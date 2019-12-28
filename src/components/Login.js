@@ -3,6 +3,7 @@ import { Dimensions, StyleSheet, Text, View, Image, TextInput, TouchableOpacity,
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCoffee, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import DeviceInfo from 'react-native-device-info';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Login extends Component {
     constructor(props) {
@@ -14,46 +15,69 @@ export default class Login extends Component {
             device_id: DeviceInfo.getDeviceId(),
             device_type: Platform.OS,
             errorText: "",
-            hasError: false
+            hasError: false,
+            userToken: '',
+            userId: '',
+            roleName: '',
+            name: ""
+        }
+        this.storeData = this.storeData.bind(this);
+    }
+
+    storeData = async () => {
+        let obj = {
+            user_id: this.state.userId,
+            userToken: this.state.userToken,
+            roleName: this.state.roleName,
+            name: this.state.name
+        }
+        console.log(obj);
+        try {
+            await AsyncStorage.setItem('visited_onces', JSON.stringify(obj));
+            this.props.navigation.navigate('Employee');
+        } catch (e) {
+            alert(e);
         }
     }
 
     login = () => {
-        this.props.navigation.navigate('Employee');
-        // if(this.state.email==""){
-        //     alert("Email cannot be black");
-        // }
-        // else if(this.state.password==""){
-        //     alert("Password cannot be black");
-        // }
-        // else if(this.state.email=="" && this.state.password==""){
-        //     alert("Username and Password cannot be blank");
-        // }else{
-        //     var data = new FormData()
-        //     data.append('email', this.state.email);
-        //     data.append('password', this.state.password);
-        //     console.log(data);
-        //     // var headers = new Headers();
-        //     // headers.append('Accept', 'application/json');
-        //     //return;
-        //     fetch("http://dev-fs.8d.ie/api/kitchen/login", {
-        //       method: "POST",
-        //       body: data
-        //     })
-        //     .then((response) => response.json())
-        //     .then((responseJson) => {
-        //     console.log(responseJson);
-        //     if(responseJson){
-        //         this.props.navigation.navigate('Employee');
-        //     }else{
-        //         alert("Something is wrong");
-        //     }
-        //     }).catch((error) => {
-        //     //alert(error);
-        //     this.setState({ hasError: true, errorText: error });
-        //     //alert(error);
-        //     });
-        // }
+        //this.props.navigation.navigate('Employee');
+        if (this.state.email == "") {
+            alert("Email cannot be black");
+        }
+        else if (this.state.password == "") {
+            alert("Password cannot be black");
+        }
+        else if (this.state.email == "" && this.state.password == "") {
+            alert("Username and Password cannot be blank");
+        } else {
+            var data = new FormData()
+            data.append('email', this.state.email);
+            data.append('password', this.state.password);
+            console.log(data);
+            // var headers = new Headers();
+            // headers.append('Accept', 'application/json');
+            //return;
+            fetch("http://dev-fs.8d.ie/api/kitchen/login", {
+                method: "POST",
+                body: data
+            })
+                .then((response) => response.json())
+                .then((responseJson) => {
+                    console.log(responseJson);
+                    if (responseJson.status == "success") {
+                        this.setState({ userId: responseJson.employee.id, roleName: responseJson.employee.role_name, userToken: responseJson.access_token, name: responseJson.employee.name });
+                        this.storeData();
+                        // this.props.navigation.navigate('Employee');
+                    } else {
+                        alert("Something is wrong");
+                    }
+                }).catch((error) => {
+                    //alert(error);
+                    this.setState({ hasError: true, errorText: error });
+                    //alert(error);
+                });
+        }
     }
 
     render() {

@@ -20,7 +20,7 @@ export default class SideMenuDrawer extends Component {
         content={<SideMenu />}
         tapToClose={true}
         type="overlay"
-        openDrawerOffset={0.6}
+        openDrawerOffset={0.7}
         panCloseMask={0.2}
         closedDrawerOffset={-3}
         onCloseStart={() => Keyboard.dismiss()}

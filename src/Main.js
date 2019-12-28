@@ -7,15 +7,23 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import Home_kitchen from './pages/Home_kitchen';
 import Login from './components/Login';
+import Logout from './pages/Logout';
 import Ingrediant from './pages/Ingrediant';
 import Employee from './pages/Employee';
 import History from './pages/History';
 import Payment from './pages/Payment';
 import IngrediantsGroups from './pages/IngrediantsGroups';
 
+
 const AppNavigator = createStackNavigator({
     Login: {
         screen: Login,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    Logout: {
+        screen: Logout,
         navigationOptions: {
             header: null,
         }

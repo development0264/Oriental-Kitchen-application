@@ -14,22 +14,46 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faHistory, faStar, faBell, faUsers, faShare, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 // Our custom files and classes import
 import Text from './Text';
+import { NavigationEvents } from 'react-navigation';
 
 export default class SideMenu extends Component {
   constructor(props) {
     super(props);
+    this._retrieveData();
     this.state = {
       search: "",
       searchError: false,
       subMenu: false,
       subMenuItems: [],
-      clickedItem: ''
+      clickedItem: '',
+      roleName: '',
+      userDetail: ''
     };
 
     //UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
   }
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('visited_onces');
+      console.log("userId::" + value);
+      if (value !== null) {
+        this.setState({ userDetail: JSON.parse(value), count: 1, roleName: value.roleName });
+        this.componentDidMount();
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  page_reloaded = () => {
+    this.componentDidMount();
+  }
+
   gonext = () => {
     this.props.navigation.navigate("History")
+  }
+  componentDidMount() {
+    console.log(this.state.userDetail.roleName);
   }
   render() {
     return (
@@ -43,21 +67,23 @@ export default class SideMenu extends Component {
     const { navigation } = this.props;
     return (
       <View style={{ backgroundColor: '#2f2d2d', height: '100%', width: '100%', opacity: 0.9, zIndex: 1 }}>
+        <NavigationEvents onDidFocus={() => { this.page_reloaded() }} />
         <View>
           <View style={styles.MainContainer} >
-            <Item style={{ paddingBottom: 10 }} onPress={() => { this.gonext() }}>
-              <Image
-                source={require('../images/profile-circle-picture-8.png')}
-                style={{ width: 120, height: 120 }}
-              />
-            </Item>
+            <Image
+              source={require('../images/profile-circle-picture-8.png')}
+              style={{ width: 120, height: 120 }}
+            />
+            <Text style={{ color: 'white', fontSize: 20, marginTop: 20 }}>{this.state.userDetail.name}</Text>
           </View>
+          <Item style={{ marginLeft: 60, marginRight: 60, marginBottom: 30 }}></Item>
         </View>
-        <View style={{ paddingRight: 40, paddingBottom: 200 }}>
+        <View style={{ paddingRight: 40, paddingBottom: 180 }}>
           <List>
-            {this.renderMenuItems()}
+            {this.state.userDetail.roleName == "cashier" ? this.renderCashierMenuItems() : this.state.userDetail.roleName == "admin" ? this.renderAdminMenuItems() : this.state.userDetail.roleName == "kitchenstaff" ? this.renderKitchenMenuItems() : this.renderMenuItems()}
           </List>
         </View>
+        <Item style={{ marginLeft: 60, marginRight: 60, marginBottom: 30 }}></Item>
         <View style={{ paddingRight: 40 }}>
           <List>
             <ListItem
@@ -89,7 +115,79 @@ export default class SideMenu extends Component {
           button={true}
         >
           <View style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }}>
-            {/* <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} /> */}
+            <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
+          </View>
+          <Body>
+            <TouchableOpacity onPress={() => { this.props.navigation.navigate(item.page) }}>
+              <Text style={{ color: 'white', paddingLeft: 10 }} >{item.title}</Text>
+            </TouchableOpacity>
+          </Body>
+        </ListItem>
+      );
+    });
+    return items;
+  }
+
+  renderCashierMenuItems() {
+    let items = [];
+    CashiermenuItems.map((item, i) => {
+      items.push(
+        <ListItem
+          last={CashiermenuItems.length === i + 1}
+          noBorder
+          key={item.id}
+          button={true}
+        >
+          <View style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }}>
+            <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
+          </View>
+          <Body>
+            <TouchableOpacity onPress={() => { this.props.navigation.navigate(item.page) }}>
+              <Text style={{ color: 'white', paddingLeft: 10 }} >{item.title}</Text>
+            </TouchableOpacity>
+          </Body>
+        </ListItem>
+      );
+    });
+    return items;
+  }
+
+  renderAdminMenuItems() {
+    let items = [];
+    AdminmenuItems.map((item, i) => {
+      items.push(
+        <ListItem
+          last={AdminmenuItems.length === i + 1}
+          noBorder
+          key={item.id}
+          button={true}
+        >
+          <View style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }}>
+            <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
+          </View>
+          <Body>
+            <TouchableOpacity onPress={() => { this.props.navigation.navigate(item.page) }}>
+              <Text style={{ color: 'white', paddingLeft: 10 }} >{item.title}</Text>
+            </TouchableOpacity>
+          </Body>
+        </ListItem>
+      );
+    });
+    return items;
+  }
+
+  renderKitchenMenuItems() {
+    let items = [];
+    KitchenmenuItems.map((item, i) => {
+      items.push(
+        <ListItem
+          last={KitchenmenuItems.length === i + 1}
+          noBorder
+          key={item.id}
+          button={true}
+        >
+          <View style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }}>
+            <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
           </View>
           <Body>
             <TouchableOpacity onPress={() => { this.props.navigation.navigate(item.page) }}>
@@ -109,7 +207,7 @@ const styles = {
     flex: 1,
     alignItems: 'center',
     paddingTop: 20,
-    paddingBottom: 30
+    paddingBottom: 10
   },
   container: {
     flex: 1,
@@ -156,47 +254,74 @@ var menuItems = [
   }
 ];
 
+var CashiermenuItems = [
+  {
+    id: 1,
+    title: 'Order',
+    icon: faStar,
+  },
+  {
+    id: 2,
+    title: 'Sales',
+    icon: faHistory
+  },
+  {
+    id: 3,
+    title: 'History',
+    icon: faShare,
+    page: 'History'
+  },
+];
 
+var AdminmenuItems = [
+  {
+    id: 1,
+    title: 'Employee',
+    icon: faStar,
+  },
+  {
+    id: 2,
+    title: 'Report',
+    icon: faHistory
+  },
+  {
+    id: 3,
+    title: 'Ingrident',
+    icon: faStar,
+  },
+  {
+    id: 4,
+    title: 'Sales',
+    icon: faHistory
+  },
+  {
+    id: 5,
+    title: 'History',
+    icon: faShare,
+    page: 'History'
+  },
+];
 
-
-const menusSecondaryItems = [
+var KitchenmenuItems = [
   {
-    id: 190,
-    title: 'Login',
-    icon: 'ios-person',
-    key: 'login'
+    id: 1,
+    title: 'Kitchen',
+    icon: faStar,
   },
   {
-    id: 519,
-    title: 'Signup',
-    icon: 'ios-person-add',
-    key: 'signup'
+    id: 2,
+    title: 'Dishes',
+    icon: faHistory
   },
   {
-    id: 19,
-    title: 'Wish List',
-    icon: 'heart',
-    key: 'wishlist'
+    id: 3,
+    title: 'Sales',
+    icon: faHistory
   },
   {
-    id: 20,
-    key: 'map',
-    title: 'Store Finder',
-    icon: 'ios-pin',
-    key: 'map'
+    id: 4,
+    title: 'History',
+    icon: faShare,
+    page: 'History'
   },
-  {
-    id: 21,
-    key: 'contact',
-    title: 'Contact Us',
-    icon: 'md-phone-portrait',
-    key: 'contact'
-  },
-  {
-    id: 23,
-    key: 'newsletter',
-    title: 'Newsletter',
-    icon: 'md-paper',
-    key: 'newsletter'
-  }
 ];
