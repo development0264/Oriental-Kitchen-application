@@ -15,9 +15,16 @@ import Payment from './pages/Payment';
 import IngrediantsGroups from './pages/IngrediantsGroups';
 import CreateDish from './pages/CreateDish';
 import Menu from './pages/Menu';
+import Splashscreen from './components/Splashscreen';
 
 
 const AppNavigator = createStackNavigator({
+    Splashscreen: {
+        screen: Splashscreen,
+        navigationOptions: {
+            header: null,
+        }
+    },
     Login: {
         screen: Login,
         navigationOptions: {
@@ -80,7 +87,7 @@ const AppNavigator = createStackNavigator({
     },
 
 }, {
-    initialRouteName: 'Login'
+    initialRouteName: 'Splashscreen'
 }
 );
 
