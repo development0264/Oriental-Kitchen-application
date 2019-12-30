@@ -14,6 +14,7 @@ import History from './pages/History';
 import Payment from './pages/Payment';
 import IngrediantsGroups from './pages/IngrediantsGroups';
 import CreateDish from './pages/CreateDish';
+import Menu from './pages/Menu';
 
 
 const AppNavigator = createStackNavigator({
@@ -71,9 +72,15 @@ const AppNavigator = createStackNavigator({
             header: null,
         }
     },
+    Menu: {
+        screen: Menu,
+        navigationOptions: {
+            header: null,
+        }
+    },
 
 }, {
-    initialRouteName: 'Login'
+    initialRouteName: 'Employee'
 }
 );
 

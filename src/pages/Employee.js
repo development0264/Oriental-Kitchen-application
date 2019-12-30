@@ -93,8 +93,8 @@ export default class Employee extends Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
         if (responseJson.status == 'success') {
+          console.log(responseJson);
           this.setState({ edit_dialog: true });
           this.setState({
             Employeeid: responseJson.Employee.id,
@@ -128,7 +128,7 @@ export default class Employee extends Component {
       console.log('Email is Correct');
     }
   };
-  updatePress = (id) => {
+  updatePress = id => {
     var data = new FormData();
     data.append('id', id);
     data.append('first_name', this.state.Editfirstname);
@@ -170,7 +170,7 @@ export default class Employee extends Component {
           this.setState({ edit_dialog: false });
           this.componentDidMount();
         } else {
-          alert('Something wrong happened.');
+          alert('Something wrong happened');
         }
       })
       .catch(error => {

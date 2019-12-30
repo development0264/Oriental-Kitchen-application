@@ -395,4 +395,10 @@ var vendermenuItems = [
     icon: faStar,
     page: 'CreateDish'
   },
+  {
+    id: 8,
+    title: 'Menu',
+    icon: faStar,
+    page: 'Menu'
+  },
 ];
