@@ -94,7 +94,11 @@ export default class SideMenu extends Component {
                 <FontAwesomeIcon icon={faSignOutAlt} style={{ color: 'black' }} />
               </View>
               <Body>
-                <Text style={{ color: 'white', paddingLeft: 10 }}>LogOut</Text>
+
+
+                <TouchableOpacity onPress={() => { this.propsnavi.navigation.navigate('Logout') }}>
+                  <Text style={{ color: 'white', paddingLeft: 10 }}>LogOut</Text>
+                </TouchableOpacity>
               </Body>
             </ListItem>
           </List>
@@ -384,5 +388,11 @@ var vendermenuItems = [
     title: 'History',
     icon: faHistory,
     page: 'History'
+  },
+  {
+    id: 7,
+    title: 'Create Dish',
+    icon: faStar,
+    page: 'CreateDish'
   },
 ];
