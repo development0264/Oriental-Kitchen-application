@@ -13,11 +13,17 @@ import SideMenu from './SideMenu';
 
 
 export default class SideMenuDrawer extends Component {
+  constructor(props) {
+    super(props);
+    //alert(JSON.stringify(this.props.navigation))
+  }
+
+
   render() {
     return (
       <Drawer
         ref={(ref) => this._drawer = ref}
-        content={<SideMenu />}
+        content={<SideMenu navigation={this.props.navigation} />}
         tapToClose={true}
         type="overlay"
         openDrawerOffset={0.7}

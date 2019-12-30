@@ -6,6 +6,8 @@
 import React, { Component } from 'react';
 import { ScrollView, LayoutAnimation, UIManager, Linking, Image, TouchableOpacity } from 'react-native';
 import { View, List, ListItem, Body, Left, Right, Icon, Item, Input, Button, Grid, Col } from 'native-base';
+import { Actions as NavigationActions } from 'react-native-router-flux'
+
 
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -20,6 +22,7 @@ export default class SideMenu extends Component {
   constructor(props) {
     super(props);
     this._retrieveData();
+    this.propsnavi = this.props.navigation;
     this.state = {
       search: "",
       searchError: false,
@@ -29,13 +32,13 @@ export default class SideMenu extends Component {
       roleName: '',
       userDetail: ''
     };
-
     //UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
   }
+
+
   _retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('visited_onces');
-      console.log("userId::" + value);
       if (value !== null) {
         this.setState({ userDetail: JSON.parse(value), count: 1, roleName: value.roleName });
         this.componentDidMount();
@@ -55,6 +58,7 @@ export default class SideMenu extends Component {
   componentDidMount() {
     console.log(this.state.userDetail.roleName);
   }
+
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -114,11 +118,11 @@ export default class SideMenu extends Component {
           key={item.id}
           button={true}
         >
-          <View style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }}>
+          <View style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }} >
             <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
           </View>
           <Body>
-            <TouchableOpacity onPress={() => { this.props.navigation.navigate(item.page) }}>
+            <TouchableOpacity onPress={() => { this.propsnavi.navigation.navigate(item.page) }}>
               <Text style={{ color: 'white', paddingLeft: 10 }} >{item.title}</Text>
             </TouchableOpacity>
           </Body>
@@ -142,7 +146,7 @@ export default class SideMenu extends Component {
             <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
           </View>
           <Body>
-            <TouchableOpacity onPress={() => { this.props.navigation.navigate(item.page) }}>
+            <TouchableOpacity onPress={() => { this.propsnavi.navigation.navigate(item.page) }}>
               <Text style={{ color: 'white', paddingLeft: 10 }} >{item.title}</Text>
             </TouchableOpacity>
           </Body>
@@ -166,7 +170,7 @@ export default class SideMenu extends Component {
             <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
           </View>
           <Body>
-            <TouchableOpacity onPress={() => { this.props.navigation.navigate(item.page) }}>
+            <TouchableOpacity onPress={() => { this.propsnavi.navigation.navigate(item.page) }}>
               <Text style={{ color: 'white', paddingLeft: 10 }} >{item.title}</Text>
             </TouchableOpacity>
           </Body>
@@ -190,7 +194,7 @@ export default class SideMenu extends Component {
             <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
           </View>
           <Body>
-            <TouchableOpacity onPress={() => { this.props.navigation.navigate(item.page) }}>
+            <TouchableOpacity onPress={() => { this.propsnavi.navigation.navigate(item.page) }}>
               <Text style={{ color: 'white', paddingLeft: 10 }} >{item.title}</Text>
             </TouchableOpacity>
           </Body>

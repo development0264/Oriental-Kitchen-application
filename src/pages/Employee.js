@@ -32,6 +32,7 @@ import SideMenuDrawer from '../components/SideMenuDrawer';
 export default class Employee extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       username: '',
       firstName: '',
@@ -442,7 +443,7 @@ export default class Employee extends Component {
       </Right>
     );
     return (
-      <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} style={{ zIndex: 1 }}>
+      <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} style={{ zIndex: 1 }} navigation={this.props}>
         <View style={styles.container}>
           <ScrollView>
             <KeyboardAvoidingView behavior="padding" enabled>
