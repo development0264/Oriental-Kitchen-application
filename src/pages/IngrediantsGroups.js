@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Dimensions,
   Image,
@@ -10,7 +10,7 @@ import {
   Alert,
   KeyboardAvoidingView,
 } from 'react-native';
-import {Button, Left, Right, Picker, Col, Row, Grid} from 'native-base';
+import { Button, Left, Right, Picker, Col, Row, Grid } from 'native-base';
 import Navbar from '../components/Navbar';
 import CheckBox from '@react-native-community/checkbox';
 import {
@@ -19,11 +19,13 @@ import {
   faArrowDown,
   faCamera,
 } from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {Card} from 'react-native-elements';
-import {Dialog} from 'react-native-simple-dialogs';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { Card } from 'react-native-elements';
+import { Dialog } from 'react-native-simple-dialogs';
 import RNImagePicker from 'react-native-image-picker';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
+import SideMenuDrawer from '../components/SideMenuDrawer';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class IngrediantsGroups extends Component {
   constructor(props) {
@@ -76,8 +78,23 @@ export default class IngrediantsGroups extends Component {
       dataSource: [],
       dialog: false,
       dataSourceIngredient: [],
+      count: 0,
+      userDetail: ""
     };
+    this._retrieveData();
   }
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('visited_onces');
+      if (value !== null) {
+        this.setState({ userDetail: JSON.parse(value), count: 1 });
+        this.componentDidMount();
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   onValueChange(value) {
     this.setState({
@@ -86,15 +103,15 @@ export default class IngrediantsGroups extends Component {
   }
 
   add_employee = () => {
-    this.setState({add_dialog: true});
+    this.setState({ add_dialog: true });
   };
 
   add_ingredient = id => {
-    this.setState({add_ingredient_dialog: true, ingredient_group_id: id});
+    this.setState({ add_ingredient_dialog: true, ingredient_group_id: id });
   };
 
   edit_ingredient = () => {
-    this.setState({edit_ingredient_dialog: true});
+    this.setState({ edit_ingredient_dialog: true });
   };
 
   addCheckBox = () => {
@@ -106,7 +123,7 @@ export default class IngrediantsGroups extends Component {
           {
             text: 'No',
             onPress: () =>
-              this.setState({change_response: 0, checked: !this.state.checked}),
+              this.setState({ change_response: 0, checked: !this.state.checked }),
             style: 'cancel',
           },
           {
@@ -118,10 +135,10 @@ export default class IngrediantsGroups extends Component {
               }),
           },
         ],
-        {cancelable: false},
+        { cancelable: false },
       );
     }
-    this.setState({checked: !this.state.checked});
+    this.setState({ checked: !this.state.checked });
   };
 
   updateCheckBox = () => {
@@ -148,10 +165,10 @@ export default class IngrediantsGroups extends Component {
               }),
           },
         ],
-        {cancelable: false},
+        { cancelable: false },
       );
     }
-    this.setState({editis_main: !this.state.editis_main});
+    this.setState({ editis_main: !this.state.editis_main });
   };
 
   updatePress = id => {
@@ -161,9 +178,9 @@ export default class IngrediantsGroups extends Component {
       this.state.editis_main = 0;
     }
     if (this.state.editis_main == 1) {
-      this.setState({editis_main: true});
+      this.setState({ editis_main: true });
     } else {
-      this.setState({editis_main: false});
+      this.setState({ editis_main: false });
     }
     var data = new FormData();
     data.append('id', id);
@@ -186,9 +203,9 @@ export default class IngrediantsGroups extends Component {
       });
     }
     console.log(data);
+    const user_details = this.state.userDetail;
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
 
@@ -201,8 +218,7 @@ export default class IngrediantsGroups extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          console.log(responseJson);
-          this.setState({edit_dialog: false});
+          this.setState({ edit_dialog: false, img_uri: "" });
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -230,14 +246,14 @@ export default class IngrediantsGroups extends Component {
           },
         },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   };
 
-  deleteYesIngredientGroup = id => {
+  deleteYesIngredientGroup = (id) => {
+    const user_details = this.state.userDetail;
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
 
@@ -253,7 +269,7 @@ export default class IngrediantsGroups extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({edit_dialog: false});
+          this.setState({ edit_dialog: false });
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -281,14 +297,15 @@ export default class IngrediantsGroups extends Component {
           },
         },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   };
 
-  deleteYesIngredient = id => {
+  deleteYesIngredient = (id) => {
+
+    const user_details = this.state.userDetail;
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
 
@@ -304,7 +321,7 @@ export default class IngrediantsGroups extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({edit_ingredient_dialog: false});
+          this.setState({ edit_ingredient_dialog: false });
           this.componentDidMount();
           this.getIngredientGroup();
           alert('Delete record successfully');
@@ -373,9 +390,9 @@ export default class IngrediantsGroups extends Component {
             : this.state.avatar.uri.replace('file://', ''),
       });
       console.log(data);
+      const user_details = this.state.userDetail;
       var headers = new Headers();
-      let auth =
-        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+      let auth = 'Bearer ' + user_details.userToken;
       headers.append('Authorization', auth);
       headers.append('Accept', 'application/json');
 
@@ -388,7 +405,7 @@ export default class IngrediantsGroups extends Component {
         .then(responseJson => {
           console.log(responseJson);
           if (responseJson.status == 'success') {
-            this.setState({add_dialog: false});
+            this.setState({ add_dialog: false, img_uri: "" });
             this.componentDidMount();
           } else {
             alert('Something wrong happened');
@@ -403,11 +420,13 @@ export default class IngrediantsGroups extends Component {
   getIngredientGroup = () => {
     var data = new FormData();
     data.append('ingredient_group_id', this.state.ingredient_group_id);
+
+    const user_details = this.state.userDetail;
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
+
     console.log(data);
     fetch('http://dev-fs.8d.ie/api/kitchen/getIngredientByGroupId', {
       method: 'POST',
@@ -451,11 +470,13 @@ export default class IngrediantsGroups extends Component {
           : this.state.avatar.uri.replace('file://', ''),
     });
     console.log(data);
+
+    const user_details = this.state.userDetail;
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
+    console.log(headers);
 
     fetch('http://dev-fs.8d.ie/api/kitchen/addIngredient', {
       method: 'POST',
@@ -465,7 +486,7 @@ export default class IngrediantsGroups extends Component {
       .then(response => response.json())
       .then(responseJson => {
         console.log(responseJson);
-        this.setState({add_ingredient_dialog: false});
+        this.setState({ add_ingredient_dialog: false, cover: "" });
         this.componentDidMount();
       })
       .catch(error => {
@@ -473,14 +494,16 @@ export default class IngrediantsGroups extends Component {
       });
   };
 
-  getIngredient = id => {
+  getIngredient = (id) => {
     var data = new FormData();
     data.append('id', id);
+
+    const user_details = this.state.userDetail;
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
+    console.log(headers);
 
     fetch('http://dev-fs.8d.ie/api/kitchen/getIngredient', {
       method: 'POST',
@@ -491,7 +514,7 @@ export default class IngrediantsGroups extends Component {
       .then(responseJson => {
         if (responseJson.status == 'success') {
           console.log(responseJson);
-          this.setState({edit_ingredient_dialog: true});
+          this.setState({ edit_ingredient_dialog: true });
           this.setState({
             Ingredientid: responseJson.ingredient.id,
             Ingredienttaxid: responseJson.ingredient.tax_id,
@@ -514,7 +537,7 @@ export default class IngrediantsGroups extends Component {
       });
   };
 
-  updateIngredient = id => {
+  updateIngredient = (id) => {
     var data = new FormData();
     data.append('id', id);
     data.append('ingredient_group_id', this.state.ingredient_group_id);
@@ -537,9 +560,10 @@ export default class IngrediantsGroups extends Component {
       });
     }
     console.log(data);
+
+    const user_details = this.state.userDetail;
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
 
@@ -553,7 +577,7 @@ export default class IngrediantsGroups extends Component {
         console.log(responseJson);
         if (responseJson.status == 'success') {
           console.log(responseJson);
-          this.setState({edit_ingredient_dialog: false});
+          this.setState({ edit_ingredient_dialog: false, cover: "" });
           this.componentDidMount();
           this.getIngredientGroup();
           alert('Update record successfully');
@@ -569,11 +593,12 @@ export default class IngrediantsGroups extends Component {
   getIngrediants = id => {
     var data = new FormData();
     data.append('id', id);
+    const user_details = this.state.userDetail;
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
+    console.log(headers);
 
     fetch('http://dev-fs.8d.ie/api/kitchen/getIngredientGroup', {
       method: 'POST',
@@ -584,11 +609,11 @@ export default class IngrediantsGroups extends Component {
       .then(responseJson => {
         if (responseJson.status == 'success') {
           console.log(responseJson);
-          this.setState({edit_dialog: true});
+          this.setState({ edit_dialog: true });
           if (responseJson.ingredient_group.is_main == 1) {
-            this.setState({editis_main: true});
+            this.setState({ editis_main: true });
           } else {
-            this.setState({editis_main: false});
+            this.setState({ editis_main: false });
           }
           this.setState({
             ingrediant_id: responseJson.ingredient_group.id,
@@ -613,48 +638,50 @@ export default class IngrediantsGroups extends Component {
   };
 
   componentDidMount() {
-    var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
-    headers.append('Authorization', auth);
-    headers.append('Accept', 'application/json');
-    console.log(headers);
-    fetch('http://dev-fs.8d.ie/api/kitchen/getIngredientGroupList', {
-      method: 'POST',
-      headers: headers,
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log(responseJson);
-        if (responseJson) {
-          if (responseJson.status == 'success') {
-            this.setState({dataSource: responseJson.ingredient_group});
-          }
-        } else {
-          alert('Something wrong happened');
-        }
+    if (this.state.count == 1) {
+      const user_details = this.state.userDetail;
+      var headers = new Headers();
+      let auth = 'Bearer ' + user_details.userToken;
+      headers.append('Authorization', auth);
+      headers.append('Accept', 'application/json');
+      console.log(headers);
+      fetch('http://dev-fs.8d.ie/api/kitchen/getIngredientGroupList', {
+        method: 'POST',
+        headers: headers,
       })
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log(responseJson);
+          if (responseJson) {
+            if (responseJson.status == 'success') {
+              this.setState({ dataSource: responseJson.ingredient_group });
+            }
+          } else {
+            alert('Something wrong happened');
+          }
+        })
 
-      .catch(error => {
-        console.error(error);
-      });
+        .catch(error => {
+          console.error(error);
+        });
+    }
   }
 
   render() {
-    const {checked, editis_main} = this.state;
-    var {height, width} = Dimensions.get('window');
+    const { checked, editis_main } = this.state;
+    var { height, width } = Dimensions.get('window');
     var left = (
-      <Left style={{flex: 1}}>
-        <Button onPress={() => this.props.navigation.openDrawer()} transparent>
+      <Left style={{ flex: 1 }}>
+        <Button onPress={() => this._sideMenuDrawer.open()} transparent>
           <FontAwesomeIcon icon={faBars} color={'white'} size={25} />
         </Button>
       </Left>
     );
     var right = (
-      <Right style={{flex: 1}}>
+      <Right style={{ flex: 1 }}>
         <TouchableOpacity onPress={() => this.add_employee()}>
           <Image
-            style={{width: 45, height: 45}}
+            style={{ width: 45, height: 45 }}
             source={require('../images/add_employee.png')}
           />
         </TouchableOpacity>
@@ -662,1143 +689,51 @@ export default class IngrediantsGroups extends Component {
     );
 
     return (
-      <View>
-        <ScrollView>
-          <Navbar left={left} right={right} title="IngrediantsGroups" />
-          <KeyboardAvoidingView behavior="padding" enabled>
-            {/* Add dialog */}
-            <Dialog
-              visible={this.state.add_dialog}
-              dialogStyle={{
-                borderRadius: 10,
-                borderWidth: 2,
-                borderColor: '#efeff4',
-                width: '80%',
-                justifyContent: 'center',
-                alignSelf: 'center',
-                backgroundColor: '#efeff4',
-              }}
-              onTouchOutside={() => this.setState({add_dialog: false})}>
-              <ScrollView>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{flex: 0.95}}>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        borderBottomWidth: 1,
-                        borderBottomColor: 'lightgrey',
-                        paddingBottom: 15,
-                        marginTop: 0,
-                        fontSize: 23,
-                      }}>
-                      Add IngrediantsGroups
-                    </Text>
-                  </View>
-                  <View style={{justifyContent: 'center'}}>
-                    <TouchableOpacity
-                      onPress={() => this.setState({add_dialog: false})}>
-                      <FontAwesomeIcon
-                        icon={faWindowClose}
-                        color={'#ff9500'}
-                        size={25}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{
-                      flex: 0.6,
-                      borderRightWidth: 1,
-                      borderRightColor: 'lightgrey',
-                      padding: 10,
-                      paddingTop: 25,
-                    }}>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Name:
-                        </Text>
-                      </View>
-                      <TextInput
+      <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} style={{ zIndex: 1 }} navigation={this.props}>
+        <View>
+          <ScrollView>
+            <Navbar left={left} right={right} title="IngrediantsGroups" />
+            <KeyboardAvoidingView behavior="padding" enabled>
+              {/* Add dialog */}
+              <Dialog
+                visible={this.state.add_dialog}
+                dialogStyle={{
+                  borderRadius: 10,
+                  borderWidth: 2,
+                  borderColor: '#efeff4',
+                  width: '80%',
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  backgroundColor: '#efeff4',
+                }}
+                onTouchOutside={() => this.setState({ add_dialog: false, img_uri: "" })}>
+                <ScrollView>
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 0.95 }}>
+                      <Text
                         style={{
-                          borderColor: 'white',
-                          height: 40,
-                          width: '60%',
-                          paddingLeft: 15,
-                          marginLeft: 15,
-                          borderWidth: 1,
-                          textAlignVertical: 'top',
-                          backgroundColor: 'white',
-                          borderRadius: 50,
-                          flexWrap: 'wrap',
-                        }}
-                        placeholder="Type message here.."
-                        onChangeText={text => this.setState({add_name: text})}
-                        value={this.state.add_name}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 15,
-                      }}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Max:
-                        </Text>
-                      </View>
-                      <TextInput
-                        style={{
-                          borderColor: 'white',
-                          height: 40,
-                          width: '60%',
-                          paddingLeft: 15,
-                          marginLeft: 15,
-                          borderWidth: 1,
-                          textAlignVertical: 'top',
-                          backgroundColor: 'white',
-                          borderRadius: 50,
-                          flexWrap: 'wrap',
-                        }}
-                        placeholder="Type message here.."
-                        number={true}
-                        keyboardType="numeric"
-                        onChangeText={number =>
-                          this.setState({add_max: number})
-                        }
-                        value={this.state.add_max}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 15,
-                      }}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Min:
-                        </Text>
-                      </View>
-                      <TextInput
-                        style={{
-                          borderColor: 'white',
-                          height: 40,
-                          width: '60%',
-                          paddingLeft: 15,
-                          marginLeft: 15,
-                          borderWidth: 1,
-                          textAlignVertical: 'top',
-                          backgroundColor: 'white',
-                          borderRadius: 50,
-                          flexWrap: 'wrap',
-                        }}
-                        placeholder="Type message here.."
-                        number={true}
-                        keyboardType="numeric"
-                        onChangeText={number =>
-                          this.setState({add_min: number})
-                        }
-                        value={this.state.add_min}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 15,
-                      }}>
-                      <View style={{width: 150, alignSelf: 'flex-start'}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Description:
-                        </Text>
-                      </View>
-                      <TextInput
-                        style={{
-                          borderColor: 'white',
-                          height: 80,
-                          width: '59%',
-                          paddingLeft: 15,
-                          marginLeft: 15,
-                          borderWidth: 1,
-                          textAlignVertical: 'top',
-                          backgroundColor: 'white',
-                          borderRadius: 10,
-                          flexWrap: 'wrap',
-                        }}
-                        placeholder="Type message here.."
-                        multiline={true}
-                        underlineColorAndroid="transparent"
-                        onChangeText={text =>
-                          this.setState({add_description: text})
-                        }
-                        value={this.state.add_description}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 15,
-                        marginRight: 50,
-                      }}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Status :
-                        </Text>
-                      </View>
-                      <Picker
-                        note
-                        mode="dropdown"
-                        style={{width: '39%', marginLeft: 12}}
-                        selectedValue={this.state.add_status}
-                        onValueChange={add_status =>
-                          this.setState({add_status: add_status})
-                        }>
-                        <Picker.Item label="Enable" value="1" />
-                        <Picker.Item label="Disable" value="0" />
-                      </Picker>
-                    </View>
-
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 10,
-                      }}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Is Main? :
-                        </Text>
-                      </View>
-                      <CheckBox
-                        style={{marginLeft: 15}}
-                        status={checked ? 'checked' : 'unchecked'}
-                        tintColors={{true: 'orange'}}
-                        value={checked}
-                        onValueChange={() => this.addCheckBox()}
-                      />
-                    </View>
-
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 15,
-                      }}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Sequence:
-                        </Text>
-                      </View>
-                      <TextInput
-                        style={{
-                          borderColor: 'white',
-                          height: 40,
-                          width: '60%',
-                          paddingLeft: 15,
-                          marginLeft: 15,
-                          marginRight: 10,
-                          borderWidth: 1,
-                          textAlignVertical: 'top',
-                          backgroundColor: 'white',
-                          borderRadius: 50,
-                          flexWrap: 'wrap',
-                        }}
-                        placeholder="Type message here.."
-                        number={true}
-                        keyboardType="numeric"
-                        onChangeText={number =>
-                          this.setState({add_sequence: number})
-                        }
-                        value={this.state.add_sequence}
-                      />
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flex: 0.4,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <View style={{position: 'relative'}}>
-                      {this.state.img_uri == '' ? (
-                        <Image
-                          style={{
-                            width: 200,
-                            height: 200,
-                            borderRadius: 200 / 2,
-                          }}
-                          source={require('../images/profile-circle-picture-8.png')}></Image>
-                      ) : (
-                        <Image
-                          style={{
-                            width: 200,
-                            height: 200,
-                            borderRadius: 200 / 2,
-                          }}
-                          source={{uri: this.state.img_uri}}></Image>
-                      )}
-                      <View style={styles.camera_icon}>
-                        <TouchableOpacity onPress={() => this.opencamera()}>
-                          <FontAwesomeIcon
-                            icon={faCamera}
-                            color={'black'}
-                            size={45}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-                <View
-                  style={{
-                    marginTop: 15,
-                    borderTopColor: 'lightgrey',
-                    borderTopWidth: 1,
-                  }}>
-                  <TouchableOpacity
-                    style={styles.add_btn}
-                    onPress={() => {
-                      this.addDetail();
-                    }}>
-                    <Text style={{fontSize: width * 0.03, color: 'white'}}>
-                      Add
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </ScrollView>
-            </Dialog>
-            {/* Update dialog */}
-            <Dialog
-              visible={this.state.edit_dialog}
-              dialogStyle={{
-                borderRadius: 10,
-                borderWidth: 2,
-                borderColor: '#efeff4',
-                width: '80%',
-                justifyContent: 'center',
-                alignSelf: 'center',
-                backgroundColor: '#efeff4',
-              }}
-              onTouchOutside={() => this.setState({edit_dialog: false})}>
-              <ScrollView>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{flex: 0.95}}>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        borderBottomWidth: 1,
-                        borderBottomColor: 'lightgrey',
-                        paddingBottom: 15,
-                        marginTop: 0,
-                        fontSize: 23,
-                      }}>
-                      Edit IngrediantsGroups{' '}
-                    </Text>
-                  </View>
-                  <View style={{justifyContent: 'center'}}>
-                    <TouchableOpacity
-                      onPress={() => this.setState({edit_dialog: false})}>
-                      <FontAwesomeIcon
-                        icon={faWindowClose}
-                        color={'#ff9500'}
-                        size={25}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={{flexDirection: 'row', marginTop: 15}}>
-                  <View
-                    style={{
-                      flex: 0.6,
-                      borderRightWidth: 1,
-                      borderRightColor: 'lightgrey',
-                      padding: 10,
-                    }}>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Name :
-                        </Text>
-                      </View>
-                      <TextInput
-                        style={{
-                          borderColor: 'white',
-                          height: 40,
-                          width: '60%',
-                          paddingLeft: 15,
-                          marginLeft: 15,
-                          borderWidth: 1,
-                          textAlignVertical: 'top',
-                          backgroundColor: 'white',
-                          borderRadius: 50,
-                          flexWrap: 'wrap',
-                        }}
-                        placeholder="Type message here.."
-                        onChangeText={editname => this.setState({editname})}
-                        defaultValue={this.state.editname}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 15,
-                      }}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Max :
-                        </Text>
-                      </View>
-                      <TextInput
-                        style={{
-                          borderColor: 'white',
-                          height: 40,
-                          width: '60%',
-                          paddingLeft: 15,
-                          marginLeft: 15,
-                          borderWidth: 1,
-                          textAlignVertical: 'top',
-                          backgroundColor: 'white',
-                          borderRadius: 50,
-                          flexWrap: 'wrap',
-                        }}
-                        placeholder="Type message here.."
-                        number={true}
-                        keyboardType="numeric"
-                        // onChangeText={editmax =>
-                        //     this.setState({ editmax })
-                        // }
-                        // defaultValue={this.state.editmax}
-                        //value={parseInt(this.state.editmax)}
-
-                        onChangeText={text => this.setState({editmax: text})}
-                        value={this.state.editmax.toString()}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 15,
-                      }}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Min :
-                        </Text>
-                      </View>
-                      <TextInput
-                        style={{
-                          borderColor: 'white',
-                          height: 40,
-                          width: '60%',
-                          paddingLeft: 15,
-                          marginLeft: 15,
-                          borderWidth: 1,
-                          textAlignVertical: 'top',
-                          backgroundColor: 'white',
-                          borderRadius: 50,
-                          flexWrap: 'wrap',
-                        }}
-                        placeholder="Type message here.."
-                        number={true}
-                        keyboardType="numeric"
-                        // onChangeText={editmin =>
-                        //     this.setState({ editmin })
-                        // }
-                        // defaultValue={this.state.editmin}
-                        onChangeText={text => this.setState({editmin: text})}
-                        value={this.state.editmin.toString()}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 15,
-                      }}>
-                      <View style={{width: 150, alignSelf: 'flex-start'}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Description :
-                        </Text>
-                      </View>
-
-                      <TextInput
-                        style={{
-                          borderColor: 'white',
-                          height: 40,
-                          width: '60%',
-                          paddingLeft: 15,
-                          marginLeft: 15,
-                          borderWidth: 1,
-                          textAlignVertical: 'top',
-                          backgroundColor: 'white',
-                          borderRadius: 50,
-                          flexWrap: 'wrap',
-                        }}
-                        placeholder="Type message here.."
-                        multiline={true}
-                        underlineColorAndroid="transparent"
-                        onChangeText={editdescription =>
-                          this.setState({editdescription})
-                        }
-                        defaultValue={this.state.editdescription}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 15,
-                        marginRight: 50,
-                      }}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Status :
-                        </Text>
-                      </View>
-                      <Picker
-                        note
-                        mode="dropdown"
-                        style={{width: '39%', marginLeft: 12}}
-                        selectedValue={this.state.editstatus.toString()}
-                        onValueChange={editstatus =>
-                          this.setState({editstatus: editstatus})
-                        }>
-                        <Picker.Item label="Enable" value="1" />
-                        <Picker.Item label="Disable" value="0" />
-                      </Picker>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 15,
-                      }}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Is_Main:
-                        </Text>
-                      </View>
-                      <CheckBox
-                        style={{marginLeft: 15}}
-                        status={editis_main ? 'checked' : 'unchecked'}
-                        tintColors={{true: 'orange'}}
-                        value={editis_main}
-                        onValueChange={() => this.updateCheckBox()}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 15,
-                      }}>
-                      <View style={{width: 150}}>
-                        <Text
-                          style={{fontSize: width * 0.02, color: '#76726d'}}>
-                          Sequence :
-                        </Text>
-                      </View>
-                      <TextInput
-                        style={{
-                          borderColor: 'white',
-                          height: 40,
-                          width: '60%',
-                          paddingLeft: 15,
-                          marginLeft: 15,
-                          borderWidth: 1,
-                          textAlignVertical: 'top',
-                          backgroundColor: 'white',
-                          borderRadius: 50,
-                          flexWrap: 'wrap',
-                        }}
-                        placeholder="Type message here.."
-                        number={true}
-                        keyboardType="numeric"
-                        // onChangeText={editsequence => this.setState({ editsequence })}
-                        // defaultValue={this.state.editsequence}
-                        onChangeText={text =>
-                          this.setState({editsequence: text})
-                        }
-                        value={this.state.editsequence.toString()}
-                      />
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      flex: 0.4,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <View style={{position: 'relative'}}>
-                      {this.state.img_uri == '' ? (
-                        <Image
-                          style={{
-                            width: 200,
-                            height: 200,
-                            borderRadius: 200 / 2,
-                          }}
-                          source={{
-                            uri: 'http://dev-fs.8d.ie/' + this.state.editcover,
-                          }}></Image>
-                      ) : (
-                        <Image
-                          style={{
-                            width: 200,
-                            height: 200,
-                            borderRadius: 200 / 2,
-                          }}
-                          source={{uri: this.state.img_uri}}></Image>
-                      )}
-                      <View style={styles.camera_icon}>
-                        <TouchableOpacity onPress={() => this.opencamera()}>
-                          <FontAwesomeIcon
-                            icon={faCamera}
-                            color={'black'}
-                            size={45}
-                          />
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-                <View
-                  style={{
-                    marginTop: 20,
-                    borderTopColor: 'lightgrey',
-                    borderTopWidth: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                  }}>
-                  <View style={{flex: 0.9, marginTop: 10}}>
-                    <TouchableOpacity
-                      style={styles.delete_btn}
-                      onPress={() => this.deleteIngredientGroup()}>
-                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                        Delete
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={{marginTop: 10}}>
-                    <TouchableOpacity
-                      style={styles.add_btn}
-                      onPress={() =>
-                        this.updatePress(this.state.ingrediant_id)
-                      }>
-                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                        Update
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </ScrollView>
-            </Dialog>
-            {/* Add ingredient dialog */}
-            <Dialog
-              visible={this.state.add_ingredient_dialog}
-              dialogStyle={{
-                borderRadius: 10,
-                borderWidth: 2,
-                borderColor: '#efeff4',
-                width: '80%',
-                justifyContent: 'center',
-                alignSelf: 'center',
-                backgroundColor: '#efeff4',
-              }}
-              onTouchOutside={() =>
-                this.setState({add_ingredient_dialog: false, dialog: false})
-              }>
-              <ScrollView>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{flex: 0.95}}>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        borderBottomWidth: 1,
-                        borderBottomColor: 'lightgrey',
-                        paddingBottom: 15,
-                        marginTop: 0,
-                        fontSize: 23,
-                      }}>
-                      Ingrediants
-                    </Text>
-                  </View>
-                  <View style={{justifyContent: 'center'}}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.setState({
-                          add_ingredient_dialog: false,
-                          dialog: false,
-                        })
-                      }>
-                      <FontAwesomeIcon
-                        icon={faWindowClose}
-                        color={'#ff9500'}
-                        size={25}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={{flexDirection: 'row', marginTop: 10}}>
-                  <View style={{flex: 0.5}}>
-                    {this.state.dialog == false ? (
-                      <TouchableOpacity
-                        style={styles.add}
-                        onPress={() =>
-                          this.setState({add_ingredient_dialog: true})
-                        }>
-                        <Text style={{color: 'white', fontSize: 20}}>
-                          Insert
-                        </Text>
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        style={styles.inactive_add}
-                        onPress={() => this.setState({dialog: false})}>
-                        <Text style={{color: 'white', fontSize: 20}}>
-                          Insert
-                        </Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                  <View style={{flex: 0.5}}>
-                    {this.state.dialog == true ? (
-                      <TouchableOpacity
-                        style={styles.add}
-                        onPress={() =>
-                          this.setState({add_ingredient_dialog: false})
-                        }>
-                        <Text style={{color: 'white', fontSize: 20}}>View</Text>
-                      </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        style={styles.inactive_add}
-                        onPress={() => {
-                          this.getIngredientGroup();
+                          textAlign: 'center',
+                          borderBottomWidth: 1,
+                          borderBottomColor: 'lightgrey',
+                          paddingBottom: 15,
+                          marginTop: 0,
+                          fontSize: 23,
                         }}>
-                        <Text style={{color: 'white', fontSize: 20}}>View</Text>
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                </View>
-                {this.state.dialog == true ? (
-                  <ScrollView>
-                    <Grid style={{marginTop: 15}}>
-                      <Row style={{height: 30, marginVertical: 20}}>
-                        <Col style={styles.add}>
-                          <Text style={styles.grid_text}>Name</Text>
-                        </Col>
-                        <Col style={styles.add}>
-                          <Text style={styles.grid_text}>Price</Text>
-                        </Col>
-                        <Col style={styles.add}>
-                          <Text style={styles.grid_text}>Max</Text>
-                        </Col>
-                        <Col style={styles.add}>
-                          <Text style={styles.grid_text}>Weight</Text>
-                        </Col>
-                        <Col style={styles.add}>
-                          <Text style={styles.grid_text}>Status</Text>
-                        </Col>
-                      </Row>
-                      {this.fillIngredient()}
-                    </Grid>
-                  </ScrollView>
-                ) : (
-                  <View>
-                    <ScrollView>
-                      <View style={{flexDirection: 'row'}}>
-                        <View
-                          style={{
-                            flex: 0.6,
-                            borderRightWidth: 1,
-                            borderRightColor: 'lightgrey',
-                            padding: 10,
-                            paddingTop: 25,
-                          }}>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                            }}>
-                            <View style={{width: 150}}>
-                              <Text
-                                style={{
-                                  fontSize: width * 0.02,
-                                  color: '#76726d',
-                                }}>
-                                taxId:
-                              </Text>
-                            </View>
-                            <TextInput
-                              style={{
-                                borderColor: 'white',
-                                height: 40,
-                                width: '60%',
-                                paddingLeft: 15,
-                                marginLeft: 15,
-                                borderWidth: 1,
-                                textAlignVertical: 'top',
-                                backgroundColor: 'white',
-                                borderRadius: 50,
-                                flexWrap: 'wrap',
-                              }}
-                              placeholder="Type message here.."
-                              onChangeText={tax_id =>
-                                this.setState({tax_id: tax_id})
-                              }
-                            />
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginTop: 15,
-                            }}>
-                            <View style={{width: 150}}>
-                              <Text
-                                style={{
-                                  fontSize: width * 0.02,
-                                  color: '#76726d',
-                                }}>
-                                Name:
-                              </Text>
-                            </View>
-                            <TextInput
-                              style={{
-                                borderColor: 'white',
-                                height: 40,
-                                width: '60%',
-                                paddingLeft: 15,
-                                marginLeft: 15,
-                                borderWidth: 1,
-                                textAlignVertical: 'top',
-                                backgroundColor: 'white',
-                                borderRadius: 50,
-                                flexWrap: 'wrap',
-                              }}
-                              placeholder="Type message here.."
-                              onChangeText={name => this.setState({name: name})}
-                            />
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginTop: 15,
-                            }}>
-                            <View style={{width: 150}}>
-                              <Text
-                                style={{
-                                  fontSize: width * 0.02,
-                                  color: '#76726d',
-                                }}>
-                                Price:
-                              </Text>
-                            </View>
-                            <TextInput
-                              style={{
-                                borderColor: 'white',
-                                height: 40,
-                                width: '60%',
-                                paddingLeft: 15,
-                                marginLeft: 15,
-                                borderWidth: 1,
-                                textAlignVertical: 'top',
-                                backgroundColor: 'white',
-                                borderRadius: 50,
-                                flexWrap: 'wrap',
-                              }}
-                              placeholder="Type message here.."
-                              onChangeText={price =>
-                                this.setState({price: price})
-                              }
-                            />
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginTop: 15,
-                            }}>
-                            <View style={{width: 150}}>
-                              <Text
-                                style={{
-                                  fontSize: width * 0.02,
-                                  color: '#76726d',
-                                }}>
-                                Max:
-                              </Text>
-                            </View>
-                            <TextInput
-                              style={{
-                                borderColor: 'white',
-                                height: 40,
-                                width: '60%',
-                                paddingLeft: 15,
-                                marginLeft: 15,
-                                borderWidth: 1,
-                                textAlignVertical: 'top',
-                                backgroundColor: 'white',
-                                borderRadius: 50,
-                                flexWrap: 'wrap',
-                              }}
-                              placeholder="Type message here.."
-                              onChangeText={max => this.setState({max: max})}
-                            />
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginTop: 15,
-                            }}>
-                            <View style={{width: 150}}>
-                              <Text
-                                style={{
-                                  fontSize: width * 0.02,
-                                  color: '#76726d',
-                                }}>
-                                Description:
-                              </Text>
-                            </View>
-                            <TextInput
-                              style={{
-                                borderColor: 'white',
-                                height: 80,
-                                width: '60%',
-                                paddingLeft: 15,
-                                marginLeft: 15,
-                                borderWidth: 1,
-                                textAlignVertical: 'top',
-                                backgroundColor: 'white',
-                                borderRadius: 10,
-                                flexWrap: 'wrap',
-                              }}
-                              placeholder="Type message here.."
-                              multiline={true}
-                              underlineColorAndroid="transparent"
-                              onChangeText={description =>
-                                this.setState({description: description})
-                              }
-                            />
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginTop: 15,
-                            }}>
-                            <View style={{width: 150}}>
-                              <Text
-                                style={{
-                                  fontSize: width * 0.02,
-                                  color: '#76726d',
-                                }}>
-                                Sequence:
-                              </Text>
-                            </View>
-                            <TextInput
-                              style={{
-                                borderColor: 'white',
-                                height: 40,
-                                width: '60%',
-                                paddingLeft: 15,
-                                marginLeft: 15,
-                                borderWidth: 1,
-                                textAlignVertical: 'top',
-                                backgroundColor: 'white',
-                                borderRadius: 50,
-                                flexWrap: 'wrap',
-                              }}
-                              placeholder="Type message here.."
-                              onChangeText={sequence =>
-                                this.setState({sequence: sequence})
-                              }
-                            />
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginTop: 15,
-                            }}>
-                            <View style={{width: 150}}>
-                              <Text
-                                style={{
-                                  fontSize: width * 0.02,
-                                  color: '#76726d',
-                                }}>
-                                Weight:
-                              </Text>
-                            </View>
-                            <TextInput
-                              style={{
-                                borderColor: 'white',
-                                height: 40,
-                                width: '60%',
-                                paddingLeft: 15,
-                                marginLeft: 15,
-                                borderWidth: 1,
-                                textAlignVertical: 'top',
-                                backgroundColor: 'white',
-                                borderRadius: 50,
-                                flexWrap: 'wrap',
-                              }}
-                              placeholder="Type message here.."
-                              onChangeText={weight =>
-                                this.setState({weight: weight})
-                              }
-                            />
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginTop: 15,
-                            }}>
-                            <View style={{width: 160}}>
-                              <Text
-                                style={{
-                                  fontSize: width * 0.02,
-                                  color: '#76726d',
-                                }}>
-                                Status:
-                              </Text>
-                            </View>
-                            <Picker
-                              note
-                              mode="dropdown"
-                              style={{width: '40%'}}
-                              selectedValue={this.state.status.toString()}
-                              onValueChange={status =>
-                                this.setState({status: status})
-                              }>
-                              <Picker.Item label="Enable" value="1" />
-                              <Picker.Item label="Disable" value="0" />
-                            </Picker>
-                          </View>
-                        </View>
-                        <View
-                          style={{
-                            flex: 0.4,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <View style={{position: 'relative'}}>
-                            {this.state.cover == '' ? (
-                              <Image
-                                style={{
-                                  width: 200,
-                                  height: 200,
-                                  borderRadius: 200 / 2,
-                                }}
-                                source={require('../images/profile-circle-picture-8.png')}></Image>
-                            ) : (
-                              <Image
-                                style={{
-                                  width: 200,
-                                  height: 200,
-                                  borderRadius: 200 / 2,
-                                }}
-                                source={{uri: this.state.cover}}></Image>
-                            )}
-                            <View style={styles.camera_icon}>
-                              <TouchableOpacity
-                                onPress={() => this.opencamera()}>
-                                <FontAwesomeIcon
-                                  icon={faCamera}
-                                  color={'black'}
-                                  size={45}
-                                />
-                              </TouchableOpacity>
-                            </View>
-                          </View>
-                        </View>
-                      </View>
-                    </ScrollView>
-                    <View
-                      style={{
-                        marginTop: 20,
-                        borderTopColor: 'lightgrey',
-                        borderTopWidth: 1,
-                      }}>
+                        Add IngrediantsGroups
+                    </Text>
+                    </View>
+                    <View style={{ justifyContent: 'center' }}>
                       <TouchableOpacity
-                        style={styles.add_btn}
-                        onPress={() => {
-                          this.addIngrediant();
-                        }}>
-                        <Text style={{fontSize: width * 0.028, color: 'white'}}>
-                          Add
-                        </Text>
+                        onPress={() => this.setState({ add_dialog: false, img_uri: "" })}>
+                        <FontAwesomeIcon
+                          icon={faWindowClose}
+                          color={'#ff9500'}
+                          size={25}
+                        />
                       </TouchableOpacity>
                     </View>
                   </View>
-                )}
-              </ScrollView>
-            </Dialog>
-            {/* Update ingredient dialog*/}
-            <Dialog
-              visible={this.state.edit_ingredient_dialog}
-              dialogStyle={{
-                borderRadius: 10,
-                borderWidth: 2,
-                borderColor: '#efeff4',
-                width: '80%',
-                justifyContent: 'center',
-                alignSelf: 'center',
-                backgroundColor: '#efeff4',
-              }}
-              onTouchOutside={() =>
-                this.setState({edit_ingredient_dialog: false})
-              }>
-              <ScrollView>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{flex: 0.95}}>
-                    <Text
-                      style={{
-                        textAlign: 'center',
-                        borderBottomWidth: 1,
-                        borderBottomColor: 'lightgrey',
-                        paddingBottom: 15,
-                        marginTop: 0,
-                        fontSize: 23,
-                      }}>
-                      Ingrediants
-                    </Text>
-                  </View>
-                  <View style={{justifyContent: 'center'}}>
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.setState({edit_ingredient_dialog: false})
-                      }>
-                      <FontAwesomeIcon
-                        icon={faWindowClose}
-                        color={'#ff9500'}
-                        size={25}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View>
-                  <View style={{flexDirection: 'row'}}>
+                  <View style={{ flexDirection: 'row' }}>
                     <View
                       style={{
                         flex: 0.6,
@@ -1807,51 +742,12 @@ export default class IngrediantsGroups extends Component {
                         padding: 10,
                         paddingTop: 25,
                       }}>
-                      <View
-                        style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{width: 150}}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ width: 150 }}>
                           <Text
-                            style={{
-                              fontSize: width * 0.02,
-                              color: '#76726d',
-                            }}>
-                            taxId:
-                          </Text>
-                        </View>
-                        <TextInput
-                          style={{
-                            borderColor: 'white',
-                            height: 40,
-                            width: '60%',
-                            paddingLeft: 15,
-                            marginLeft: 15,
-                            borderWidth: 1,
-                            textAlignVertical: 'top',
-                            backgroundColor: 'white',
-                            borderRadius: 50,
-                            flexWrap: 'wrap',
-                          }}
-                          placeholder="Type message here.."
-                          onChangeText={Ingredienttaxid =>
-                            this.setState({Ingredienttaxid: Ingredienttaxid})
-                          }
-                          defaultValue={this.state.Ingredienttaxid.toString()}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          marginTop: 15,
-                        }}>
-                        <View style={{width: 150}}>
-                          <Text
-                            style={{
-                              fontSize: width * 0.02,
-                              color: '#76726d',
-                            }}>
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
                             Name:
-                          </Text>
+                        </Text>
                         </View>
                         <TextInput
                           style={{
@@ -1867,10 +763,8 @@ export default class IngrediantsGroups extends Component {
                             flexWrap: 'wrap',
                           }}
                           placeholder="Type message here.."
-                          onChangeText={Ingredientname =>
-                            this.setState({Ingredientname: Ingredientname})
-                          }
-                          defaultValue={this.state.Ingredientname}
+                          onChangeText={text => this.setState({ add_name: text })}
+                          value={this.state.add_name}
                         />
                       </View>
                       <View
@@ -1879,49 +773,11 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{ width: 150 }}>
                           <Text
-                            style={{
-                              fontSize: width * 0.02,
-                              color: '#76726d',
-                            }}>
-                            Price:
-                          </Text>
-                        </View>
-                        <TextInput
-                          style={{
-                            borderColor: 'white',
-                            height: 40,
-                            width: '60%',
-                            paddingLeft: 15,
-                            marginLeft: 15,
-                            borderWidth: 1,
-                            textAlignVertical: 'top',
-                            backgroundColor: 'white',
-                            borderRadius: 50,
-                            flexWrap: 'wrap',
-                          }}
-                          placeholder="Type message here.."
-                          onChangeText={Ingredientprice =>
-                            this.setState({Ingredientprice: Ingredientprice})
-                          }
-                          defaultValue={this.state.Ingredientprice}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          marginTop: 15,
-                        }}>
-                        <View style={{width: 150}}>
-                          <Text
-                            style={{
-                              fontSize: width * 0.02,
-                              color: '#76726d',
-                            }}>
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
                             Max:
-                          </Text>
+                        </Text>
                         </View>
                         <TextInput
                           style={{
@@ -1937,10 +793,12 @@ export default class IngrediantsGroups extends Component {
                             flexWrap: 'wrap',
                           }}
                           placeholder="Type message here.."
-                          onChangeText={Ingredientmax =>
-                            this.setState({Ingredientmax: Ingredientmax})
+                          number={true}
+                          keyboardType="numeric"
+                          onChangeText={number =>
+                            this.setState({ add_max: number })
                           }
-                          defaultValue={this.state.Ingredientmax.toString()}
+                          value={this.state.add_max}
                         />
                       </View>
                       <View
@@ -1949,20 +807,51 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{ width: 150 }}>
                           <Text
-                            style={{
-                              fontSize: width * 0.02,
-                              color: '#76726d',
-                            }}>
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            Min:
+                        </Text>
+                        </View>
+                        <TextInput
+                          style={{
+                            borderColor: 'white',
+                            height: 40,
+                            width: '60%',
+                            paddingLeft: 15,
+                            marginLeft: 15,
+                            borderWidth: 1,
+                            textAlignVertical: 'top',
+                            backgroundColor: 'white',
+                            borderRadius: 50,
+                            flexWrap: 'wrap',
+                          }}
+                          placeholder="Type message here.."
+                          number={true}
+                          keyboardType="numeric"
+                          onChangeText={number =>
+                            this.setState({ add_min: number })
+                          }
+                          value={this.state.add_min}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 15,
+                        }}>
+                        <View style={{ width: 150, alignSelf: 'flex-start' }}>
+                          <Text
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
                             Description:
-                          </Text>
+                        </Text>
                         </View>
                         <TextInput
                           style={{
                             borderColor: 'white',
                             height: 80,
-                            width: '60%',
+                            width: '59%',
                             paddingLeft: 15,
                             marginLeft: 15,
                             borderWidth: 1,
@@ -1974,10 +863,10 @@ export default class IngrediantsGroups extends Component {
                           placeholder="Type message here.."
                           multiline={true}
                           underlineColorAndroid="transparent"
-                          onChangeText={Ingredientdesc =>
-                            this.setState({Ingredientdesc: Ingredientdesc})
+                          onChangeText={text =>
+                            this.setState({ add_description: text })
                           }
-                          defaultValue={this.state.Ingredientdesc}
+                          value={this.state.add_description}
                         />
                       </View>
                       <View
@@ -1985,101 +874,82 @@ export default class IngrediantsGroups extends Component {
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
+                          marginRight: 50,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{ width: 150 }}>
                           <Text
-                            style={{
-                              fontSize: width * 0.02,
-                              color: '#76726d',
-                            }}>
-                            Sequence:
-                          </Text>
-                        </View>
-                        <TextInput
-                          style={{
-                            borderColor: 'white',
-                            height: 40,
-                            width: '60%',
-                            paddingLeft: 15,
-                            marginLeft: 15,
-                            borderWidth: 1,
-                            textAlignVertical: 'top',
-                            backgroundColor: 'white',
-                            borderRadius: 50,
-                            flexWrap: 'wrap',
-                          }}
-                          placeholder="Type message here.."
-                          onChangeText={Ingredientseq =>
-                            this.setState({Ingredientseq: Ingredientseq})
-                          }
-                          defaultValue={this.state.Ingredientseq.toString()}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          marginTop: 15,
-                        }}>
-                        <View style={{width: 150}}>
-                          <Text
-                            style={{
-                              fontSize: width * 0.02,
-                              color: '#76726d',
-                            }}>
-                            Weight:
-                          </Text>
-                        </View>
-                        <TextInput
-                          style={{
-                            borderColor: 'white',
-                            height: 40,
-                            width: '60%',
-                            paddingLeft: 15,
-                            marginLeft: 15,
-                            borderWidth: 1,
-                            textAlignVertical: 'top',
-                            backgroundColor: 'white',
-                            borderRadius: 50,
-                            flexWrap: 'wrap',
-                          }}
-                          placeholder="Type message here.."
-                          onChangeText={Ingredientweight =>
-                            this.setState({
-                              Ingredientweight: Ingredientweight,
-                            })
-                          }
-                          defaultValue={this.state.Ingredientweight}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          marginTop: 15,
-                        }}>
-                        <View style={{width: 160}}>
-                          <Text
-                            style={{
-                              fontSize: width * 0.02,
-                              color: '#76726d',
-                            }}>
-                            Status:
-                          </Text>
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            Status :
+                        </Text>
                         </View>
                         <Picker
                           note
                           mode="dropdown"
-                          style={{width: '40%'}}
-                          selectedValue={this.state.Ingredientstatus.toString()}
-                          onValueChange={status =>
-                            this.setState({
-                              Ingredientstatus: status,
-                            })
+                          style={{ width: '39%', marginLeft: 12 }}
+                          selectedValue={this.state.add_status}
+                          onValueChange={add_status =>
+                            this.setState({ add_status: add_status })
                           }>
                           <Picker.Item label="Enable" value="1" />
                           <Picker.Item label="Disable" value="0" />
                         </Picker>
+                      </View>
+
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 10,
+                        }}>
+                        <View style={{ width: 150 }}>
+                          <Text
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            Is Main? :
+                        </Text>
+                        </View>
+                        <CheckBox
+                          style={{ marginLeft: 15 }}
+                          status={checked ? 'checked' : 'unchecked'}
+                          tintColors={{ true: 'orange' }}
+                          value={checked}
+                          onValueChange={() => this.addCheckBox()}
+                        />
+                      </View>
+
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 15,
+                        }}>
+                        <View style={{ width: 150 }}>
+                          <Text
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            Sequence:
+                        </Text>
+                        </View>
+                        <TextInput
+                          style={{
+                            borderColor: 'white',
+                            height: 40,
+                            width: '60%',
+                            paddingLeft: 15,
+                            marginLeft: 15,
+                            marginRight: 10,
+                            borderWidth: 1,
+                            textAlignVertical: 'top',
+                            backgroundColor: 'white',
+                            borderRadius: 50,
+                            flexWrap: 'wrap',
+                          }}
+                          placeholder="Type message here.."
+                          number={true}
+                          keyboardType="numeric"
+                          onChangeText={number =>
+                            this.setState({ add_sequence: number })
+                          }
+                          value={this.state.add_sequence}
+                        />
                       </View>
                     </View>
                     <View
@@ -2088,28 +958,24 @@ export default class IngrediantsGroups extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}>
-                      <View style={{position: 'relative'}}>
-                        {this.state.cover == '' ? (
+                      <View style={{ position: 'relative' }}>
+                        {this.state.img_uri == '' ? (
                           <Image
                             style={{
                               width: 200,
                               height: 200,
                               borderRadius: 200 / 2,
                             }}
-                            source={{
-                              uri:
-                                'http://dev-fs.8d.ie/' +
-                                this.state.Ingredientimage,
-                            }}></Image>
+                            source={require('../images/profile-circle-picture-8.png')}></Image>
                         ) : (
-                          <Image
-                            style={{
-                              width: 200,
-                              height: 200,
-                              borderRadius: 200 / 2,
-                            }}
-                            source={{uri: this.state.cover}}></Image>
-                        )}
+                            <Image
+                              style={{
+                                width: 200,
+                                height: 200,
+                                borderRadius: 200 / 2,
+                              }}
+                              source={{ uri: this.state.img_uri }}></Image>
+                          )}
                         <View style={styles.camera_icon}>
                           <TouchableOpacity onPress={() => this.opencamera()}>
                             <FontAwesomeIcon
@@ -2122,156 +988,1320 @@ export default class IngrediantsGroups extends Component {
                       </View>
                     </View>
                   </View>
-                </View>
-                <View
-                  style={{
-                    marginTop: 20,
-                    borderTopColor: 'lightgrey',
-                    borderTopWidth: 1,
-                    flexDirection: 'row',
-                  }}>
-                  <View style={{flex: 0.9}}>
-                    <TouchableOpacity
-                      style={styles.delete_btn}
-                      onPress={() => this.deleteIngredient()}>
-                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                        Delete
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View>
-                    <TouchableOpacity
-                      style={styles.add_btn}
-                      onPress={() =>
-                        this.updateIngredient(this.state.Ingredientid)
-                      }>
-                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                        Update
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </ScrollView>
-            </Dialog>
-          </KeyboardAvoidingView>
-          <View style={{flex: 1}}>
-            {this.state.dataSource.length > 0 ? (
-              <Grid>
-                <Row style={{height: 60}}>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      borderBottomColor: 'lightgrey',
-                      borderBottomWidth: 1,
-                      alignItems: 'center',
-                      justifyContent: 'center',
+                      marginTop: 15,
+                      borderTopColor: 'lightgrey',
+                      borderTopWidth: 1,
                     }}>
-                    <Col style={{alignItems: 'center', width: '10%'}}>
-                      <View>
-                        <Text
-                          style={{
-                            fontSize: width * 0.02,
-                            backgroundColor: '#ff9500',
-                            color: 'white',
-                            borderRadius: 80,
-                            padding: 15,
-                            paddingBottom: 2,
-                            paddingTop: 2,
-                          }}>
-                          Sr.No.
-                        </Text>
-                      </View>
-                    </Col>
-                    <Col style={{alignItems: 'center', width: '18%'}}>
-                      <View>
-                        <Text
-                          style={{
-                            fontSize: width * 0.02,
-                            backgroundColor: '#ff9500',
-                            color: 'white',
-                            borderRadius: 80,
-                            padding: 15,
-                            paddingBottom: 2,
-                            paddingTop: 2,
-                          }}>
-                          Name
-                        </Text>
-                      </View>
-                    </Col>
-                    <Col style={{alignItems: 'center', width: '18%'}}>
-                      <View>
-                        <Text
-                          style={{
-                            fontSize: width * 0.02,
-                            backgroundColor: '#ff9500',
-                            color: 'white',
-                            borderRadius: 80,
-                            padding: 15,
-                            paddingBottom: 2,
-                            paddingTop: 2,
-                          }}>
-                          Max
-                        </Text>
-                      </View>
-                    </Col>
-                    <Col style={{alignItems: 'center', width: '18%'}}>
-                      <View>
-                        <Text
-                          style={{
-                            fontSize: width * 0.02,
-                            backgroundColor: '#ff9500',
-                            color: 'white',
-                            borderRadius: 80,
-                            padding: 15,
-                            paddingBottom: 2,
-                            paddingTop: 2,
-                          }}>
-                          Status
-                        </Text>
-                      </View>
-                    </Col>
-                    <Col style={{alignItems: 'center', width: '18%'}}>
-                      <View>
-                        <Text
-                          style={{
-                            fontSize: width * 0.02,
-                            backgroundColor: '#ff9500',
-                            color: 'white',
-                            borderRadius: 80,
-                            padding: 15,
-                            paddingBottom: 2,
-                            paddingTop: 2,
-                          }}>
-                          Main
-                        </Text>
-                      </View>
-                    </Col>
-                    <Col style={{alignItems: 'center', width: '18%'}}>
-                      <View>
-                        <Text
-                          style={{
-                            fontSize: width * 0.02,
-                            backgroundColor: '#ff9500',
-                            color: 'white',
-                            borderRadius: 80,
-                            padding: 15,
-                            paddingBottom: 2,
-                            paddingTop: 2,
-                          }}>
-                          Action
-                        </Text>
-                      </View>
-                    </Col>
+                    <TouchableOpacity
+                      style={styles.add_btn}
+                      onPress={() => {
+                        this.addDetail();
+                      }}>
+                      <Text style={{ fontSize: width * 0.03, color: 'white' }}>
+                        Add
+                    </Text>
+                    </TouchableOpacity>
                   </View>
-                </Row>
-                {this.filldata()}
-              </Grid>
-            ) : (
-              <Grid></Grid>
-            )}
-          </View>
-        </ScrollView>
-      </View>
+                </ScrollView>
+              </Dialog>
+              {/* Update dialog */}
+              <Dialog
+                visible={this.state.edit_dialog}
+                dialogStyle={{
+                  borderRadius: 10,
+                  borderWidth: 2,
+                  borderColor: '#efeff4',
+                  width: '80%',
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  backgroundColor: '#efeff4',
+                }}
+                onTouchOutside={() => this.setState({ edit_dialog: false, img_uri: "" })}>
+                <ScrollView>
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 0.95 }}>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          borderBottomWidth: 1,
+                          borderBottomColor: 'lightgrey',
+                          paddingBottom: 15,
+                          marginTop: 0,
+                          fontSize: 23,
+                        }}>
+                        Edit IngrediantsGroups{' '}
+                      </Text>
+                    </View>
+                    <View style={{ justifyContent: 'center' }}>
+                      <TouchableOpacity
+                        onPress={() => this.setState({ edit_dialog: false, img_uri: "" })}>
+                        <FontAwesomeIcon
+                          icon={faWindowClose}
+                          color={'#ff9500'}
+                          size={25}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                    <View
+                      style={{
+                        flex: 0.6,
+                        borderRightWidth: 1,
+                        borderRightColor: 'lightgrey',
+                        padding: 10,
+                      }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ width: 150 }}>
+                          <Text
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            Name :
+                        </Text>
+                        </View>
+                        <TextInput
+                          style={{
+                            borderColor: 'white',
+                            height: 40,
+                            width: '60%',
+                            paddingLeft: 15,
+                            marginLeft: 15,
+                            borderWidth: 1,
+                            textAlignVertical: 'top',
+                            backgroundColor: 'white',
+                            borderRadius: 50,
+                            flexWrap: 'wrap',
+                          }}
+                          placeholder="Type message here.."
+                          onChangeText={editname => this.setState({ editname })}
+                          defaultValue={this.state.editname}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 15,
+                        }}>
+                        <View style={{ width: 150 }}>
+                          <Text
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            Max :
+                        </Text>
+                        </View>
+                        <TextInput
+                          style={{
+                            borderColor: 'white',
+                            height: 40,
+                            width: '60%',
+                            paddingLeft: 15,
+                            marginLeft: 15,
+                            borderWidth: 1,
+                            textAlignVertical: 'top',
+                            backgroundColor: 'white',
+                            borderRadius: 50,
+                            flexWrap: 'wrap',
+                          }}
+                          placeholder="Type message here.."
+                          number={true}
+                          keyboardType="numeric"
+                          // onChangeText={editmax =>
+                          //     this.setState({ editmax })
+                          // }
+                          // defaultValue={this.state.editmax}
+                          //value={parseInt(this.state.editmax)}
+
+                          onChangeText={text => this.setState({ editmax: text })}
+                          value={this.state.editmax.toString()}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 15,
+                        }}>
+                        <View style={{ width: 150 }}>
+                          <Text
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            Min :
+                        </Text>
+                        </View>
+                        <TextInput
+                          style={{
+                            borderColor: 'white',
+                            height: 40,
+                            width: '60%',
+                            paddingLeft: 15,
+                            marginLeft: 15,
+                            borderWidth: 1,
+                            textAlignVertical: 'top',
+                            backgroundColor: 'white',
+                            borderRadius: 50,
+                            flexWrap: 'wrap',
+                          }}
+                          placeholder="Type message here.."
+                          number={true}
+                          keyboardType="numeric"
+                          // onChangeText={editmin =>
+                          //     this.setState({ editmin })
+                          // }
+                          // defaultValue={this.state.editmin}
+                          onChangeText={text => this.setState({ editmin: text })}
+                          value={this.state.editmin.toString()}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 15,
+                        }}>
+                        <View style={{ width: 150, alignSelf: 'flex-start' }}>
+                          <Text
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            Description :
+                        </Text>
+                        </View>
+
+                        <TextInput
+                          style={{
+                            borderColor: 'white',
+                            height: 40,
+                            width: '60%',
+                            paddingLeft: 15,
+                            marginLeft: 15,
+                            borderWidth: 1,
+                            textAlignVertical: 'top',
+                            backgroundColor: 'white',
+                            borderRadius: 50,
+                            flexWrap: 'wrap',
+                          }}
+                          placeholder="Type message here.."
+                          multiline={true}
+                          underlineColorAndroid="transparent"
+                          onChangeText={editdescription =>
+                            this.setState({ editdescription })
+                          }
+                          defaultValue={this.state.editdescription}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 15,
+                          marginRight: 50,
+                        }}>
+                        <View style={{ width: 150 }}>
+                          <Text
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            Status :
+                        </Text>
+                        </View>
+                        <Picker
+                          note
+                          mode="dropdown"
+                          style={{ width: '39%', marginLeft: 12 }}
+                          selectedValue={this.state.editstatus.toString()}
+                          onValueChange={editstatus =>
+                            this.setState({ editstatus: editstatus })
+                          }>
+                          <Picker.Item label="Enable" value="1" />
+                          <Picker.Item label="Disable" value="0" />
+                        </Picker>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 15,
+                        }}>
+                        <View style={{ width: 150 }}>
+                          <Text
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            Is_Main:
+                        </Text>
+                        </View>
+                        <CheckBox
+                          style={{ marginLeft: 15 }}
+                          status={editis_main ? 'checked' : 'unchecked'}
+                          tintColors={{ true: 'orange' }}
+                          value={editis_main}
+                          onValueChange={() => this.updateCheckBox()}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 15,
+                        }}>
+                        <View style={{ width: 150 }}>
+                          <Text
+                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            Sequence :
+                        </Text>
+                        </View>
+                        <TextInput
+                          style={{
+                            borderColor: 'white',
+                            height: 40,
+                            width: '60%',
+                            paddingLeft: 15,
+                            marginLeft: 15,
+                            borderWidth: 1,
+                            textAlignVertical: 'top',
+                            backgroundColor: 'white',
+                            borderRadius: 50,
+                            flexWrap: 'wrap',
+                          }}
+                          placeholder="Type message here.."
+                          number={true}
+                          keyboardType="numeric"
+                          // onChangeText={editsequence => this.setState({ editsequence })}
+                          // defaultValue={this.state.editsequence}
+                          onChangeText={text =>
+                            this.setState({ editsequence: text })
+                          }
+                          value={this.state.editsequence.toString()}
+                        />
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        flex: 0.4,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <View style={{ position: 'relative' }}>
+                        {this.state.img_uri == '' ? (
+                          <Image
+                            style={{
+                              width: 200,
+                              height: 200,
+                              borderRadius: 200 / 2,
+                            }}
+                            source={{
+                              uri: 'http://dev-fs.8d.ie/' + this.state.editcover,
+                            }}></Image>
+                        ) : (
+                            <Image
+                              style={{
+                                width: 200,
+                                height: 200,
+                                borderRadius: 200 / 2,
+                              }}
+                              source={{ uri: this.state.img_uri }}></Image>
+                          )}
+                        <View style={styles.camera_icon}>
+                          <TouchableOpacity onPress={() => this.opencamera()}>
+                            <FontAwesomeIcon
+                              icon={faCamera}
+                              color={'black'}
+                              size={45}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      marginTop: 20,
+                      borderTopColor: 'lightgrey',
+                      borderTopWidth: 1,
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                    }}>
+                    <View style={{ flex: 0.9, marginTop: 10 }}>
+                      <TouchableOpacity
+                        style={styles.delete_btn}
+                        onPress={() => this.deleteIngredientGroup()}>
+                        <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                          Delete
+                      </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{ marginTop: 10 }}>
+                      <TouchableOpacity
+                        style={styles.add_btn}
+                        onPress={() =>
+                          this.updatePress(this.state.ingrediant_id)
+                        }>
+                        <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                          Update
+                      </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </ScrollView>
+              </Dialog>
+              {/* Add ingredient dialog */}
+              <Dialog
+                visible={this.state.add_ingredient_dialog}
+                dialogStyle={{
+                  borderRadius: 10,
+                  borderWidth: 2,
+                  borderColor: '#efeff4',
+                  width: '80%',
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  backgroundColor: '#efeff4',
+                }}
+                onTouchOutside={() =>
+                  this.setState({ add_ingredient_dialog: false, dialog: false, cover: "" })
+                }>
+                <ScrollView>
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 0.95 }}>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          borderBottomWidth: 1,
+                          borderBottomColor: 'lightgrey',
+                          paddingBottom: 15,
+                          marginTop: 0,
+                          fontSize: 23,
+                        }}>
+                        Ingrediants
+                    </Text>
+                    </View>
+                    <View style={{ justifyContent: 'center' }}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.setState({
+                            add_ingredient_dialog: false,
+                            dialog: false,
+                            cover: ""
+                          })
+                        }>
+                        <FontAwesomeIcon
+                          icon={faWindowClose}
+                          color={'#ff9500'}
+                          size={25}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                    <View style={{ flex: 0.5 }}>
+                      {this.state.dialog == false ? (
+                        <TouchableOpacity
+                          style={styles.add}
+                          onPress={() =>
+                            this.setState({ add_ingredient_dialog: true })
+                          }>
+                          <Text style={{ color: 'white', fontSize: 20 }}>
+                            Insert
+                        </Text>
+                        </TouchableOpacity>
+                      ) : (
+                          <TouchableOpacity
+                            style={styles.inactive_add}
+                            onPress={() => this.setState({ dialog: false })}>
+                            <Text style={{ color: 'white', fontSize: 20 }}>
+                              Insert
+                        </Text>
+                          </TouchableOpacity>
+                        )}
+                    </View>
+                    <View style={{ flex: 0.5 }}>
+                      {this.state.dialog == true ? (
+                        <TouchableOpacity
+                          style={styles.add}
+                          onPress={() =>
+                            this.setState({ add_ingredient_dialog: false })
+                          }>
+                          <Text style={{ color: 'white', fontSize: 20 }}>View</Text>
+                        </TouchableOpacity>
+                      ) : (
+                          <TouchableOpacity
+                            style={styles.inactive_add}
+                            onPress={() => {
+                              this.getIngredientGroup();
+                            }}>
+                            <Text style={{ color: 'white', fontSize: 20 }}>View</Text>
+                          </TouchableOpacity>
+                        )}
+                    </View>
+                  </View>
+                  {this.state.dialog == true ? (
+                    <ScrollView>
+                      <Grid style={{ marginTop: 15 }}>
+                        <Row style={{ height: 30, marginVertical: 20 }}>
+                          <Col style={styles.add}>
+                            <Text style={styles.grid_text}>Name</Text>
+                          </Col>
+                          <Col style={styles.add}>
+                            <Text style={styles.grid_text}>Price</Text>
+                          </Col>
+                          <Col style={styles.add}>
+                            <Text style={styles.grid_text}>Max</Text>
+                          </Col>
+                          <Col style={styles.add}>
+                            <Text style={styles.grid_text}>Weight</Text>
+                          </Col>
+                          <Col style={styles.add}>
+                            <Text style={styles.grid_text}>Status</Text>
+                          </Col>
+                        </Row>
+                        {this.fillIngredient()}
+                      </Grid>
+                    </ScrollView>
+                  ) : (
+                      <View>
+                        <ScrollView>
+                          <View style={{ flexDirection: 'row' }}>
+                            <View
+                              style={{
+                                flex: 0.6,
+                                borderRightWidth: 1,
+                                borderRightColor: 'lightgrey',
+                                padding: 10,
+                                paddingTop: 25,
+                              }}>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                }}>
+                                <View style={{ width: 150 }}>
+                                  <Text
+                                    style={{
+                                      fontSize: width * 0.02,
+                                      color: '#76726d',
+                                    }}>
+                                    taxId:
+                              </Text>
+                                </View>
+                                <TextInput
+                                  style={{
+                                    borderColor: 'white',
+                                    height: 40,
+                                    width: '60%',
+                                    paddingLeft: 15,
+                                    marginLeft: 15,
+                                    borderWidth: 1,
+                                    textAlignVertical: 'top',
+                                    backgroundColor: 'white',
+                                    borderRadius: 50,
+                                    flexWrap: 'wrap',
+                                  }}
+                                  placeholder="Type message here.."
+                                  onChangeText={tax_id =>
+                                    this.setState({ tax_id: tax_id })
+                                  }
+                                />
+                              </View>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  marginTop: 15,
+                                }}>
+                                <View style={{ width: 150 }}>
+                                  <Text
+                                    style={{
+                                      fontSize: width * 0.02,
+                                      color: '#76726d',
+                                    }}>
+                                    Name:
+                              </Text>
+                                </View>
+                                <TextInput
+                                  style={{
+                                    borderColor: 'white',
+                                    height: 40,
+                                    width: '60%',
+                                    paddingLeft: 15,
+                                    marginLeft: 15,
+                                    borderWidth: 1,
+                                    textAlignVertical: 'top',
+                                    backgroundColor: 'white',
+                                    borderRadius: 50,
+                                    flexWrap: 'wrap',
+                                  }}
+                                  placeholder="Type message here.."
+                                  onChangeText={name => this.setState({ name: name })}
+                                />
+                              </View>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  marginTop: 15,
+                                }}>
+                                <View style={{ width: 150 }}>
+                                  <Text
+                                    style={{
+                                      fontSize: width * 0.02,
+                                      color: '#76726d',
+                                    }}>
+                                    Price:
+                              </Text>
+                                </View>
+                                <TextInput
+                                  style={{
+                                    borderColor: 'white',
+                                    height: 40,
+                                    width: '60%',
+                                    paddingLeft: 15,
+                                    marginLeft: 15,
+                                    borderWidth: 1,
+                                    textAlignVertical: 'top',
+                                    backgroundColor: 'white',
+                                    borderRadius: 50,
+                                    flexWrap: 'wrap',
+                                  }}
+                                  placeholder="Type message here.."
+                                  onChangeText={price =>
+                                    this.setState({ price: price })
+                                  }
+                                />
+                              </View>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  marginTop: 15,
+                                }}>
+                                <View style={{ width: 150 }}>
+                                  <Text
+                                    style={{
+                                      fontSize: width * 0.02,
+                                      color: '#76726d',
+                                    }}>
+                                    Max:
+                              </Text>
+                                </View>
+                                <TextInput
+                                  style={{
+                                    borderColor: 'white',
+                                    height: 40,
+                                    width: '60%',
+                                    paddingLeft: 15,
+                                    marginLeft: 15,
+                                    borderWidth: 1,
+                                    textAlignVertical: 'top',
+                                    backgroundColor: 'white',
+                                    borderRadius: 50,
+                                    flexWrap: 'wrap',
+                                  }}
+                                  placeholder="Type message here.."
+                                  onChangeText={max => this.setState({ max: max })}
+                                />
+                              </View>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  marginTop: 15,
+                                }}>
+                                <View style={{ width: 150 }}>
+                                  <Text
+                                    style={{
+                                      fontSize: width * 0.02,
+                                      color: '#76726d',
+                                    }}>
+                                    Description:
+                              </Text>
+                                </View>
+                                <TextInput
+                                  style={{
+                                    borderColor: 'white',
+                                    height: 80,
+                                    width: '60%',
+                                    paddingLeft: 15,
+                                    marginLeft: 15,
+                                    borderWidth: 1,
+                                    textAlignVertical: 'top',
+                                    backgroundColor: 'white',
+                                    borderRadius: 10,
+                                    flexWrap: 'wrap',
+                                  }}
+                                  placeholder="Type message here.."
+                                  multiline={true}
+                                  underlineColorAndroid="transparent"
+                                  onChangeText={description =>
+                                    this.setState({ description: description })
+                                  }
+                                />
+                              </View>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  marginTop: 15,
+                                }}>
+                                <View style={{ width: 150 }}>
+                                  <Text
+                                    style={{
+                                      fontSize: width * 0.02,
+                                      color: '#76726d',
+                                    }}>
+                                    Sequence:
+                              </Text>
+                                </View>
+                                <TextInput
+                                  style={{
+                                    borderColor: 'white',
+                                    height: 40,
+                                    width: '60%',
+                                    paddingLeft: 15,
+                                    marginLeft: 15,
+                                    borderWidth: 1,
+                                    textAlignVertical: 'top',
+                                    backgroundColor: 'white',
+                                    borderRadius: 50,
+                                    flexWrap: 'wrap',
+                                  }}
+                                  placeholder="Type message here.."
+                                  onChangeText={sequence =>
+                                    this.setState({ sequence: sequence })
+                                  }
+                                />
+                              </View>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  marginTop: 15,
+                                }}>
+                                <View style={{ width: 150 }}>
+                                  <Text
+                                    style={{
+                                      fontSize: width * 0.02,
+                                      color: '#76726d',
+                                    }}>
+                                    Weight:
+                              </Text>
+                                </View>
+                                <TextInput
+                                  style={{
+                                    borderColor: 'white',
+                                    height: 40,
+                                    width: '60%',
+                                    paddingLeft: 15,
+                                    marginLeft: 15,
+                                    borderWidth: 1,
+                                    textAlignVertical: 'top',
+                                    backgroundColor: 'white',
+                                    borderRadius: 50,
+                                    flexWrap: 'wrap',
+                                  }}
+                                  placeholder="Type message here.."
+                                  onChangeText={weight =>
+                                    this.setState({ weight: weight })
+                                  }
+                                />
+                              </View>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  alignItems: 'center',
+                                  marginTop: 15,
+                                }}>
+                                <View style={{ width: 160 }}>
+                                  <Text
+                                    style={{
+                                      fontSize: width * 0.02,
+                                      color: '#76726d',
+                                    }}>
+                                    Status:
+                              </Text>
+                                </View>
+                                <Picker
+                                  note
+                                  mode="dropdown"
+                                  style={{ width: '40%' }}
+                                  selectedValue={this.state.status.toString()}
+                                  onValueChange={status =>
+                                    this.setState({ status: status })
+                                  }>
+                                  <Picker.Item label="Enable" value="1" />
+                                  <Picker.Item label="Disable" value="0" />
+                                </Picker>
+                              </View>
+                            </View>
+                            <View
+                              style={{
+                                flex: 0.4,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                              }}>
+                              <View style={{ position: 'relative' }}>
+                                {this.state.cover == '' ? (
+                                  <Image
+                                    style={{
+                                      width: 200,
+                                      height: 200,
+                                      borderRadius: 200 / 2,
+                                    }}
+                                    source={require('../images/profile-circle-picture-8.png')}></Image>
+                                ) : (
+                                    <Image
+                                      style={{
+                                        width: 200,
+                                        height: 200,
+                                        borderRadius: 200 / 2,
+                                      }}
+                                      source={{ uri: this.state.cover }}></Image>
+                                  )}
+                                <View style={styles.camera_icon}>
+                                  <TouchableOpacity
+                                    onPress={() => this.opencamera()}>
+                                    <FontAwesomeIcon
+                                      icon={faCamera}
+                                      color={'black'}
+                                      size={45}
+                                    />
+                                  </TouchableOpacity>
+                                </View>
+                              </View>
+                            </View>
+                          </View>
+                        </ScrollView>
+                        <View
+                          style={{
+                            marginTop: 20,
+                            borderTopColor: 'lightgrey',
+                            borderTopWidth: 1,
+                          }}>
+                          <TouchableOpacity
+                            style={styles.add_btn}
+                            onPress={() => {
+                              this.addIngrediant();
+                            }}>
+                            <Text style={{ fontSize: width * 0.028, color: 'white' }}>
+                              Add
+                        </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    )}
+                </ScrollView>
+              </Dialog>
+              {/* Update ingredient dialog*/}
+              <Dialog
+                visible={this.state.edit_ingredient_dialog}
+                dialogStyle={{
+                  borderRadius: 10,
+                  borderWidth: 2,
+                  borderColor: '#efeff4',
+                  width: '80%',
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  backgroundColor: '#efeff4',
+                }}
+                onTouchOutside={() =>
+                  this.setState({ edit_ingredient_dialog: false, cover: "" })
+                }>
+                <ScrollView>
+                  <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flex: 0.95 }}>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          borderBottomWidth: 1,
+                          borderBottomColor: 'lightgrey',
+                          paddingBottom: 15,
+                          marginTop: 0,
+                          fontSize: 23,
+                        }}>
+                        Ingrediants
+                    </Text>
+                    </View>
+                    <View style={{ justifyContent: 'center' }}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.setState({ edit_ingredient_dialog: false, cover: "" })
+                        }>
+                        <FontAwesomeIcon
+                          icon={faWindowClose}
+                          color={'#ff9500'}
+                          size={25}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <View
+                        style={{
+                          flex: 0.6,
+                          borderRightWidth: 1,
+                          borderRightColor: 'lightgrey',
+                          padding: 10,
+                          paddingTop: 25,
+                        }}>
+                        <View
+                          style={{ flexDirection: 'row', alignItems: 'center' }}>
+                          <View style={{ width: 150 }}>
+                            <Text
+                              style={{
+                                fontSize: width * 0.02,
+                                color: '#76726d',
+                              }}>
+                              taxId:
+                          </Text>
+                          </View>
+                          <TextInput
+                            style={{
+                              borderColor: 'white',
+                              height: 40,
+                              width: '60%',
+                              paddingLeft: 15,
+                              marginLeft: 15,
+                              borderWidth: 1,
+                              textAlignVertical: 'top',
+                              backgroundColor: 'white',
+                              borderRadius: 50,
+                              flexWrap: 'wrap',
+                            }}
+                            placeholder="Type message here.."
+                            onChangeText={Ingredienttaxid =>
+                              this.setState({ Ingredienttaxid: Ingredienttaxid })
+                            }
+                            defaultValue={this.state.Ingredienttaxid.toString()}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: 15,
+                          }}>
+                          <View style={{ width: 150 }}>
+                            <Text
+                              style={{
+                                fontSize: width * 0.02,
+                                color: '#76726d',
+                              }}>
+                              Name:
+                          </Text>
+                          </View>
+                          <TextInput
+                            style={{
+                              borderColor: 'white',
+                              height: 40,
+                              width: '60%',
+                              paddingLeft: 15,
+                              marginLeft: 15,
+                              borderWidth: 1,
+                              textAlignVertical: 'top',
+                              backgroundColor: 'white',
+                              borderRadius: 50,
+                              flexWrap: 'wrap',
+                            }}
+                            placeholder="Type message here.."
+                            onChangeText={Ingredientname =>
+                              this.setState({ Ingredientname: Ingredientname })
+                            }
+                            defaultValue={this.state.Ingredientname}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: 15,
+                          }}>
+                          <View style={{ width: 150 }}>
+                            <Text
+                              style={{
+                                fontSize: width * 0.02,
+                                color: '#76726d',
+                              }}>
+                              Price:
+                          </Text>
+                          </View>
+                          <TextInput
+                            style={{
+                              borderColor: 'white',
+                              height: 40,
+                              width: '60%',
+                              paddingLeft: 15,
+                              marginLeft: 15,
+                              borderWidth: 1,
+                              textAlignVertical: 'top',
+                              backgroundColor: 'white',
+                              borderRadius: 50,
+                              flexWrap: 'wrap',
+                            }}
+                            placeholder="Type message here.."
+                            onChangeText={Ingredientprice =>
+                              this.setState({ Ingredientprice: Ingredientprice })
+                            }
+                            defaultValue={this.state.Ingredientprice}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: 15,
+                          }}>
+                          <View style={{ width: 150 }}>
+                            <Text
+                              style={{
+                                fontSize: width * 0.02,
+                                color: '#76726d',
+                              }}>
+                              Max:
+                          </Text>
+                          </View>
+                          <TextInput
+                            style={{
+                              borderColor: 'white',
+                              height: 40,
+                              width: '60%',
+                              paddingLeft: 15,
+                              marginLeft: 15,
+                              borderWidth: 1,
+                              textAlignVertical: 'top',
+                              backgroundColor: 'white',
+                              borderRadius: 50,
+                              flexWrap: 'wrap',
+                            }}
+                            placeholder="Type message here.."
+                            onChangeText={Ingredientmax =>
+                              this.setState({ Ingredientmax: Ingredientmax })
+                            }
+                            defaultValue={this.state.Ingredientmax.toString()}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: 15,
+                          }}>
+                          <View style={{ width: 150 }}>
+                            <Text
+                              style={{
+                                fontSize: width * 0.02,
+                                color: '#76726d',
+                              }}>
+                              Description:
+                          </Text>
+                          </View>
+                          <TextInput
+                            style={{
+                              borderColor: 'white',
+                              height: 80,
+                              width: '60%',
+                              paddingLeft: 15,
+                              marginLeft: 15,
+                              borderWidth: 1,
+                              textAlignVertical: 'top',
+                              backgroundColor: 'white',
+                              borderRadius: 10,
+                              flexWrap: 'wrap',
+                            }}
+                            placeholder="Type message here.."
+                            multiline={true}
+                            underlineColorAndroid="transparent"
+                            onChangeText={Ingredientdesc =>
+                              this.setState({ Ingredientdesc: Ingredientdesc })
+                            }
+                            defaultValue={this.state.Ingredientdesc}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: 15,
+                          }}>
+                          <View style={{ width: 150 }}>
+                            <Text
+                              style={{
+                                fontSize: width * 0.02,
+                                color: '#76726d',
+                              }}>
+                              Sequence:
+                          </Text>
+                          </View>
+                          <TextInput
+                            style={{
+                              borderColor: 'white',
+                              height: 40,
+                              width: '60%',
+                              paddingLeft: 15,
+                              marginLeft: 15,
+                              borderWidth: 1,
+                              textAlignVertical: 'top',
+                              backgroundColor: 'white',
+                              borderRadius: 50,
+                              flexWrap: 'wrap',
+                            }}
+                            placeholder="Type message here.."
+                            onChangeText={Ingredientseq =>
+                              this.setState({ Ingredientseq: Ingredientseq })
+                            }
+                            defaultValue={this.state.Ingredientseq.toString()}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: 15,
+                          }}>
+                          <View style={{ width: 150 }}>
+                            <Text
+                              style={{
+                                fontSize: width * 0.02,
+                                color: '#76726d',
+                              }}>
+                              Weight:
+                          </Text>
+                          </View>
+                          <TextInput
+                            style={{
+                              borderColor: 'white',
+                              height: 40,
+                              width: '60%',
+                              paddingLeft: 15,
+                              marginLeft: 15,
+                              borderWidth: 1,
+                              textAlignVertical: 'top',
+                              backgroundColor: 'white',
+                              borderRadius: 50,
+                              flexWrap: 'wrap',
+                            }}
+                            placeholder="Type message here.."
+                            onChangeText={Ingredientweight =>
+                              this.setState({
+                                Ingredientweight: Ingredientweight,
+                              })
+                            }
+                            defaultValue={this.state.Ingredientweight}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            marginTop: 15,
+                          }}>
+                          <View style={{ width: 160 }}>
+                            <Text
+                              style={{
+                                fontSize: width * 0.02,
+                                color: '#76726d',
+                              }}>
+                              Status:
+                          </Text>
+                          </View>
+                          <Picker
+                            note
+                            mode="dropdown"
+                            style={{ width: '40%' }}
+                            selectedValue={this.state.Ingredientstatus.toString()}
+                            onValueChange={status =>
+                              this.setState({
+                                Ingredientstatus: status,
+                              })
+                            }>
+                            <Picker.Item label="Enable" value="1" />
+                            <Picker.Item label="Disable" value="0" />
+                          </Picker>
+                        </View>
+                      </View>
+                      <View
+                        style={{
+                          flex: 0.4,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <View style={{ position: 'relative' }}>
+                          {this.state.cover == '' ? (
+                            <Image
+                              style={{
+                                width: 200,
+                                height: 200,
+                                borderRadius: 200 / 2,
+                              }}
+                              source={{
+                                uri:
+                                  'http://dev-fs.8d.ie/' +
+                                  this.state.Ingredientimage,
+                              }}></Image>
+                          ) : (
+                              <Image
+                                style={{
+                                  width: 200,
+                                  height: 200,
+                                  borderRadius: 200 / 2,
+                                }}
+                                source={{ uri: this.state.cover }}></Image>
+                            )}
+                          <View style={styles.camera_icon}>
+                            <TouchableOpacity onPress={() => this.opencamera()}>
+                              <FontAwesomeIcon
+                                icon={faCamera}
+                                color={'black'}
+                                size={45}
+                              />
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      marginTop: 20,
+                      borderTopColor: 'lightgrey',
+                      borderTopWidth: 1,
+                      flexDirection: 'row',
+                    }}>
+                    <View style={{ flex: 0.9 }}>
+                      <TouchableOpacity
+                        style={styles.delete_btn}
+                        onPress={() => this.deleteIngredient()}>
+                        <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                          Delete
+                      </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View>
+                      <TouchableOpacity
+                        style={styles.add_btn}
+                        onPress={() =>
+                          this.updateIngredient(this.state.Ingredientid)
+                        }>
+                        <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                          Update
+                      </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </ScrollView>
+              </Dialog>
+            </KeyboardAvoidingView>
+            <View style={{ flex: 1 }}>
+              {this.state.dataSource.length > 0 ? (
+                <Grid>
+                  <Row style={{ height: 60 }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        borderBottomColor: 'lightgrey',
+                        borderBottomWidth: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <Col style={{ alignItems: 'center', width: '10%' }}>
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: width * 0.02,
+                              backgroundColor: '#ff9500',
+                              color: 'white',
+                              borderRadius: 80,
+                              padding: 15,
+                              paddingBottom: 2,
+                              paddingTop: 2,
+                            }}>
+                            Sr.No.
+                        </Text>
+                        </View>
+                      </Col>
+                      <Col style={{ alignItems: 'center', width: '18%' }}>
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: width * 0.02,
+                              backgroundColor: '#ff9500',
+                              color: 'white',
+                              borderRadius: 80,
+                              padding: 15,
+                              paddingBottom: 2,
+                              paddingTop: 2,
+                            }}>
+                            Name
+                        </Text>
+                        </View>
+                      </Col>
+                      <Col style={{ alignItems: 'center', width: '18%' }}>
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: width * 0.02,
+                              backgroundColor: '#ff9500',
+                              color: 'white',
+                              borderRadius: 80,
+                              padding: 15,
+                              paddingBottom: 2,
+                              paddingTop: 2,
+                            }}>
+                            Max
+                        </Text>
+                        </View>
+                      </Col>
+                      <Col style={{ alignItems: 'center', width: '18%' }}>
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: width * 0.02,
+                              backgroundColor: '#ff9500',
+                              color: 'white',
+                              borderRadius: 80,
+                              padding: 15,
+                              paddingBottom: 2,
+                              paddingTop: 2,
+                            }}>
+                            Status
+                        </Text>
+                        </View>
+                      </Col>
+                      <Col style={{ alignItems: 'center', width: '18%' }}>
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: width * 0.02,
+                              backgroundColor: '#ff9500',
+                              color: 'white',
+                              borderRadius: 80,
+                              padding: 15,
+                              paddingBottom: 2,
+                              paddingTop: 2,
+                            }}>
+                            Main
+                        </Text>
+                        </View>
+                      </Col>
+                      <Col style={{ alignItems: 'center', width: '18%' }}>
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: width * 0.02,
+                              backgroundColor: '#ff9500',
+                              color: 'white',
+                              borderRadius: 80,
+                              padding: 15,
+                              paddingBottom: 2,
+                              paddingTop: 2,
+                            }}>
+                            Action
+                        </Text>
+                        </View>
+                      </Col>
+                    </View>
+                  </Row>
+                  {this.filldata()}
+                </Grid>
+              ) : (
+                  <Grid></Grid>
+                )}
+            </View>
+          </ScrollView>
+        </View>
+      </SideMenuDrawer>
     );
   }
 
@@ -2290,25 +2320,25 @@ export default class IngrediantsGroups extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Col style={{alignItems: 'center'}}>
-                <Text style={{fontSize: 20}}>{item.name}</Text>
+              <Col style={{ alignItems: 'center' }}>
+                <Text style={{ fontSize: 20 }}>{item.name}</Text>
               </Col>
-              <Col style={{alignItems: 'center'}}>
-                <Text style={{fontSize: 20}}>${item.price}</Text>
+              <Col style={{ alignItems: 'center' }}>
+                <Text style={{ fontSize: 20 }}>${item.price}</Text>
               </Col>
-              <Col style={{alignItems: 'center'}}>
-                <Text style={{fontSize: 20}}>{item.max}</Text>
+              <Col style={{ alignItems: 'center' }}>
+                <Text style={{ fontSize: 20 }}>{item.max}</Text>
               </Col>
-              <Col style={{alignItems: 'center'}}>
-                <Text style={{fontSize: 20}}>{item.weight}</Text>
+              <Col style={{ alignItems: 'center' }}>
+                <Text style={{ fontSize: 20 }}>{item.weight}</Text>
               </Col>
-              <Col style={{alignItems: 'center'}}>
-                <Text style={{fontSize: 20}}>
+              <Col style={{ alignItems: 'center' }}>
+                <Text style={{ fontSize: 20 }}>
                   {item.status == 1 ? (
                     <Text>Enable</Text>
                   ) : (
-                    <Text>Disable</Text>
-                  )}
+                      <Text>Disable</Text>
+                    )}
                 </Text>
               </Col>
             </Row>
@@ -2328,7 +2358,7 @@ export default class IngrediantsGroups extends Component {
             onPress={() => {
               this.getIngrediants(item.id);
             }}>
-            <Row style={{height: 60, marginBottom: 10}}>
+            <Row style={{ height: 60, marginBottom: 10 }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -2338,34 +2368,34 @@ export default class IngrediantsGroups extends Component {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <Col style={{alignItems: 'center', width: '10%'}}>
-                  <Text style={{fontSize: 25}}>{i + 1}</Text>
+                <Col style={{ alignItems: 'center', width: '10%' }}>
+                  <Text style={{ fontSize: 25 }}>{i + 1}</Text>
                 </Col>
-                <Col style={{alignItems: 'center', width: '18%'}}>
-                  <Text style={{fontSize: 25}}>{item.name}</Text>
+                <Col style={{ alignItems: 'center', width: '18%' }}>
+                  <Text style={{ fontSize: 25 }}>{item.name}</Text>
                 </Col>
-                <Col style={{alignItems: 'center', width: '18%'}}>
-                  <Text style={{fontSize: 25}}>{item.max}</Text>
+                <Col style={{ alignItems: 'center', width: '18%' }}>
+                  <Text style={{ fontSize: 25 }}>{item.max}</Text>
                 </Col>
-                <Col style={{alignItems: 'center', width: '18%'}}>
-                  <Text style={{fontSize: 25, marginLeft: 10}}>
+                <Col style={{ alignItems: 'center', width: '18%' }}>
+                  <Text style={{ fontSize: 25, marginLeft: 10 }}>
                     {item.status == 1 ? (
                       <Text>Enable</Text>
                     ) : (
-                      <Text>Disable</Text>
-                    )}
+                        <Text>Disable</Text>
+                      )}
                   </Text>
                 </Col>
-                <Col style={{alignItems: 'center', width: '18%'}}>
-                  <Text style={{fontSize: 25, marginLeft: 10}}>
+                <Col style={{ alignItems: 'center', width: '18%' }}>
+                  <Text style={{ fontSize: 25, marginLeft: 10 }}>
                     {item.is_main == 1 ? <Text>Yes</Text> : <Text>No</Text>}
                   </Text>
                 </Col>
-                <Col style={{alignItems: 'center', width: '18%'}}>
+                <Col style={{ alignItems: 'center', width: '18%' }}>
                   <TouchableOpacity
                     style={styles.add}
                     onPress={() => this.add_ingredient(item.id)}>
-                    <Text style={{color: 'white', fontSize: 25}}>Add</Text>
+                    <Text style={{ color: 'white', fontSize: 25 }}>Add</Text>
                   </TouchableOpacity>
                 </Col>
               </View>

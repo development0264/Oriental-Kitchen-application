@@ -57,9 +57,7 @@ export default class Login extends Component {
             console.log(data);
             var headers = new Headers();
             headers.append('Accept', 'application/json');
-            // var headers = new Headers();
-            // headers.append('Accept', 'application/json');
-            //return;
+
             fetch("http://dev-fs.8d.ie/api/kitchen/login", {
                 method: "POST",
                 headers: headers,
@@ -69,7 +67,6 @@ export default class Login extends Component {
                 .then((responseJson) => {
                     console.log(responseJson);
                     if (responseJson.status == "success") {
-                        console.log("success");
                         if (responseJson.role == "vender") {
                             this.setState({ userId: responseJson.vender.id, roleName: responseJson.role, userToken: responseJson.access_token, name: responseJson.vender.name });
                         } else {
@@ -81,9 +78,7 @@ export default class Login extends Component {
                         alert("Something is wrong");
                     }
                 }).catch((error) => {
-                    //alert(error);
                     this.setState({ hasError: true, errorText: error });
-                    //alert(error);
                 });
         }
     }

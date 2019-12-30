@@ -480,8 +480,8 @@ export default class Home extends Component {
     var { height, width } = Dimensions.get('window');
     var left = (
       <Left style={{ flex: 1 }}>
-        <Button onPress={() => this.props.navigation.openDrawer()} transparent>
-          <FontAwesomeIcon icon={faBars} color={'white'} />
+        <Button onPress={() => this._sideMenuDrawer.open()} transparent>
+          <FontAwesomeIcon icon={faBars} color={'white'} size={25} />
         </Button>
       </Left>
     );
@@ -493,180 +493,182 @@ export default class Home extends Component {
       </Right>
     );
     return (
-      <View style={styles.container}>
-        <Navbar left={left} right={right} title="Kitchen" />
-        <View style={{ flex: 0.88 }}>
-          <View>{this.fillOrder()}</View>
-        </View>
-        <Dialog
-          visible={this.state.pause_dialog}
-          dialogStyle={{
-            borderRadius: 10,
-            borderWidth: 2,
-            borderColor: '#efeff4',
-            width: '35%',
-            justifyContent: 'center',
-            alignSelf: 'center',
-            backgroundColor: '#efeff4',
-          }}
-          onTouchOutside={() => this.setState({ pause_dialog: false })}>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ flex: 0.95 }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'lightgrey',
-                  paddingBottom: 15,
-                  marginTop: 0,
-                  fontSize: 23,
-                  fontWeight: 'bold',
-                }}>
-                Pause order
-              </Text>
-            </View>
-            <View style={{ justifyContent: 'center' }}>
-              <TouchableOpacity
-                onPress={() => this.setState({ pause_dialog: false })}>
-                <FontAwesomeIcon
-                  icon={faWindowClose}
-                  color={'#ff9500'}
-                  size={25}
-                />
-              </TouchableOpacity>
-            </View>
+      <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} style={{ zIndex: 1 }} navigation={this.props}>
+        <View style={styles.container}>
+          <Navbar left={left} right={right} title="Kitchen" />
+          <View style={{ flex: 0.88 }}>
+            <View>{this.fillOrder()}</View>
           </View>
-          <Text
-            style={{
-              fontSize: width * 0.02,
-              textAlign: 'center',
-              marginTop: 10,
-            }}>
-            Order will pause for 5 minutes?
-          </Text>
-          {this.getOrderId()}
-          <View
-            style={{
-              borderTopColor: 'lightgrey',
-              borderTopWidth: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-            }}>
-            <View style={{ flex: 0.9, marginTop: 10 }}>
-              <TouchableOpacity style={styles.yes} onPress={() => { }}>
-                <Text style={{ fontSize: width * 0.015, color: 'white' }}>
-                  Yes
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{ marginTop: 10 }}>
-              <TouchableOpacity
-                style={styles.no}
-                onPress={() => this.setState({ pause_dialog: false })}>
-                <Text style={{ fontSize: width * 0.015, color: 'white' }}>
-                  No
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Dialog>
-        <Dialog
-          visible={this.state.cancel_dialog}
-          dialogStyle={{
-            borderRadius: 10,
-            borderWidth: 2,
-            borderColor: '#efeff4',
-            width: '35%',
-            justifyContent: 'center',
-            alignSelf: 'center',
-            backgroundColor: '#efeff4',
-          }}
-          onTouchOutside={() => this.setState({ cancel_dialog: false })}>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ flex: 0.95 }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  borderBottomWidth: 1,
-                  borderBottomColor: 'lightgrey',
-                  paddingBottom: 15,
-                  marginTop: 0,
-                  fontSize: 23,
-                  fontWeight: 'bold',
-                }}>
-                Cancel order
-              </Text>
-            </View>
-            <View style={{ justifyContent: 'center' }}>
-              <TouchableOpacity
-                onPress={() => this.setState({ cancel_dialog: false })}>
-                <FontAwesomeIcon
-                  icon={faWindowClose}
-                  color={'#ff9500'}
-                  size={25}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-          <Text
-            style={{
-              fontSize: width * 0.02,
-              textAlign: 'center',
-              marginTop: 10,
-            }}>
-            Are you sure to cancel the order?
-          </Text>
-          {this.getOrderId()}
-          <View
-            style={{
-              borderTopColor: 'lightgrey',
-              borderTopWidth: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-            }}>
-            <View style={{ flex: 0.9, marginTop: 10 }}>
-              <TouchableOpacity style={styles.yes} onPress={() => { }}>
-                <Text style={{ fontSize: width * 0.015, color: 'white' }}>
-                  Yes
-                </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{ marginTop: 10 }}>
-              <TouchableOpacity
-                style={styles.no}
-                onPress={() => this.setState({ cancel_dialog: false })}>
-                <Text style={{ fontSize: width * 0.015, color: 'white' }}>
-                  No
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Dialog>
-        <View style={{ flex: 0.12, flexDirection: 'row' }}>
-          <View
-            style={{
-              backgroundColor: '#ff9500',
-              flex: 0.8,
+          <Dialog
+            visible={this.state.pause_dialog}
+            dialogStyle={{
+              borderRadius: 10,
+              borderWidth: 2,
+              borderColor: '#efeff4',
+              width: '35%',
               justifyContent: 'center',
-              padding: 20,
-            }}>
-            <Text style={{ fontSize: 40, color: 'white', fontWeight: 'bold' }}>
-              CURRENT ORDER
-            </Text>
-          </View>
-          <View
-            style={{
-              backgroundColor: 'green',
-              flex: 0.2,
+              alignSelf: 'center',
+              backgroundColor: '#efeff4',
+            }}
+            onTouchOutside={() => this.setState({ pause_dialog: false })}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 0.95 }}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'lightgrey',
+                    paddingBottom: 15,
+                    marginTop: 0,
+                    fontSize: 23,
+                    fontWeight: 'bold',
+                  }}>
+                  Pause order
+              </Text>
+              </View>
+              <View style={{ justifyContent: 'center' }}>
+                <TouchableOpacity
+                  onPress={() => this.setState({ pause_dialog: false })}>
+                  <FontAwesomeIcon
+                    icon={faWindowClose}
+                    color={'#ff9500'}
+                    size={25}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <Text
+              style={{
+                fontSize: width * 0.02,
+                textAlign: 'center',
+                marginTop: 10,
+              }}>
+              Order will pause for 5 minutes?
+          </Text>
+            {this.getOrderId()}
+            <View
+              style={{
+                borderTopColor: 'lightgrey',
+                borderTopWidth: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+              }}>
+              <View style={{ flex: 0.9, marginTop: 10 }}>
+                <TouchableOpacity style={styles.yes} onPress={() => { }}>
+                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+                    Yes
+                </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{ marginTop: 10 }}>
+                <TouchableOpacity
+                  style={styles.no}
+                  onPress={() => this.setState({ pause_dialog: false })}>
+                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+                    No
+                </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Dialog>
+          <Dialog
+            visible={this.state.cancel_dialog}
+            dialogStyle={{
+              borderRadius: 10,
+              borderWidth: 2,
+              borderColor: '#efeff4',
+              width: '35%',
               justifyContent: 'center',
-              padding: 20,
-            }}>
-            <Text style={{ fontSize: 40, color: 'white', fontWeight: 'bold' }}>
-              COMPLETE
+              alignSelf: 'center',
+              backgroundColor: '#efeff4',
+            }}
+            onTouchOutside={() => this.setState({ cancel_dialog: false })}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 0.95 }}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    borderBottomWidth: 1,
+                    borderBottomColor: 'lightgrey',
+                    paddingBottom: 15,
+                    marginTop: 0,
+                    fontSize: 23,
+                    fontWeight: 'bold',
+                  }}>
+                  Cancel order
+              </Text>
+              </View>
+              <View style={{ justifyContent: 'center' }}>
+                <TouchableOpacity
+                  onPress={() => this.setState({ cancel_dialog: false })}>
+                  <FontAwesomeIcon
+                    icon={faWindowClose}
+                    color={'#ff9500'}
+                    size={25}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <Text
+              style={{
+                fontSize: width * 0.02,
+                textAlign: 'center',
+                marginTop: 10,
+              }}>
+              Are you sure to cancel the order?
+          </Text>
+            {this.getOrderId()}
+            <View
+              style={{
+                borderTopColor: 'lightgrey',
+                borderTopWidth: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+              }}>
+              <View style={{ flex: 0.9, marginTop: 10 }}>
+                <TouchableOpacity style={styles.yes} onPress={() => { }}>
+                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+                    Yes
+                </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{ marginTop: 10 }}>
+                <TouchableOpacity
+                  style={styles.no}
+                  onPress={() => this.setState({ cancel_dialog: false })}>
+                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+                    No
+                </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Dialog>
+          <View style={{ flex: 0.12, flexDirection: 'row' }}>
+            <View
+              style={{
+                backgroundColor: '#ff9500',
+                flex: 0.8,
+                justifyContent: 'center',
+                padding: 20,
+              }}>
+              <Text style={{ fontSize: 40, color: 'white', fontWeight: 'bold' }}>
+                CURRENT ORDER
             </Text>
+            </View>
+            <View
+              style={{
+                backgroundColor: 'green',
+                flex: 0.2,
+                justifyContent: 'center',
+                padding: 20,
+              }}>
+              <Text style={{ fontSize: 40, color: 'white', fontWeight: 'bold' }}>
+                COMPLETE
+            </Text>
+            </View>
           </View>
         </View>
-      </View>
+      </SideMenuDrawer>
     );
   }
 }

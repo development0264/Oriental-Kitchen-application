@@ -28,6 +28,7 @@ import { Dialog } from 'react-native-simple-dialogs';
 import RNImagePicker from 'react-native-image-picker';
 import SideMenu from '../components/SideMenu';
 import SideMenuDrawer from '../components/SideMenuDrawer';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Employee extends Component {
   constructor(props) {
@@ -65,10 +66,26 @@ export default class Employee extends Component {
       Searchtext: '',
       Employeeid: '',
       hidePassword: true,
+      count: 0,
+      userDetail: ""
       // dataSourcePicker : []
     };
     this.dataSourcePicker = [];
+    this._retrieveData();
   }
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('visited_onces');
+      if (value !== null) {
+        this.setState({ userDetail: JSON.parse(value), count: 1 });
+        this.componentDidMount();
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   onValueChange(value) {
     this.setState({
       selected: value,
@@ -80,11 +97,12 @@ export default class Employee extends Component {
   selectEmployee = (id) => {
     var data = new FormData();
     data.append('id', id);
+    const user_details = this.state.userDetail;
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
+    console.log(headers);
 
     fetch('http://dev-fs.8d.ie/api/kitchen/getEmployee', {
       method: 'POST',
@@ -151,11 +169,12 @@ export default class Employee extends Component {
     }
     data.append('role_id', this.state.Editrole);
     console.log(data);
+    const user_details = this.state.userDetail;
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
+    console.log(headers);
 
     fetch('http://dev-fs.8d.ie/api/kitchen/updateEmployee', {
       method: 'POST',
@@ -167,7 +186,7 @@ export default class Employee extends Component {
         console.log(responseJson);
         if (responseJson.status == 'success') {
           console.log(responseJson);
-          this.setState({ edit_dialog: false });
+          this.setState({ edit_dialog: false, img_uri: "" });
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -179,10 +198,12 @@ export default class Employee extends Component {
   };
   searchResult = () => {
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    const user_details = this.state.userDetail;
+    var headers = new Headers();
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
+    console.log(headers);
 
     var data = new FormData();
     data.append('name', this.state.Searchtext);
@@ -229,11 +250,12 @@ export default class Employee extends Component {
     );
   };
   deleteYesPress = id => {
+    const user_details = this.state.userDetail;
     var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+    let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     headers.append('Accept', 'application/json');
+    console.log(headers);
 
     var data = new FormData();
     data.append('id', id);
@@ -247,7 +269,7 @@ export default class Employee extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({ edit_dialog: false });
+          this.setState({ edit_dialog: false, img_uri: "" });
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -291,11 +313,12 @@ export default class Employee extends Component {
         });
         data.append('role_id', this.state.role);
         console.log(data);
+        const user_details = this.state.userDetail;
         var headers = new Headers();
-        let auth =
-          'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+        let auth = 'Bearer ' + user_details.userToken;
         headers.append('Authorization', auth);
         headers.append('Accept', 'application/json');
+        console.log(headers);
 
         fetch('http://dev-fs.8d.ie/api/kitchen/addEmployee', {
           method: 'POST',
@@ -363,63 +386,65 @@ export default class Employee extends Component {
     });
   };
   componentDidMount() {
-    this.dataSourcePicker = [];
-    var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
-    headers.append('Authorization', auth);
-    headers.append('Accept', 'application/json');
-    console.log(headers);
-    fetch('http://dev-fs.8d.ie/api/kitchen/getEmployees', {
-      method: 'POST',
-      headers: headers,
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        if (responseJson) {
-          const dataSource = [];
-          console.log(responseJson);
-          this.setState({ dataSource: responseJson.employees });
-          //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
-        } else {
-          alert('Something wrong happened');
-        }
+    if (this.state.count == 1) {
+      this.dataSourcePicker = [];
+      const user_details = this.state.userDetail;
+      var headers = new Headers();
+      let auth = 'Bearer ' + user_details.userToken;
+      headers.append('Authorization', auth);
+      headers.append('Accept', 'application/json');
+      console.log(headers);
+      fetch('http://dev-fs.8d.ie/api/kitchen/getEmployees', {
+        method: 'POST',
+        headers: headers,
       })
-      .catch(error => {
-        console.error(error);
-      });
-
-    fetch('http://dev-fs.8d.ie/api/kitchen/getRoles', {
-      method: 'POST',
-      headers: headers,
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        if (responseJson) {
-          console.log(responseJson);
-          // this.setState({dataSource: responseJson.Roles});
-          var MyArr;
-          let i = 0;
-          for (i = 0; i < responseJson.Roles.length; i++) {
-            //this.dataSourcePicker['name'+i] = responseJson.Roles[i].name
-            MyArr = {
-              id: responseJson.Roles[i].id,
-              name: responseJson.Roles[i].display_name,
-            };
-            this.dataSourcePicker.push(MyArr);
+        .then(response => response.json())
+        .then(responseJson => {
+          if (responseJson) {
+            const dataSource = [];
+            console.log(responseJson);
+            this.setState({ dataSource: responseJson.employees });
+            //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
+          } else {
+            alert('Something wrong happened');
           }
-          // let hello = JSON.stringify(this.dataSourcePicker);
-          this.setState({ role_details: JSON.stringify(this.dataSourcePicker) });
-          console.log(this.dataSourcePicker);
-          console.log(JSON.stringify(this.dataSourcePicker));
-          //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
-        } else {
-          alert('Something wrong happened');
-        }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+      fetch('http://dev-fs.8d.ie/api/kitchen/getRoles', {
+        method: 'POST',
+        headers: headers,
       })
-      .catch(error => {
-        console.error(error);
-      });
+        .then(response => response.json())
+        .then(responseJson => {
+          if (responseJson) {
+            console.log(responseJson);
+            // this.setState({dataSource: responseJson.Roles});
+            var MyArr;
+            let i = 0;
+            for (i = 0; i < responseJson.Roles.length; i++) {
+              //this.dataSourcePicker['name'+i] = responseJson.Roles[i].name
+              MyArr = {
+                id: responseJson.Roles[i].id,
+                name: responseJson.Roles[i].display_name,
+              };
+              this.dataSourcePicker.push(MyArr);
+            }
+            // let hello = JSON.stringify(this.dataSourcePicker);
+            this.setState({ role_details: JSON.stringify(this.dataSourcePicker) });
+            console.log(this.dataSourcePicker);
+            console.log(JSON.stringify(this.dataSourcePicker));
+            //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
+          } else {
+            alert('Something wrong happened');
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
   }
 
   render() {
@@ -817,7 +842,7 @@ export default class Employee extends Component {
                   alignSelf: 'center',
                   backgroundColor: '#efeff4',
                 }}
-                onTouchOutside={() => this.setState({ edit_dialog: false })}>
+                onTouchOutside={() => this.setState({ edit_dialog: false, img_uri: "" })}>
                 <ScrollView>
                   <View style={{ flexDirection: 'row' }}>
                     <View style={{ flex: 0.95 }}>
@@ -835,7 +860,7 @@ export default class Employee extends Component {
                     </View>
                     <View style={{ justifyContent: 'center' }}>
                       <TouchableOpacity
-                        onPress={() => this.setState({ edit_dialog: false })}>
+                        onPress={() => this.setState({ edit_dialog: false, img_uri: "" })}>
                         <FontAwesomeIcon
                           icon={faWindowClose}
                           color={'#ff9500'}

@@ -80,7 +80,7 @@ const AppNavigator = createStackNavigator({
     },
 
 }, {
-    initialRouteName: 'Employee'
+    initialRouteName: 'Login'
 }
 );
 

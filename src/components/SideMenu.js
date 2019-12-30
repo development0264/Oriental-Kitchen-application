@@ -77,12 +77,12 @@ export default class SideMenu extends Component {
           </View>
           <Item style={{ marginLeft: 60, marginRight: 60, marginBottom: 30 }}></Item>
         </View>
-        <View style={{ paddingRight: 40, paddingBottom: 180 }}>
+        <View style={{ paddingRight: 40, paddingBottom: 15 }}>
           <List>
             {this.state.userDetail.roleName == "cashier" ? this.renderCashierMenuItems() : this.state.userDetail.roleName == "admin" ? this.renderAdminMenuItems() : this.state.userDetail.roleName == "kitchenstaff" ? this.renderKitchenMenuItems() : this.state.userDetail.roleName == "vender" ? this.renderVenderMenuItems() : null}
           </List>
         </View>
-        <Item style={{ marginLeft: 60, marginRight: 60, marginBottom: 30 }}></Item>
+        <Item style={{ marginLeft: 60, marginRight: 60, marginBottom: 5 }}></Item>
         <View style={{ paddingRight: 40 }}>
           <List>
             <ListItem
@@ -400,5 +400,11 @@ var vendermenuItems = [
     title: 'Menu',
     icon: faStar,
     page: 'Menu'
+  },
+  {
+    id: 8,
+    title: 'Payment',
+    icon: faStar,
+    page: 'Payment'
   },
 ];
