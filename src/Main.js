@@ -13,6 +13,7 @@ import Employee from './pages/Employee';
 import History from './pages/History';
 import Payment from './pages/Payment';
 import IngrediantsGroups from './pages/IngrediantsGroups';
+import CreateDish from './pages/CreateDish';
 
 
 const AppNavigator = createStackNavigator({
@@ -60,6 +61,12 @@ const AppNavigator = createStackNavigator({
     },
     IngrediantsGroups: {
         screen: IngrediantsGroups,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    CreateDish: {
+        screen: CreateDish,
         navigationOptions: {
             header: null,
         }
