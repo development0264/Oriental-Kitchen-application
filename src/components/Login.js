@@ -41,7 +41,6 @@ export default class Login extends Component {
     }
 
     login = () => {
-        //this.props.navigation.navigate('Employee');
         if (this.state.email == "") {
             alert("Email cannot be black");
         }
@@ -51,22 +50,31 @@ export default class Login extends Component {
         else if (this.state.email == "" && this.state.password == "") {
             alert("Username and Password cannot be blank");
         } else {
+            //this.props.navigation.navigate('Employee');
             var data = new FormData()
             data.append('email', this.state.email);
             data.append('password', this.state.password);
             console.log(data);
+            var headers = new Headers();
+            headers.append('Accept', 'application/json');
             // var headers = new Headers();
             // headers.append('Accept', 'application/json');
             //return;
             fetch("http://dev-fs.8d.ie/api/kitchen/login", {
                 method: "POST",
+                headers: headers,
                 body: data
             })
                 .then((response) => response.json())
                 .then((responseJson) => {
                     console.log(responseJson);
                     if (responseJson.status == "success") {
-                        this.setState({ userId: responseJson.employee.id, roleName: responseJson.employee.role_name, userToken: responseJson.access_token, name: responseJson.employee.name });
+                        console.log("success");
+                        if (responseJson.role == "vender") {
+                            this.setState({ userId: responseJson.vender.id, roleName: responseJson.role, userToken: responseJson.access_token, name: responseJson.vender.name });
+                        } else {
+                            this.setState({ userId: responseJson.employee.id, roleName: responseJson.employee.role_name, userToken: responseJson.access_token, name: responseJson.employee.name });
+                        }
                         this.storeData();
                         // this.props.navigation.navigate('Employee');
                     } else {

@@ -65,7 +65,10 @@ const AppNavigator = createStackNavigator({
         }
     },
 
-});
+}, {
+    initialRouteName: 'Login'
+}
+);
 
 const ReApp = createAppContainer(AppNavigator);
 export default ReApp;

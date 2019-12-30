@@ -84,7 +84,7 @@ export default class SideMenu extends Component {
         </View>
         <View style={{ paddingRight: 40, paddingBottom: 180 }}>
           <List>
-            {this.state.userDetail.roleName == "cashier" ? this.renderCashierMenuItems() : this.state.userDetail.roleName == "admin" ? this.renderAdminMenuItems() : this.state.userDetail.roleName == "kitchenstaff" ? this.renderKitchenMenuItems() : this.renderMenuItems()}
+            {this.state.userDetail.roleName == "cashier" ? this.renderCashierMenuItems() : this.state.userDetail.roleName == "admin" ? this.renderAdminMenuItems() : this.state.userDetail.roleName == "kitchenstaff" ? this.renderKitchenMenuItems() : this.state.userDetail.roleName == "vender" ? this.renderKitchenMenuItems() : null}
           </List>
         </View>
         <Item style={{ marginLeft: 60, marginRight: 60, marginBottom: 30 }}></Item>
@@ -186,6 +186,30 @@ export default class SideMenu extends Component {
       items.push(
         <ListItem
           last={KitchenmenuItems.length === i + 1}
+          noBorder
+          key={item.id}
+          button={true}
+        >
+          <View style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }}>
+            <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
+          </View>
+          <Body>
+            <TouchableOpacity onPress={() => { this.propsnavi.navigation.navigate(item.page) }}>
+              <Text style={{ color: 'white', paddingLeft: 10 }} >{item.title}</Text>
+            </TouchableOpacity>
+          </Body>
+        </ListItem>
+      );
+    });
+    return items;
+  }
+
+  renderVenderMenuItems() {
+    let items = [];
+    vendermenuItems.map((item, i) => {
+      items.push(
+        <ListItem
+          last={vendermenuItems.length === i + 1}
           noBorder
           key={item.id}
           button={true}
@@ -326,6 +350,35 @@ var KitchenmenuItems = [
     id: 4,
     title: 'History',
     icon: faShare,
+    page: 'History'
+  },
+];
+
+var vendermenuItems = [
+  {
+    id: 1,
+    title: 'Employee',
+    icon: faStar,
+  },
+  {
+    id: 2,
+    title: 'Report',
+    icon: faHistory
+  },
+  {
+    id: 3,
+    title: 'Ingrident',
+    icon: faStar,
+  },
+  {
+    id: 4,
+    title: 'Sales',
+    icon: faHistory
+  },
+  {
+    id: 5,
+    title: 'History',
+    icon: faHistory,
     page: 'History'
   },
 ];

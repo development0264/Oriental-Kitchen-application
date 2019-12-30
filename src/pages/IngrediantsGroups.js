@@ -35,11 +35,11 @@ export default class IngrediantsGroups extends Component {
       max: '',
       description: '',
       sequence: '',
-      cover: '',
       weight: '',
       status: '',
       img_uri: '',
       avatar: '',
+      cover: '',
       change_response: 0,
       add_name: '',
       add_max: '',
@@ -332,8 +332,9 @@ export default class IngrediantsGroups extends Component {
       } else {
         console.log(response);
         this.setState({
-          img_uri: response.uri,
           avatar: response,
+          img_uri: response.uri,
+          cover: response.uri,
         });
       }
     });
@@ -933,9 +934,9 @@ export default class IngrediantsGroups extends Component {
                       {this.state.img_uri == '' ? (
                         <Image
                           style={{
-                            width: 250,
-                            height: 250,
-                            borderRadius: 250 / 2,
+                            width: 200,
+                            height: 200,
+                            borderRadius: 200 / 2,
                           }}
                           source={require('../images/profile-circle-picture-8.png')}></Image>
                       ) : (
@@ -947,7 +948,6 @@ export default class IngrediantsGroups extends Component {
                           }}
                           source={{uri: this.state.img_uri}}></Image>
                       )}
-
                       <View style={styles.camera_icon}>
                         <TouchableOpacity onPress={() => this.opencamera()}>
                           <FontAwesomeIcon
@@ -1248,15 +1248,7 @@ export default class IngrediantsGroups extends Component {
                       alignItems: 'center',
                     }}>
                     <View style={{position: 'relative'}}>
-                      {this.state.editcover == '' ? (
-                        <Image
-                          style={{
-                            width: 250,
-                            height: 250,
-                            borderRadius: 250 / 2,
-                          }}
-                          source={require('../images/profile-circle-picture-8.png')}></Image>
-                      ) : (
+                      {this.state.img_uri == '' ? (
                         <Image
                           style={{
                             width: 200,
@@ -1264,12 +1256,17 @@ export default class IngrediantsGroups extends Component {
                             borderRadius: 200 / 2,
                           }}
                           source={{
-                            uri:
-                              'http://dev-fs.8d.ie/storage/' +
-                              this.state.editcover,
+                            uri: 'http://dev-fs.8d.ie/' + this.state.editcover,
                           }}></Image>
+                      ) : (
+                        <Image
+                          style={{
+                            width: 200,
+                            height: 200,
+                            borderRadius: 200 / 2,
+                          }}
+                          source={{uri: this.state.img_uri}}></Image>
                       )}
-
                       <View style={styles.camera_icon}>
                         <TouchableOpacity onPress={() => this.opencamera()}>
                           <FontAwesomeIcon
@@ -1706,13 +1703,23 @@ export default class IngrediantsGroups extends Component {
                             alignItems: 'center',
                           }}>
                           <View style={{position: 'relative'}}>
-                            <Image
-                              style={{
-                                width: 200,
-                                height: 200,
-                                borderRadius: 200 / 2,
-                              }}
-                              source={require('../images/profile-circle-picture-8.png')}></Image>
+                            {this.state.cover == '' ? (
+                              <Image
+                                style={{
+                                  width: 200,
+                                  height: 200,
+                                  borderRadius: 200 / 2,
+                                }}
+                                source={require('../images/profile-circle-picture-8.png')}></Image>
+                            ) : (
+                              <Image
+                                style={{
+                                  width: 200,
+                                  height: 200,
+                                  borderRadius: 200 / 2,
+                                }}
+                                source={{uri: this.state.cover}}></Image>
+                            )}
                             <View style={styles.camera_icon}>
                               <TouchableOpacity
                                 onPress={() => this.opencamera()}>
@@ -2082,7 +2089,7 @@ export default class IngrediantsGroups extends Component {
                         alignItems: 'center',
                       }}>
                       <View style={{position: 'relative'}}>
-                        {this.state.img_uri == '' ? (
+                        {this.state.cover == '' ? (
                           <Image
                             style={{
                               width: 200,
@@ -2101,7 +2108,7 @@ export default class IngrediantsGroups extends Component {
                               height: 200,
                               borderRadius: 200 / 2,
                             }}
-                            source={{uri: this.state.Ingredientimage}}></Image>
+                            source={{uri: this.state.cover}}></Image>
                         )}
                         <View style={styles.camera_icon}>
                           <TouchableOpacity onPress={() => this.opencamera()}>
