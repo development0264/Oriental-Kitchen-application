@@ -22,6 +22,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import moment from 'moment';
 import { Card } from 'react-native-elements';
+import SideMenuDrawer from '../components/SideMenuDrawer';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default class Home extends Component {
   constructor(props) {
@@ -34,41 +36,58 @@ export default class Home extends Component {
       dataImage: [],
       cancel_dialog: false,
       pause_dialog: false,
+      count: 0,
+      userDetail: ""
     };
+    this._retrieveData();
   }
 
-  componentDidMount() {
-    var data = new FormData();
-    data.append('order_id', 123);
-    console.log(data);
-    var headers = new Headers();
-    let auth =
-      'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
-    headers.append('Authorization', auth);
-    headers.append('Accept', 'application/json');
-    console.log(headers);
-    fetch('http://dev-fs.8d.ie/api/kitchen/getOrderList', {
-      method: 'POST',
-      headers: headers,
-      body: data,
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log(responseJson);
-        if (responseJson.status == 'success') {
-          this.setState({
-            dataSource: responseJson.data,
-            dataImage: responseJson.data[0].ingredient,
-          });
-          console.log(this.state.dataImage);
-        } else {
-          alert('Something wrong happened');
-        }
-      })
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('visited_onces');
+      if (value !== null) {
+        this.setState({ userDetail: JSON.parse(value), count: 1 });
+        this.componentDidMount();
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
 
-      .catch(error => {
-        console.error(error);
-      });
+  componentDidMount() {
+    if (this.state.count == 1) {
+      var data = new FormData();
+      data.append('order_id', 123);
+      console.log(data);
+      const user_details = this.state.userDetail;
+      var headers = new Headers();
+      let auth = 'Bearer ' + user_details.userToken;
+      headers.append('Authorization', auth);
+      headers.append('Accept', 'application/json');
+      console.log(headers);
+      fetch('http://dev-fs.8d.ie/api/kitchen/getOrderList', {
+        method: 'POST',
+        headers: headers,
+        body: data,
+      })
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log(responseJson);
+          if (responseJson.status == 'success') {
+            this.setState({
+              dataSource: responseJson.data,
+              dataImage: responseJson.data[0].ingredient,
+            });
+            console.log(this.state.dataImage);
+          } else {
+            alert('Something wrong happened');
+          }
+        })
+
+        .catch(error => {
+          console.error(error);
+        });
+    }
   }
 
   getOrderId = () => {

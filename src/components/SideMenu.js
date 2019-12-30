@@ -6,12 +6,7 @@
 import React, { Component } from 'react';
 import { ScrollView, LayoutAnimation, UIManager, Linking, Image, TouchableOpacity } from 'react-native';
 import { View, List, ListItem, Body, Left, Right, Icon, Item, Input, Button, Grid, Col } from 'native-base';
-import { Actions as NavigationActions } from 'react-native-router-flux'
-
-
 import AsyncStorage from '@react-native-community/async-storage';
-
-
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faHistory, faStar, faBell, faUsers, faShare, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 // Our custom files and classes import
@@ -84,7 +79,7 @@ export default class SideMenu extends Component {
         </View>
         <View style={{ paddingRight: 40, paddingBottom: 180 }}>
           <List>
-            {this.state.userDetail.roleName == "cashier" ? this.renderCashierMenuItems() : this.state.userDetail.roleName == "admin" ? this.renderAdminMenuItems() : this.state.userDetail.roleName == "kitchenstaff" ? this.renderKitchenMenuItems() : this.state.userDetail.roleName == "vender" ? this.renderKitchenMenuItems() : null}
+            {this.state.userDetail.roleName == "cashier" ? this.renderCashierMenuItems() : this.state.userDetail.roleName == "admin" ? this.renderAdminMenuItems() : this.state.userDetail.roleName == "kitchenstaff" ? this.renderKitchenMenuItems() : this.state.userDetail.roleName == "vender" ? this.renderVenderMenuItems() : null}
           </List>
         </View>
         <Item style={{ marginLeft: 60, marginRight: 60, marginBottom: 30 }}></Item>
@@ -359,24 +354,33 @@ var vendermenuItems = [
     id: 1,
     title: 'Employee',
     icon: faStar,
+    page: 'Employee'
   },
   {
     id: 2,
-    title: 'Report',
-    icon: faHistory
+    title: 'Ingrediant',
+    icon: faHistory,
+    page: 'Ingrediant'
   },
   {
     id: 3,
-    title: 'Ingrident',
-    icon: faStar,
+    title: 'Report',
+    icon: faHistory,
+    page: 'History'
   },
   {
     id: 4,
+    title: 'IngridentGroup',
+    icon: faStar,
+    page: 'IngrediantsGroups'
+  },
+  {
+    id: 5,
     title: 'Sales',
     icon: faHistory
   },
   {
-    id: 5,
+    id: 6,
     title: 'History',
     icon: faHistory,
     page: 'History'
