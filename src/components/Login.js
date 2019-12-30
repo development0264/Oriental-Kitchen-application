@@ -34,7 +34,13 @@ export default class Login extends Component {
         console.log(obj);
         try {
             await AsyncStorage.setItem('visited_onces', JSON.stringify(obj));
-            this.props.navigation.navigate('Employee');
+            if (this.state.roleName == "vender") {
+                this.props.navigation.navigate('Employee');
+            } else if (this.state.roleName == "cashier") {
+                this.props.navigation.navigate('Payment');
+            } else if (this.state.roleName == "kitchenstaff") {
+                this.props.navigation.navigate('Home_kitchen');
+            }
         } catch (e) {
             alert(e);
         }
