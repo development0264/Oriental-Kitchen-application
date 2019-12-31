@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dimensions, Image, StyleSheet, Text, View, TextInput, FlatList, TouchableOpacity, ToastAndroid, CheckBox, ScrollView } from 'react-native';
 import { Button, Left, Right, Grid, Col, Row, Picker, Switch } from 'native-base';
 import Navbar from '../components/Navbar';
-import { faBars, faWindowClose, faArrowRight, faCamera, faPrint, faPager, faPlus, faMinus, } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faWindowClose, faArrowRight, faCamera, faPrint, faPager, faPlus, faMinus, faReceipt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Dialog } from 'react-native-simple-dialogs';
 import { Card } from 'react-native-elements';
@@ -159,18 +159,44 @@ export default class Employee extends Component {
 
 
 
-    onDigitPresscash = (digit) => {
-        this.setState({ cash: this.state.cash + " " + digit });
+    onDigitPresssum = digit => {
+        let a = parseFloat(this.state.cash);
+        let b = digit;
+        let c = (a + b).toString();
+        this.setState({ cash: c });
+    };
+
+    onDecimalPointPresssum = digit => {
+        let a = parseFloat(this.state.cash);
+        let b = digit;
+        let c = (a + b).toString();
+        this.setState({ cash: c });
+    };
+
+    _totalChange() {
+        let total = this.state.cash;
+        this.setState({
+            cash: total,
+        });
     }
 
-    onDigitPresssum = (digit) => {
-        console.log(typeof (this.state.cash))
-        this.setState({ cash: this.state.cash + digit });
-    }
+    onZeroPress = () => {
+        this.setState({ cash: this.state.cash + '0' });
+    };
 
+    onDoubleZeroPress = () => {
+        this.setState({ cash: this.state.cash + '00' });
+    };
+
+    onPercentCash = () => {
+        var newNum = this.state.cash / 100;
+        this.setState({
+            cash: newNum,
+        });
+    };
     onClearPress = () => {
         this.setState({ cash: 0 });
-    }
+    };
 
 
     main_callvenderingredient() {
@@ -852,8 +878,10 @@ export default class Employee extends Component {
                                         <TextInput
                                             style={{ borderColor: 'white', height: 40, width: '60%', paddingLeft: 15, marginLeft: 60, borderWidth: 1, textAlignVertical: "top", backgroundColor: "white", borderRadius: 50, }}
                                             placeholder=""
-                                            value={this.state.cash}
-                                            onChangeText={(cash) => this.setState({ cash: cash })}
+                                            defaultValue={this.state.cash.toString()}
+                                            onChange={() => this._totalChange()}
+                                            keyboardType={'numeric'}
+                                            onChangeText={cash => this.setState({ cash: cash })}
                                         />
                                     </View>
                                     <View style={{ flexDirection: 'row', paddingTop: 10, marginTop: 10 }}>
@@ -898,118 +926,338 @@ export default class Employee extends Component {
 
 
 
-                            <View style={{ flex: 0.5, height: '100%' }}>
-                                <View style={{ borderBottomWidth: 1, borderBottomColor: 'lightgrey', paddingBottom: 20, flexDirection: 'column' }}>
-
+                            <View
+                                style={{
+                                    flex: 0.5,
+                                    height: '100%',
+                                }}>
+                                <View
+                                    style={{
+                                        borderBottomWidth: 1,
+                                        borderBottomColor: 'lightgrey',
+                                        paddingBottom: 20,
+                                        flexDirection: 'column',
+                                    }}>
                                     <View style={styles.touchable1}>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum(7) }} >
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>7</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber1}
+                                            onPress={() => {
+                                                this.onDigitPresssum(7);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                7
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum(8) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>8</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber1}
+                                            onPress={() => {
+                                                this.onDigitPresssum(8);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                8
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum(9) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>9</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber1}
+                                            onPress={() => {
+                                                this.onDigitPresssum(9);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                9
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={{
-                                            backgroundColor: 'orange', height: 40, width: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 10, marginHorizontal: 10,
-                                        }}
-                                            onPress={() => { this.onDigitPresscash("%") }} >
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>%</Text>
-                                        </TouchableOpacity >
-                                        <TouchableOpacity style={{
-                                            backgroundColor: 'orange', height: 40, width: 40, justifyContent: 'center', alignItems: 'center', borderRadius: 10, marginHorizontal: 10,
-                                        }}
-                                            onPress={() => { this.onDigitPresscash("-") }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>-</Text>
+                                        <TouchableOpacity
+                                            style={{
+                                                backgroundColor: 'orange',
+                                                height: 40,
+                                                width: 40,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                borderRadius: 10,
+                                                marginHorizontal: 10,
+                                            }}
+                                            onPress={() => {
+                                                this.onPercentCash('%');
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                %
+                    </Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={{
+                                                backgroundColor: 'orange',
+                                                height: 40,
+                                                width: 40,
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                borderRadius: 10,
+                                                marginHorizontal: 10,
+                                            }}
+                                            onPress={() => { }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                -
+                    </Text>
                                         </TouchableOpacity>
                                     </View>
 
                                     <View style={styles.touchable2}>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum(4) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>4</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber1}
+                                            onPress={() => {
+                                                this.onDigitPresssum(4);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                4
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum(5) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>5</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber1}
+                                            onPress={() => {
+                                                this.onDigitPresssum(5);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                5
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum(6) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>6</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber1}
+                                            onPress={() => {
+                                                this.onDigitPresssum(6);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                6
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber1} >
-                                            <FontAwesomeIcon icon={faWindowClose} color={'grey'} size={35} />
+                                        <TouchableOpacity style={styles.print_btn}>
+                                            <FontAwesomeIcon icon={faPrint} size={25} />
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber1} >
-                                            <FontAwesomeIcon icon={faWindowClose} color={'grey'} size={35} />
-                                        </TouchableOpacity>
-                                    </View>
-
-
-
-
-                                    <View style={styles.touchable3}>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum(1) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>1</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum(2) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>2</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum(3) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>3</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onClearPress("") }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>CE</Text>
-                                        </TouchableOpacity>
-                                    </View>
-
-
-                                    <View style={styles.touchable4}>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum(0) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>0</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum("00") }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>00</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber1} onPress={() => { this.onDigitPresssum(".") }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>.</Text>
+                                        <TouchableOpacity style={styles.print_btn}>
+                                            <FontAwesomeIcon icon={faReceipt} size={25} />
                                         </TouchableOpacity>
                                     </View>
-
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            height: 100,
+                                            width: '70%',
+                                            alignSelf: 'center',
+                                            marginRight: 30,
+                                        }}>
+                                        <View style={{ flex: 0.6 }}>
+                                            <View style={{ flexDirection: 'row', margin: 10 }}>
+                                                <TouchableOpacity
+                                                    style={styles.touchablenumber1}
+                                                    onPress={() => {
+                                                        this.onDigitPresssum(1);
+                                                    }}>
+                                                    <Text
+                                                        style={{
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold',
+                                                            color: 'grey',
+                                                        }}>
+                                                        1
+                        </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={styles.touchablenumber1}
+                                                    onPress={() => {
+                                                        this.onDigitPresssum(2);
+                                                    }}>
+                                                    <Text
+                                                        style={{
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold',
+                                                            color: 'grey',
+                                                        }}>
+                                                        2
+                        </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={styles.touchablenumber1}
+                                                    onPress={() => {
+                                                        this.onDigitPresssum(3);
+                                                    }}>
+                                                    <Text
+                                                        style={{
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold',
+                                                            color: 'grey',
+                                                        }}>
+                                                        3
+                        </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    marginHorizontal: 10,
+                                                }}>
+                                                <TouchableOpacity
+                                                    style={styles.touchablenumber1}
+                                                    onPress={() => {
+                                                        this.onZeroPress(0);
+                                                    }}>
+                                                    <Text
+                                                        style={{
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold',
+                                                            color: 'grey',
+                                                        }}>
+                                                        0
+                        </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={styles.touchablenumber1}
+                                                    onPress={() => {
+                                                        this.onDoubleZeroPress();
+                                                    }}>
+                                                    <Text
+                                                        style={{
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold',
+                                                            color: 'grey',
+                                                        }}>
+                                                        00
+                        </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={styles.touchablenumber1}
+                                                    onPress={() => {
+                                                        this.onDigitPresssum('.');
+                                                    }}>
+                                                    <Text
+                                                        style={{
+                                                            fontSize: 20,
+                                                            fontWeight: 'bold',
+                                                            color: 'grey',
+                                                        }}>
+                                                        .
+                        </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                        <View style={{ flex: 0.4, margin: 10 }}>
+                                            <TouchableOpacity
+                                                style={{
+                                                    height: 90,
+                                                    width: 100,
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    borderRadius: 10,
+                                                    backgroundColor: 'white',
+                                                    marginStart: 8,
+                                                }}
+                                                onPress={() => {
+                                                    this.onClearPress('');
+                                                }}>
+                                                <Text
+                                                    style={{
+                                                        fontSize: 30,
+                                                        fontWeight: 'bold',
+                                                        color: 'grey',
+                                                    }}>
+                                                    CE
+                      </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
                                 </View>
 
                                 <View>
                                     <View style={styles.touchable1}>
-                                        <TouchableOpacity style={styles.touchablenumber2} onPress={() => { this.onDigitPresssum(50) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>50</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber2}
+                                            onPress={() => {
+                                                this.onDigitPresssum(50);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                50
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber2} onPress={() => { this.onDigitPresssum(20) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>20</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber2}
+                                            onPress={() => {
+                                                this.onDigitPresssum(20);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                20
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber2} onPress={() => { this.onDigitPresssum(10) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>10</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber2}
+                                            onPress={() => {
+                                                this.onDigitPresssum(10);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                10
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber2} onPress={() => { this.onDigitPresssum(2) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>2</Text>
-                                        </TouchableOpacity >
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber2}
+                                            onPress={() => {
+                                                this.onDigitPresssum(2);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                2
+                    </Text>
+                                        </TouchableOpacity>
                                     </View>
                                     <View style={styles.touchable1}>
-                                        <TouchableOpacity style={styles.touchablenumber2} onPress={() => { this.onDigitPresssum(1) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>1</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber2}
+                                            onPress={() => {
+                                                this.onDigitPresssum(1);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                1
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber2} onPress={() => { this.onDigitPresssum(0.5) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>0.5</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber2}
+                                            onPress={() => {
+                                                this.onDecimalPointPresssum(0.5);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                0.5
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber2} onPress={() => { this.onDigitPresssum(0.2) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>0.2</Text>
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber2}
+                                            onPress={() => {
+                                                this.onDecimalPointPresssum(0.2);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                0.2
+                    </Text>
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={styles.touchablenumber2} onPress={() => { this.onDigitPresssum(0.1) }}>
-                                            <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'grey', }}>0.1</Text>
-                                        </TouchableOpacity >
+                                        <TouchableOpacity
+                                            style={styles.touchablenumber2}
+                                            onPress={() => {
+                                                this.onDecimalPointPresssum(0.1);
+                                            }}>
+                                            <Text
+                                                style={{ fontSize: 20, fontWeight: 'bold', color: 'grey' }}>
+                                                0.1
+                    </Text>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
-
-
-
-
                             </View>
 
                         </View>
@@ -1166,6 +1414,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#333333',
         marginBottom: 5,
+    },
+    print_btn: {
+        padding: 8,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        backgroundColor: '#ffffff',
+        marginHorizontal: 10,
     },
     camera_icon: {
         justifyContent: 'center',

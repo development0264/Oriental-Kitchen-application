@@ -6,11 +6,11 @@ import Employee from './pages/Employee';
 import History from './pages/History';
 import Payment from './pages/Payment';
 import IngrediantsGroups from './pages/IngrediantsGroups';
-import {createAppContainer, SafeAreaView} from 'react-navigation';
-import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
-import {Image, Dimensions, ScrollView, View, Text} from 'react-native';
+import { createAppContainer, SafeAreaView } from 'react-navigation';
+import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
+import { Image, Dimensions, ScrollView, View, Text } from 'react-native';
 
-var {height, width} = Dimensions.get('window');
+var { height, width } = Dimensions.get('window');
 
 // const design = (props) =>(
 //   <SafeAreaView style={{flex:1}}>
@@ -71,7 +71,7 @@ const Primary_Nav = createDrawerNavigator(
     },
   },
   {
-    initialRouteName: 'Home_kitchen',
+    initialRouteName: 'Payment',
     drawerPosition: 'left',
     drawerType: 'slide',
     // drawerOpenRouter:'DrawerOpen',
