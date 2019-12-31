@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { Dimensions, Platform, StyleSheet, Text, View, Image, FlatList, TouchableOpacity, TextInput, CheckBox, AsyncStorage, ToastAndroid } from 'react-native';
+import { Dimensions, Platform, StyleSheet, Text, View, Image, FlatList, TouchableOpacity, TextInput, AsyncStorage, ToastAndroid } from 'react-native';
 import { Button, Left, Right, Toast } from 'native-base';
 import Navbar from '../components/Navbar';
-import { faBars, faArrowUp, faArrowDown, faPlus, faMinus, faWindowClose, faCamera } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBackward, faArrowUp, faArrowDown, faPlus, faMinus, faWindowClose, faCamera } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Card } from 'react-native-elements';
 import { Dialog } from 'react-native-simple-dialogs';
 import RNImagePicker from 'react-native-image-picker';
 import Colors from '../Colors';
 import SideMenuDrawer from '../components/SideMenuDrawer';
+import CheckBox from 'react-native-check-box'
 
 export default class CreateDish extends Component {
     constructor(props) {
@@ -38,7 +39,8 @@ export default class CreateDish extends Component {
             venderid: 1,
             dishrate: '',
             ingredient_group_id: null,
-            groupmax: 0
+            groupmax: 0,
+            isadd: false
         }
 
         AsyncStorage.setItem("INGREDIENT", "")
@@ -51,6 +53,11 @@ export default class CreateDish extends Component {
 
     }
 
+    create_new_dish() {
+        this.setState({
+            isadd: !this.state.isadd
+        })
+    }
 
     callvenderingredient() {
         // this.setState({ qty: '' });
@@ -71,15 +78,15 @@ export default class CreateDish extends Component {
 
                     for (var i = 0; i < responseJson.ingredientGroups.length; i++) {
                         responseJson.ingredientGroups[i].isgroup = true;
-                        responseJson.ingredientGroups[i].name = responseJson.ingredientGroups[i].name + 'Group'
                         ingredientGroups.push(responseJson.ingredientGroups[i])
                         for (var j = 0; j < responseJson.ingredientGroups[i].ingredients.length; j++) {
                             responseJson.ingredientGroups[i].ingredients[j].idingredient = responseJson.ingredientGroups[i].ingredients[j].id;
                             responseJson.ingredientGroups[i].ingredients[j].isexisting = false;
                             responseJson.ingredientGroups[i].ingredients[j].iscreate = false;
                             responseJson.ingredientGroups[i].ingredients[j].isgroup = false;
-                            responseJson.ingredientGroups[i].ingredients[j].groupmax = responseJson.ingredientGroups[i].max;
                             responseJson.ingredientGroups[i].ingredients[j].groupname = responseJson.ingredientGroups[i].name;
+                            responseJson.ingredientGroups[i].ingredients[j].groupmax = responseJson.ingredientGroups[i].max;
+                            responseJson.ingredientGroups[i].ingredients[j].ingredient_group_id = responseJson.ingredientGroups[i].id;
                             ingredientGroups.push(responseJson.ingredientGroups[i].ingredients[j])
                         }
                     }
@@ -276,7 +283,8 @@ export default class CreateDish extends Component {
                             isqtyupdate = true
                         }
                     }
-
+                    alert(item.group_id)
+                    alert(this.state.ingredient_group_id)
                     if (item.group_id == this.state.ingredient_group_id) {
                         group_count++
                     }
@@ -389,181 +397,414 @@ export default class CreateDish extends Component {
         console.log(width);
         var left = (
             <Left style={{ flex: 1 }}>
-                <Button onPress={() => this._sideMenuDrawer.open()} transparent>
-                    <FontAwesomeIcon icon={faBars} color={'white'} />
-                </Button>
+                {this.state.isadd == false ?
+                    <Button onPress={() => this._sideMenuDrawer.open()} transparent>
+                        <FontAwesomeIcon icon={faBars} color={'white'} />
+                    </Button>
+                    :
+                    <Button onPress={() => this.create_new_dish()} transparent>
+                        <FontAwesomeIcon icon={faBackward} color={'white'} />
+                    </Button>
+                }
             </Left>
         );
         var right = (
-            // <Right style={{ flex: 1 }}>
-            //     <View style={{ paddingRight: 10 }}>
-            //         <Button onPress={() => this.add_dish()} transparent title="Add Dish">
-            //             <FontAwesomeIcon icon={faPlus} color={'white'} size={20} />
-            //             {/* <Text>Add Dish</Text>> */}
-            //         </Button>
-            //     </View>
-            //     <FontAwesomeIcon style={{ marginBottom: 15 }} icon={faBars} color={'white'} />
-            //     <FontAwesomeIcon style={{ marginBottom: 15 }} icon={faBars} color={'white'} />
-            //     <FontAwesomeIcon style={{ marginBottom: 15 }} icon={faBars} color={'white'} />
-            // </Right>
-
             <Right style={{ flex: 1 }}>
-                <TouchableOpacity onPress={() => this.add_dish()} title="Create Dish">
-                    <Image
-                        style={{ width: 45, height: 45 }}
-                        source={require('../images/add_employee.png')}
-                    />
-                </TouchableOpacity>
+                {this.state.isadd == false ?
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.create_new_dish();
+                        }} title="Create Dish">
+                        <Text
+                            style={{
+                                fontSize: width * 0.03,
+                                paddingHorizontal: 10,
+                                backgroundColor: '#ff9500',
+                                color: 'white',
+                                borderRadius: 10,
+                            }}>
+                            Create
+                        </Text>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity onPress={() => this.add_dish()} title="Create Dish">
+                        <Image
+                            style={{ width: 45, height: 45 }}
+                            source={require('../images/add_employee.png')}
+                        />
+                    </TouchableOpacity>
+                }
             </Right>
         );
         return (
             <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} style={{ zIndex: 1 }} navigation={this.props}>
-                <View style={styles.container} >
-                    <Dialog
-                        visible={this.state.add_dialog}
-                        dialogStyle={{ borderRadius: 10, borderWidth: 10, borderColor: '#efeff4', width: '80%', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#efeff4' }}
-                        onTouchOutside={() => this.setState({ add_dialog: false })} >
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flex: 0.95 }}>
-                                <Text style={{ textAlign: 'center', borderBottomWidth: 1, borderBottomColor: 'lightgrey', paddingBottom: 15, marginTop: 0, fontSize: 23 }}>Create Dish</Text>
-                            </View>
-                            <View style={{ justifyContent: 'center' }}>
-                                <TouchableOpacity onPress={() => this.setState({ add_dialog: false })}>
-                                    <FontAwesomeIcon icon={faWindowClose} color={'#ff9500'} size={25} />
+                <Navbar left={left} right={right} title={this.state.dishname == null ? "Create Dish" : this.state.dishname} />
+                {this.state.isadd == false ?
+                    <View
+                        style={{
+                            flex: 0.12,
+                            backgroundColor: '#efeff4',
+                            flexDirection: 'row',
+                        }}>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                flex: 0.98,
+                                margin: 10,
+                                marginLeft: 40,
+                            }}>
+                            <Text style={{ fontSize: width * 0.03 }}>Name:</Text>
+                            <TextInput
+                                style={{
+                                    borderColor: 'gray',
+                                    height: '70%',
+                                    width: '60%',
+                                    paddingLeft: 15,
+                                    marginLeft: 15,
+                                    borderWidth: 1,
+                                    textAlignVertical: 'top',
+                                    backgroundColor: 'white',
+                                    borderRadius: 50,
+                                    flexWrap: 'wrap',
+                                    alignSelf: 'center',
+                                }}
+                                placeholder=" "
+                                numberOfLines={1}
+                                onChangeText={(Searchtext) =>
+                                    this.setState({ Searchtext: Searchtext })
+                                }
+                                defaultValue={this.state.Searchtext}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                margin: 10,
+                                justifyContent: 'center',
+                                flexDirection: 'row',
+                            }}>
+                            {this.state.Search_result != '' ? (
+                                <TouchableOpacity
+                                    style={{ marginHorizontal: 30 }}
+                                    onPress={() => {
+                                        this.clear(' ');
+                                    }}>
+                                    <Text
+                                        style={{
+                                            fontSize: width * 0.03,
+                                            backgroundColor: '#ff9500',
+                                            paddingLeft: 10,
+                                            paddingRight: 10,
+                                            color: 'white',
+                                            borderRadius: 10,
+                                        }}>
+                                        CLEAR
+                         </Text>
                                 </TouchableOpacity>
-                            </View>
-                        </View>
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flex: 0.6, borderRightWidth: 1, borderRightColor: 'lightgrey', padding: 50 }}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <View style={{ width: 150 }}>
-                                        <Text style={{ fontSize: width * 0.02, color: '#76726d' }}>Dish Name:</Text>
-                                    </View>
-                                    <TextInput
-                                        style={{ borderColor: 'white', height: 40, width: '60%', paddingLeft: 15, marginLeft: 15, borderWidth: 1, textAlignVertical: "top", backgroundColor: "white", borderRadius: 50, flexWrap: 'wrap' }}
-                                        placeholder="Type message here.."
-                                        value={this.state.dishname}
-                                        onChangeText={(dishname) => this.setState({ dishname })}
-                                    // onChangeText={this.setName}
-                                    />
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
-                                    <View style={{ width: 150 }}>
-                                        <Text style={{ fontSize: width * 0.02, color: '#76726d' }}>Dish Description:</Text>
-                                    </View>
-                                    <TextInput
-                                        style={{ borderColor: 'white', height: 40, width: '60%', paddingLeft: 15, marginLeft: 15, borderWidth: 1, textAlignVertical: "top", backgroundColor: "white", borderRadius: 50, flexWrap: 'wrap' }}
-                                        placeholder="Type message here.."
-                                        value={this.state.dishdescription}
-                                        onChangeText={(dishdescription) => this.setState({ dishdescription })}
-                                    //onChangeText={this.setName}
-                                    />
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
-                                    <View style={{ width: 150 }}>
-                                        <Text style={{ fontSize: width * 0.02, color: '#76726d' }}>Dish Rate:</Text>
-                                    </View>
-                                    <TextInput
-                                        style={{ borderColor: 'white', height: 40, width: '60%', paddingLeft: 15, marginLeft: 15, borderWidth: 1, textAlignVertical: "top", backgroundColor: "white", borderRadius: 50, flexWrap: 'wrap' }}
-                                        placeholder="Type message here.."
-                                        value={this.state.dishrate}
-                                        onChangeText={(dishrate) => this.setState({ dishrate })}
-                                    // onChangeText={this.setName}
-                                    />
-                                </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
-                                    <View style={{ width: 150 }}>
-                                        <Text style={{ fontSize: width * 0.02, color: '#76726d' }}>Popular:</Text>
-                                    </View>
-                                    {/* <CheckBox
-                                    style={{ flex: 1, marginLeft: 15 }}
-                                    value={this.state.isPopular}
-                                    //onValueChange={() => this.toggleStatus()}
-                                    onValueChange={() => this.setState({ isPopular: !this.state.isPopular })}
-                                    leftText={"PopularCheck"}
-                                /> */}
-                                </View>
-                            </View>
-                            <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center' }}>
-                                <View style={{ position: 'relative' }}>
-                                    {this.state.img_uri == ""
-                                        ? <Image style={{ width: 200, height: 200, borderRadius: 200 / 2 }} source={require("../images/profile-circle-picture-8.png")}  >
-                                        </Image>
-                                        : <Image style={{ width: 200, height: 200, borderRadius: 200 / 2 }} source={{ uri: this.state.img_uri }}  >
-                                        </Image>
-                                    }
-                                    <View style={styles.camera_icon}>
-                                        <TouchableOpacity onPress={() => this.opencamera()}>
-                                            <FontAwesomeIcon icon={faCamera} color={'black'} size={45} />
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                        <View style={{ marginTop: 20, borderTopColor: 'lightgrey', borderTopWidth: 1 }}>
-                            <TouchableOpacity style={styles.add_btn} onPress={() => this.handleAddDish()}>
-                                <Text style={{ fontSize: width * 0.03, color: 'white' }}>Create</Text>
+                            ) : null}
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.searchResult();
+                                }}>
+                                <Text
+                                    style={{
+                                        fontSize: width * 0.03,
+                                        paddingHorizontal: 10,
+                                        backgroundColor: '#ff9500',
+                                        color: 'white',
+                                        borderRadius: 10,
+                                    }}>
+                                    SEARCH
+                       </Text>
                             </TouchableOpacity>
                         </View>
-                    </Dialog>
-
-                    {/* Quantity Dialog */}
-
-                    <Dialog visible={this.state.show_dialog}
-                        dialogStyle={{ borderRadius: 10, borderWidth: 10, borderColor: '#efeff4', width: '50%', height: '50%', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#efeff4' }}
-                        onTouchOutside={() => this.setState({ show_dialog: false })}>
-                        <View style={{ height: '100%' }}>
+                    </View>
+                    <View style={{ flex: 0.8 }}>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                borderBottomColor: 'lightgrey',
+                                paddingBottom: 8,
+                                borderBottomWidth: 1,
+                            }}>
+                            <View
+                                style={{
+                                    flex: 0.4,
+                                    alignItems: 'center',
+                                    marginTop: 10,
+                                    marginLeft: 10,
+                                }}>
+                                <Text
+                                    style={{
+                                        fontSize: width * 0.02,
+                                        backgroundColor: '#ff9500',
+                                        color: 'white',
+                                        borderRadius: 80,
+                                        padding: 15,
+                                        paddingBottom: 2,
+                                        paddingTop: 2,
+                                    }}>
+                                    Name
+                       </Text>
+                            </View>
+                            <View
+                                style={{
+                                    flex: 0.4,
+                                    alignItems: 'center',
+                                    marginTop: 10,
+                                    marginLeft: 10,
+                                }}>
+                                <Text
+                                    style={{
+                                        fontSize: width * 0.02,
+                                        backgroundColor: '#ff9500',
+                                        color: 'white',
+                                        borderRadius: 80,
+                                        padding: 15,
+                                        paddingBottom: 2,
+                                        paddingTop: 2,
+                                    }}>
+                                    Role
+                       </Text>
+                            </View>
+                            <View
+                                style={{
+                                    flex: 0.4,
+                                    alignItems: 'center',
+                                    marginTop: 10,
+                                    marginLeft: 10,
+                                }}>
+                                <Text
+                                    style={{
+                                        fontSize: width * 0.02,
+                                        backgroundColor: '#ff9500',
+                                        color: 'white',
+                                        borderRadius: 80,
+                                        padding: 15,
+                                        paddingBottom: 2,
+                                        paddingTop: 2,
+                                    }}>
+                                    Enable
+                       </Text>
+                            </View>
+                        </View>
+                        {this.state.Search_result == '' ? (
+                            <FlatList
+                                pagingEnabled={true}
+                                data={this.state.dataSource}
+                                showsHorizontalScrollIndicator={false}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.selectEmployee(item.id);
+                                        }}>
+                                        <View style={styles.dynamic_list_view}>
+                                            <View style={{ flex: 0.5, alignItems: 'center' }}>
+                                                <Text style={{ fontSize: width * 0.025 }}>
+                                                    {item.name}
+                                                </Text>
+                                            </View>
+                                            <View style={{ flex: 0.5, alignItems: 'center' }}>
+                                                <Text style={{ fontSize: width * 0.025 }}>
+                                                    {item.display_name}
+                                                </Text>
+                                            </View>
+                                            <View style={{ flex: 0.5, alignItems: 'center' }}>
+                                                {item.status == 1 ? (
+                                                    <Text style={{ fontSize: width * 0.025 }}>Yes</Text>
+                                                ) : (
+                                                        <Text style={{ fontSize: width * 0.025 }}>No</Text>
+                                                    )}
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                )}
+                                keyExtractor={({ id }, index) => id}
+                            />
+                        ) : (
+                                <FlatList
+                                    pagingEnabled={true}
+                                    data={this.state.Search_result}
+                                    showsHorizontalScrollIndicator={false}
+                                    renderItem={({ item }) => (
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                this.selectEmployee(item.id);
+                                            }}>
+                                            <View style={styles.dynamic_list_view}>
+                                                <View style={{ flex: 0.5, alignItems: 'center' }}>
+                                                    <Text style={{ fontSize: width * 0.025 }}>
+                                                        {item.name}
+                                                    </Text>
+                                                </View>
+                                                <View style={{ flex: 0.5, alignItems: 'center' }}>
+                                                    <Text style={{ fontSize: width * 0.025 }}>
+                                                        {item.display_name}
+                                                    </Text>
+                                                </View>
+                                                <View style={{ flex: 0.5, alignItems: 'center' }}>
+                                                    {item.status == 1 ? (
+                                                        <Text style={{ fontSize: width * 0.025 }}>Yes</Text>
+                                                    ) : (
+                                                            <Text style={{ fontSize: width * 0.025 }}>No</Text>
+                                                        )}
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                    )}
+                                    keyExtractor={({ id }, index) => id}
+                                />
+                            )}
+                    </View>
+                    :
+                    
+                    <View style={styles.container} >
+                        <Dialog
+                            visible={this.state.add_dialog}
+                            dialogStyle={{ borderRadius: 10, borderWidth: 10, borderColor: '#efeff4', width: '80%', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#efeff4' }}
+                            onTouchOutside={() => this.setState({ add_dialog: false })} >
                             <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flex: 1 }}>
-                                    <Text style={{ textAlign: 'center', borderBottomWidth: 1, borderBottomColor: 'lightgrey', paddingBottom: 15, marginBottom: 0, fontSize: 23 }}>Select {this.state.groupname}</Text>
+                                <View style={{ flex: 0.95 }}>
+                                    <Text style={{ textAlign: 'center', borderBottomWidth: 1, borderBottomColor: 'lightgrey', paddingBottom: 15, marginTop: 0, fontSize: 23 }}>Create Dish</Text>
                                 </View>
                                 <View style={{ justifyContent: 'center' }}>
-                                    <TouchableOpacity onPress={() => this.setState({ show_dialog: false })}>
+                                    <TouchableOpacity onPress={() => this.setState({ add_dialog: false })}>
                                         <FontAwesomeIcon icon={faWindowClose} color={'#ff9500'} size={25} />
                                     </TouchableOpacity>
                                 </View>
                             </View>
-                            <View style={{ flex: 1, width: 250, maxHeight: 200 }}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <View style={{ flex: 0.6, borderRightWidth: 1, borderRightColor: 'lightgrey', padding: 50 }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <View style={{ width: 150 }}>
+                                            <Text style={{ fontSize: width * 0.02, color: '#76726d' }}>Dish Name:</Text>
+                                        </View>
+                                        <TextInput
+                                            style={{ borderColor: 'white', height: 40, width: '60%', paddingLeft: 15, marginLeft: 15, borderWidth: 1, textAlignVertical: "top", backgroundColor: "white", borderRadius: 50, flexWrap: 'wrap' }}
+                                            placeholder="Type message here.."
+                                            value={this.state.dishname}
+                                            onChangeText={(dishname) => this.setState({ dishname })}
+                                        // onChangeText={this.setName}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
+                                        <View style={{ width: 150 }}>
+                                            <Text style={{ fontSize: width * 0.02, color: '#76726d' }}>Dish Description:</Text>
+                                        </View>
+                                        <TextInput
+                                            style={{ borderColor: 'white', height: 40, width: '60%', paddingLeft: 15, marginLeft: 15, borderWidth: 1, textAlignVertical: "top", backgroundColor: "white", borderRadius: 50, flexWrap: 'wrap' }}
+                                            placeholder="Type message here.."
+                                            value={this.state.dishdescription}
+                                            onChangeText={(dishdescription) => this.setState({ dishdescription })}
+                                        //onChangeText={this.setName}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
+                                        <View style={{ width: 150 }}>
+                                            <Text style={{ fontSize: width * 0.02, color: '#76726d' }}>Dish Rate:</Text>
+                                        </View>
+                                        <TextInput
+                                            style={{ borderColor: 'white', height: 40, width: '60%', paddingLeft: 15, marginLeft: 15, borderWidth: 1, textAlignVertical: "top", backgroundColor: "white", borderRadius: 50, flexWrap: 'wrap' }}
+                                            placeholder="Type message here.."
+                                            value={this.state.dishrate}
+                                            onChangeText={(dishrate) => this.setState({ dishrate })}
+                                        // onChangeText={this.setName}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
+                                        <View style={{ width: 150 }}>
+                                            <Text style={{ fontSize: width * 0.02, color: '#76726d' }}>Is Popular:</Text>
+                                        </View>
+                                        <CheckBox
+                                            style={{ flex: 1, padding: 10 }}
+                                            onClick={() => {
+                                                this.setState({
+                                                    isPopular: !this.state.isPopular
+                                                })
+                                            }}
+                                            isChecked={this.state.isPopular}
+                                        />
+                                    </View>
+                                </View>
+                                <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center' }}>
+                                    <View style={{ position: 'relative' }}>
+                                        {this.state.img_uri == ""
+                                            ? <Image style={{ width: 200, height: 200, borderRadius: 200 / 2 }} source={require("../images/profile-circle-picture-8.png")}  >
+                                            </Image>
+                                            : <Image style={{ width: 200, height: 200, borderRadius: 200 / 2 }} source={{ uri: this.state.img_uri }}  >
+                                            </Image>
+                                        }
+                                        <View style={styles.camera_icon}>
+                                            <TouchableOpacity onPress={() => this.opencamera()}>
+                                                <FontAwesomeIcon icon={faCamera} color={'black'} size={45} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={{ marginTop: 20, borderTopColor: 'lightgrey', borderTopWidth: 1 }}>
+                                <TouchableOpacity style={styles.add_btn} onPress={() => this.handleAddDish()}>
+                                    <Text style={{ fontSize: width * 0.03, color: 'white' }}>Create</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </Dialog>
+
+                        {/* Quantity Dialog */}
+
+                        <Dialog visible={this.state.show_dialog}
+                            dialogStyle={{ borderRadius: 10, borderWidth: 10, borderColor: '#efeff4', width: '50%', height: '50%', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#efeff4' }}
+                            onTouchOutside={() => this.setState({ show_dialog: false })}>
+                            <View style={{ height: '100%' }}>
                                 <View style={{ flexDirection: 'row' }}>
-                                    <View style={{ marginLeft: 20, marginTop: 20 }}>
-                                        <Image
-                                            style={{ justifyContent: 'center', alignItems: 'center', width: 100, height: 110, backgroundColor: 'black' }}
-                                            source={{ uri: "http://dev-fs.8d.ie/storage/" + this.state.cover }}
-                                        ></Image>
+                                    <View style={{ flex: 1 }}>
+                                        <Text style={{ textAlign: 'center', borderBottomWidth: 1, borderBottomColor: 'lightgrey', paddingBottom: 15, marginBottom: 0, fontSize: 23 }}>Select {this.state.groupname}</Text>
                                     </View>
-                                    <View style={{ marginLeft: 40, marginTop: 10 }}>
-                                        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{this.state.name}</Text>
-                                        <Text style={{ fontSize: 16, width: 350, marginTop: 10 }}>{this.state.description}</Text>
+                                    <View style={{ justifyContent: 'center' }}>
+                                        <TouchableOpacity onPress={() => this.setState({ show_dialog: false })}>
+                                            <FontAwesomeIcon icon={faWindowClose} color={'#ff9500'} size={25} />
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
-                            </View>
-                            <View style={{ borderTopWidth: 1, borderColor: '#ccccde', flex: 1, width: 530, maxHeight: 150, marginBottom: -100 }}>
-                                <View style={{ flex: 1, flexDirection: 'row' }}>
-                                    <Button block icon transparent style={{ marginTop: 10 }} onPress={() => this.setState({ quantity: this.state.quantity > 0 ? this.state.quantity - 1 : 0 })} >
-                                        <FontAwesomeIcon icon={faMinus} color={'orange'} size={20} />
-                                    </Button>
-
-                                    <Text style={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center', fontSize: 20, marginLeft: 30, marginTop: 20 }}>{this.state.quantity}</Text>
-
-                                    <Button block icon transparent style={{ marginLeft: 30, marginTop: 10 }} onPress={() => this.addQuantity()} >
-                                        <FontAwesomeIcon icon={faPlus} color={'orange'} size={20} />
-                                    </Button>
-
-                                    <TouchableOpacity style={{
-                                        paddingLeft: 30,
-                                        paddingRight: 30,
-                                        marginBottom: 80,
-                                        marginLeft: 320,
-                                        borderRadius: 10,
-                                        justifyContent: 'center',
-                                        alignSelf: 'center',
-                                        backgroundColor: '#ff9500',
-                                    }} onPress={() => this.add_Dish_ingredient()}>
-                                        <Text style={{ fontSize: 20, color: 'white' }}>Add</Text>
-                                    </TouchableOpacity>
+                                <View style={{ flex: 1, width: 250, maxHeight: 200 }}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ marginLeft: 20, marginTop: 20 }}>
+                                            <Image
+                                                style={{ justifyContent: 'center', alignItems: 'center', width: 100, height: 110, backgroundColor: 'black' }}
+                                                source={{ uri: "http://dev-fs.8d.ie/storage/" + this.state.cover }}
+                                            ></Image>
+                                        </View>
+                                        <View style={{ marginLeft: 40, marginTop: 10 }}>
+                                            <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{this.state.name}</Text>
+                                            <Text style={{ fontSize: 16, width: 350, marginTop: 10 }}>{this.state.description}</Text>
+                                        </View>
+                                    </View>
                                 </View>
-                            </View>
-                            {/* <View style={{ borderTopWidth: 1, borderColor: '#ccccde', flex: 1, width: 250, maxHeight: 200, marginBottom: -100 }}>
+                                <View style={{ borderTopWidth: 1, borderColor: '#ccccde', flex: 1, width: 530, maxHeight: 150, marginBottom: -100 }}>
+                                    <View style={{ flex: 1, flexDirection: 'row' }}>
+                                        <Button block icon transparent style={{ marginTop: 10 }} onPress={() => this.setState({ quantity: this.state.quantity > 0 ? this.state.quantity - 1 : 0 })} >
+                                            <FontAwesomeIcon icon={faMinus} color={'orange'} size={20} />
+                                        </Button>
+
+                                        <Text style={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center', fontSize: 20, marginLeft: 30, marginTop: 20 }}>{this.state.quantity}</Text>
+
+                                        <Button block icon transparent style={{ marginLeft: 30, marginTop: 10 }} onPress={() => this.addQuantity()} >
+                                            <FontAwesomeIcon icon={faPlus} color={'orange'} size={20} />
+                                        </Button>
+
+                                        <TouchableOpacity style={{
+                                            paddingLeft: 30,
+                                            paddingRight: 30,
+                                            marginBottom: 80,
+                                            marginLeft: 320,
+                                            borderRadius: 10,
+                                            justifyContent: 'center',
+                                            alignSelf: 'center',
+                                            backgroundColor: '#ff9500',
+                                        }} onPress={() => this.add_Dish_ingredient()}>
+                                            <Text style={{ fontSize: 20, color: 'white' }}>Add</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                                {/* <View style={{ borderTopWidth: 1, borderColor: '#ccccde', flex: 1, width: 250, maxHeight: 200, marginBottom: -100 }}>
               <View>
 
                 <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -588,36 +829,37 @@ export default class CreateDish extends Component {
 
               </View>
             </View> */}
+                            </View>
+                        </Dialog >
+
+                        <View style={{ flex: 0.9, flexDirection: 'row' }}>
+                            <FlatList
+                                data={this.state.dataSource}
+                                keyExtractor={({ id }, index) => id}
+                                numColumns={8}
+                                renderItem={({ item }) =>
+                                    <View style={{ padding: 5, flexDirection: 'row', }}>
+
+                                        <TouchableOpacity onPress={() => this.ingredients_data(item)}>
+                                            <Image
+                                                style={{ height: 150, width: 150 }}
+                                                source={{ uri: 'http://dev-fs.8d.ie/storage/' + item.cover }}
+                                            />
+                                            <Text>{item.name}-{item.id}</Text>
+                                        </TouchableOpacity>
+                                        {this.getindiexistingqty(item)}
+
+                                    </View>}
+                            />
                         </View>
-                    </Dialog >
-                    <Navbar left={left} right={right} title={this.state.dishname == null ? "Create Dish" : this.state.dishname} />
-                    <View style={{ flex: 0.9, flexDirection: 'row' }}>
-                        <FlatList
-                            data={this.state.dataSource}
-                            keyExtractor={({ id }, index) => id}
-                            numColumns={8}
-                            renderItem={({ item }) =>
-                                <View style={{ padding: 5, flexDirection: 'row', }}>
-
-                                    <TouchableOpacity onPress={() => this.ingredients_data(item)}>
-                                        <Image
-                                            style={{ height: 150, width: 150 }}
-                                            source={{ uri: 'http://dev-fs.8d.ie/storage/' + item.cover }}
-                                        />
-                                        <Text>{item.name}-{item.id}</Text>
-                                    </TouchableOpacity>
-                                    {this.getindiexistingqty(item)}
-
-                                </View>}
-                        />
-                    </View>
-                    <View style={{ flex: 0.1, backgroundColor: '#ff9500' }}>
-                        <TouchableOpacity style={{ justifyContent: 'center', alignSelf: 'center' }}
-                            onPress={() => this.create_dish()}>
-                            <Text style={{ fontSize: width * 0.03, color: 'white' }}>Save</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View >
+                        <View style={{ flex: 0.1, backgroundColor: '#ff9500' }}>
+                            <TouchableOpacity style={{ justifyContent: 'center', alignSelf: 'center' }}
+                                onPress={() => this.create_dish()}>
+                                <Text style={{ fontSize: width * 0.03, color: 'white' }}>Save</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View >
+                }
             </SideMenuDrawer>
         );
     }

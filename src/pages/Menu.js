@@ -10,169 +10,55 @@ import {
     TouchableOpacity,
     Alert,
     KeyboardAvoidingView,
-    ScrollView,
-    CheckBox
+    ScrollView
 } from 'react-native';
-import { Button, Left, Right, Grid, Col, Row, Picker } from 'native-base';
+import { Button, Left, Right } from 'native-base';
 import Navbar from '../components/Navbar';
 import {
     faBars,
     faWindowClose,
-    faArrowDown,
-    faCamera,
-    faEye,
-    faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { Card } from 'react-native-elements';
 import { Dialog } from 'react-native-simple-dialogs';
-import RNImagePicker from 'react-native-image-picker';
-import SideMenu from '../components/SideMenu';
 import SideMenuDrawer from '../components/SideMenuDrawer';
+import CheckBox from 'react-native-check-box'
 
 export default class Employee extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            username: '',
-            firstName: '',
-            lastName: '',
-            email: '',
-            phone: '',
-            password: '',
-            repassword: '',
-            token: '',
-            role: '',
-            add_dialog: false,
-            edit_dialog: false,
-            img_uri: '',
-            selected: null,
-            avatar: '',
-            dataSource: '',
-            currency: '',
-            role_details: [],
-            status: 1,
-            Editusername: '',
-            Editname: '',
-            Editfirstname: '',
-            Editlastname: '',
-            Editemail: '',
-            Editphone: '',
-            Editpassword: '',
-            Editrole: '',
-            EditImage: '',
-            Search_result: '',
-            Searchtext: '',
-            Employeeid: '',
-            hidePassword: true,
-            status: true
+            id: null,
+            name: null,
+            description: null,
+            status: true,
+            dataSource: []
         };
-        this.dataSourcePicker = [];
-        this._retrieveData();
     }
 
-    _retrieveData = async () => {
-        try {
-            AsyncStorage.getItem('visited_onces', (err, res) => {
-                if (res === null || res === 'null' || res === "") {
-                    this.props.navigation.replace('login');
-                } else {
-                    var user = JSON.parse(res)
-                    this.setState({ customer_id: user.id })
-                    this.getalldishes()
-                    this._getcartitem();
-                }
-            });
-        } catch (error) {
-        }
-    };
-
-    onValueChange(value) {
-        this.setState({
-            selected: value,
-        });
-    }
-    add_employee = () => {
+    add_menu = () => {
         this.setState({ add_dialog: true });
     };
 
-    selectEmployee = (id) => {
-        var data = new FormData();
-        data.append('id', id);
-        var headers = new Headers();
-        let auth =
-            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
-        headers.append('Authorization', auth);
-        headers.append('Accept', 'application/json');
-
-        fetch('http://dev-fs.8d.ie/api/kitchen/getEmployee', {
-            method: 'POST',
-            headers: headers,
-            body: data,
-        })
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log(responseJson);
-                if (responseJson.status == 'success') {
-                    this.setState({ edit_dialog: true });
-                    this.setState({
-                        Employeeid: responseJson.Employee.id,
-                        Editusername: responseJson.Employee.user_name,
-                        Editfirstname: responseJson.Employee.name.split(' ')[0],
-                        Editlastname: responseJson.Employee.name.split(' ')[1],
-                        Editemail: responseJson.Employee.email,
-                        Editphone: responseJson.Employee.phone_number,
-                        Editpassword: responseJson.Employee.password,
-                        Editrole: responseJson.Employee.role_id,
-                        EditImage: responseJson.Employee.photo,
-                    });
-                    // this.componentDidMount();
-                } else {
-                    alert('Something wrong happened');
-                }
-            })
-            .catch(error => {
-                console.error(error);
+    selectmenu = (id) => {
+        let objectGroup = this.state.dataSource.find(o => o.id === id);
+        if (objectGroup) {
+            this.setState({
+                id: objectGroup.id,
+                name: objectGroup.name,
+                description: objectGroup.description,
+                status: objectGroup.status == 1 ? true : false,
             });
-    };
-
-    validate = text => {
-        console.log(text);
-        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if (reg.test(text) === false) {
-            console.log('Email is Not Correct');
-            this.setState({ email: text });
-            return false;
-        } else {
-            this.setState({ email: text });
-            console.log('Email is Correct');
         }
     };
+
 
     updatePress = (id) => {
         var data = new FormData();
         data.append('id', id);
-        data.append('first_name', this.state.Editfirstname);
-        data.append('last_name', this.state.Editlastname);
-        data.append('user_name', this.state.Editusername);
-        data.append('phone_number', this.state.Editphone);
-        data.append('email', this.state.Editemail);
-        data.append('password', this.state.Editpassword);
-        data.append('password_confirmation', this.state.Editpassword);
-        data.append('status', this.state.status);
-        if (this.state.avatar != "") {
-            data.append('photo', {
-                name: this.state.avatar.fileName,
-                type: this.state.avatar.type,
-                uri:
-                    Platform.OS === 'android'
-                        ? this.state.avatar.uri
-                        : this.state.avatar.uri.replace('file://', ''),
-            });
-        }
-        data.append('role_id', this.state.Editrole);
-        console.log(data);
+        data.append('name', this.state.name);
+        data.append('status', this.state.status == true ? 1 : 0);
+
         var headers = new Headers();
         let auth =
             'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
@@ -217,7 +103,6 @@ export default class Employee extends Component {
         })
             .then(response => response.json())
             .then(responseJson => {
-                console.log(responseJson);
                 if (responseJson.status == 'success') {
                     this.setState({ Search_result: responseJson.Employee });
                 } else {
@@ -286,147 +171,101 @@ export default class Employee extends Component {
 
     showDetail = () => {
         if (
-            this.state.username == '' ||
-            this.state.firstName == '' ||
-            this.state.lastName == '' ||
-            this.state.email == '' ||
-            this.state.phone.length < 10 ||
-            this.state.password == '' ||
-            this.state.role == ''
+            this.state.name == ''
         ) {
             alert('Please inserted remaining fields');
         } else {
-            if (this.state.repassword != this.state.password) {
-                alert('Password mismatch');
-            } else {
-                var data = new FormData();
-                data.append('first_name', this.state.firstName);
-                data.append('last_name', this.state.lastName);
-                data.append('user_name', this.state.username);
-                data.append('phone_number', this.state.phone);
-                data.append('email', this.state.email);
-                data.append('password', this.state.password);
-                data.append('password_confirmation', this.state.repassword);
-                data.append('status', this.state.status);
-                data.append('photo', {
-                    name: this.state.avatar.fileName,
-                    type: this.state.avatar.type,
-                    uri:
-                        Platform.OS === 'android'
-                            ? this.state.avatar.uri
-                            : this.state.avatar.uri.replace('file://', ''),
-                });
-                data.append('role_id', this.state.role);
-                console.log(data);
-                var headers = new Headers();
-                let auth =
-                    'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
-                headers.append('Authorization', auth);
-                headers.append('Accept', 'application/json');
 
-                fetch('http://dev-fs.8d.ie/api/kitchen/addEmployee', {
-                    method: 'POST',
-                    headers: headers,
-                    body: data,
-                })
-                    .then(response => response.json())
-                    .then(responseJson => {
+            var data = new FormData();
+            data.append('name', this.state.name);
+            data.append('description', this.state.description);
+            data.append('status', this.state.status == true ? 1 : 0);
+
+            console.log(data);
+            var headers = new Headers();
+            let auth =
+                'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+            headers.append('Authorization', auth);
+            headers.append('Accept', 'application/json');
+
+            fetch('http://dev-fs.8d.ie/api/kitchen/addEmployee', {
+                method: 'POST',
+                headers: headers,
+                body: data,
+            })
+                .then(response => response.json())
+                .then(responseJson => {
+                    if (responseJson.status == 'success') {
+                        // console.log('username', this.state.username);
+                        // console.log('firstname', this.state.firstName);
+                        // console.log('lastname', this.state.lastName);
+                        // console.log('email', this.state.email);
+                        // console.log('phone', this.state.phone);
+                        // console.log('password', this.state.password);
+                        // console.log('Confirm password', this.state.repassword);
+                        // console.log('Role', this.state.role);
+                        // console.log('avatar', {
+                        //   name: this.state.avatar.fileName,
+                        //   type: this.state.avatar.type,
+                        //   uri:
+                        //     Platform.OS === 'android'
+                        //       ? this.state.avatar.uri
+                        //       : this.state.avatar.uri.replace('file://', ''),
+                        // });
                         console.log(responseJson);
-                        if (responseJson.status == 'success') {
-                            // console.log('username', this.state.username);
-                            // console.log('firstname', this.state.firstName);
-                            // console.log('lastname', this.state.lastName);
-                            // console.log('email', this.state.email);
-                            // console.log('phone', this.state.phone);
-                            // console.log('password', this.state.password);
-                            // console.log('Confirm password', this.state.repassword);
-                            // console.log('Role', this.state.role);
-                            // console.log('avatar', {
-                            //   name: this.state.avatar.fileName,
-                            //   type: this.state.avatar.type,
-                            //   uri:
-                            //     Platform.OS === 'android'
-                            //       ? this.state.avatar.uri
-                            //       : this.state.avatar.uri.replace('file://', ''),
-                            // });
-                            console.log(responseJson);
-                            this.setState({ add_dialog: false });
-                            this.componentDidMount();
-                        } else {
-                            alert('Something wrong happened');
-                        }
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            }
+                        this.setState({ add_dialog: false });
+                        this.componentDidMount();
+                    } else {
+                        alert('Something wrong happened');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+
         }
     };
 
-    roleList = () => {
-        return this.dataSourcePicker.map(item => {
-            return <Picker.Item label={item.name} value={item.id} />;
-        });
-    };
-
     componentDidMount() {
-        this.dataSourcePicker = [];
-        var headers = new Headers();
-        let auth =
-            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
-        headers.append('Authorization', auth);
-        headers.append('Accept', 'application/json');
-        console.log(headers);
-        fetch('http://dev-fs.8d.ie/api/kitchen/getEmployees', {
-            method: 'POST',
-            headers: headers,
-        })
-            .then(response => response.json())
-            .then(responseJson => {
-                if (responseJson) {
-                    const dataSource = [];
-                    console.log(responseJson);
-                    this.setState({ dataSource: responseJson.employees });
-                    //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
-                } else {
-                    alert('Something wrong happened');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
 
-        fetch('http://dev-fs.8d.ie/api/kitchen/getRoles', {
-            method: 'POST',
-            headers: headers,
-        })
-            .then(response => response.json())
-            .then(responseJson => {
-                if (responseJson) {
-                    console.log(responseJson);
-                    // this.setState({dataSource: responseJson.Roles});
-                    var MyArr;
-                    let i = 0;
-                    for (i = 0; i < responseJson.Roles.length; i++) {
-                        //this.dataSourcePicker['name'+i] = responseJson.Roles[i].name
-                        MyArr = {
-                            id: responseJson.Roles[i].id,
-                            name: responseJson.Roles[i].display_name,
-                        };
-                        this.dataSourcePicker.push(MyArr);
-                    }
-                    // let hello = JSON.stringify(this.dataSourcePicker);
-                    this.setState({ role_details: JSON.stringify(this.dataSourcePicker) });
-                    console.log(this.dataSourcePicker);
-                    console.log(JSON.stringify(this.dataSourcePicker));
-                    //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
+        try {
+            AsyncStorage.getItem('visited_onces', (err, res) => {
+                if (res === null || res === 'null' || res === "") {
+                    this.props.navigation.replace('login');
                 } else {
-                    alert('Something wrong happened');
+
+                    var headers = new Headers();
+                    let auth =
+                        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
+                    headers.append('Authorization', auth);
+                    headers.append('Accept', 'application/json');
+                    console.log(headers);
+                    fetch('http://dev-fs.8d.ie/api/kitchen/getEmployees', {
+                        method: 'POST',
+                        headers: headers,
+                    })
+                        .then(response => response.json())
+                        .then(responseJson => {
+                            if (responseJson) {
+                                const dataSource = [];
+                                console.log(responseJson);
+                                this.setState({ dataSource: responseJson.employees });
+                                //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
+                            } else {
+                                alert('Something wrong happened');
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                    var user = JSON.parse(res)
+                    this.setState({ customer_id: user.id })
+                    this.getalldishes()
+                    this._getcartitem();
                 }
-            })
-            .catch(error => {
-                console.error(error);
             });
+        } catch (error) {
+        }
     }
 
     render() {
@@ -441,7 +280,7 @@ export default class Employee extends Component {
         );
         var right = (
             <Right style={{ flex: 1 }}>
-                <TouchableOpacity onPress={() => this.add_employee()}>
+                <TouchableOpacity onPress={() => this.add_menu()}>
                     <Image
                         style={{ width: 45, height: 45 }}
                         source={require('../images/add_employee.png')}
@@ -524,7 +363,7 @@ export default class Employee extends Component {
                                                         flexWrap: 'wrap',
                                                     }}
                                                     placeholder="Type name here.."
-                                                    onChangeText={username => this.setState({ username })}
+                                                    onChangeText={username => this.setState({ name })}
                                                 />
                                             </View>
                                             <View
@@ -553,7 +392,7 @@ export default class Employee extends Component {
                                                         flexWrap: 'wrap',
                                                     }}
                                                     placeholder="Type description here.."
-                                                    onChangeText={firstName => this.setState({ firstName })}
+                                                    onChangeText={firstName => this.setState({ description })}
                                                 />
                                             </View>
 
@@ -569,13 +408,15 @@ export default class Employee extends Component {
                                                         Is Status:
                                                     </Text>
                                                 </View>
-                                                {/* <CheckBox
-                                                    style={{ flex: 1, marginLeft: 15 }}
-                                                    value={this.state.status}
-                                                    //onValueChange={() => this.toggleStatus()}
-                                                    onValueChange={() => this.setState({ status: !this.state.status })}
-                                                    leftText={"PopularCheck"}
-                                                /> */}
+                                                <CheckBox
+                                                    style={{ flex: 1, padding: 10 }}
+                                                    onClick={() => {
+                                                        this.setState({
+                                                            status: !this.state.status
+                                                        })
+                                                    }}
+                                                    isChecked={this.state.status}
+                                                />
                                             </View>
 
                                         </View>
@@ -667,10 +508,10 @@ export default class Employee extends Component {
                                                         flexWrap: 'wrap',
                                                     }}
                                                     placeholder="Type message here.."
-                                                    onChangeText={Editusername =>
-                                                        this.setState({ Editusername })
+                                                    onChangeText={name =>
+                                                        this.setState({ name })
                                                     }
-                                                    defaultValue={this.state.Editusername}
+                                                    defaultValue={this.state.name}
                                                 />
                                             </View>
                                             <View
@@ -699,10 +540,10 @@ export default class Employee extends Component {
                                                         flexWrap: 'wrap',
                                                     }}
                                                     placeholder="Type message here.."
-                                                    onChangeText={Editfirstname =>
-                                                        this.setState({ Editfirstname })
+                                                    onChangeText={description =>
+                                                        this.setState({ description })
                                                     }
-                                                    defaultValue={this.state.Editfirstname}
+                                                    defaultValue={this.state.description}
                                                 />
                                             </View>
                                             <View
@@ -717,13 +558,15 @@ export default class Employee extends Component {
                                                         Is Status:
                                                     </Text>
                                                 </View>
-                                                {/* <CheckBox
-                                                    style={{ flex: 1, marginLeft: 15 }}
-                                                    value={this.state.status}
-                                                    //onValueChange={() => this.toggleStatus()}
-                                                    onValueChange={() => this.setState({ status: !this.state.status })}
-                                                    leftText={"PopularCheck"}
-                                                /> */}
+                                                <CheckBox
+                                                    style={{ flex: 1, padding: 10 }}
+                                                    onClick={() => {
+                                                        this.setState({
+                                                            status: !this.state.status
+                                                        })
+                                                    }}
+                                                    isChecked={this.state.status}
+                                                />
                                             </View>
                                         </View>
                                     </View>
