@@ -66,7 +66,7 @@ export default class Employee extends Component {
 
         AsyncStorage.getItem("Order_Dish", (err, res) => {
             this.setState({ paymentData: JSON.parse(res) });
-            //console.log(JSON.parse(res));
+            console.log(JSON.parse(res));
         })
 
 
@@ -135,10 +135,11 @@ export default class Employee extends Component {
                 console.log(responseJson);
                 if (responseJson.status == 'success') {
                     this.setState({ card_dish_dialog: true });
-                    this.setState({ card_dataSource: responseJson.data });
                     for (var i = 0; i < responseJson.data.length; i++) {
-                        this.dishQty.push(1);
+                        responseJson.data[i].qty = 1;
                     }
+                    console.log(responseJson.data);
+                    this.setState({ card_dataSource: responseJson.data });
                     // console.log(this.dishQty);
                 } else {
                     alert('Something wrong happened');
@@ -284,17 +285,7 @@ export default class Employee extends Component {
 
 
 
-    addDishQuantity(item) {
-        var obj = this.state.card_dataSource.find(o => o.id == item.id);
-        obj['qty'] = obj['qty'] + 1;
-        // alert(obj['qty']);
 
-        this.setState({ card_dataSource: this.state.card_dataSource });
-        //obj = item;
-        // alert(JSON.stringify(obj));
-        // this.setState({ dishqty: this.state.dishqty + 1 })
-        // this.setState({ dishname: this.state.Dish })
-    }
 
     // RemoveDishQuantity() {
     //     if (dishqty == 1) {
@@ -396,6 +387,7 @@ export default class Employee extends Component {
             )
         }
         )
+        console.log("item" + items);
         return items;
         // AsyncStorage.getItem("Order_Dish", (err, res) => {
         //     var item = [];
@@ -436,11 +428,11 @@ export default class Employee extends Component {
                 // console.log(orderdishlist);
                 orderdishlist.map((items) => {
                     if (items.id == item.id) {
-                        if (items.qty == this.state.dishqty) {
+                        if (items.qty == item.qty) {
                             success = true;
                             console.log(items);
                         } else {
-                            items.qty = this.state.dishqty;
+                            items.qty = item.qty;
                             // items.name = this.state.d_name;
                             isqtyupdate = true
                         }
@@ -596,8 +588,22 @@ export default class Employee extends Component {
 
     getItemQty(item) {
         item['qty'] = 1;
-
         return item['qty'];
+    }
+
+    addDishQuantity(item, cart_quantity) {
+        // alert(JSON.stringify(cart_quantity));
+        item.qty = cart_quantity < 1 ? (cart_quantity = 1) : cart_quantity
+        // // var obj = this.state.card_dataSource.filter(o => o.id == item.id);
+        // // obj[0].qty = obj[0].qty + 1;
+        // // alert(JSON.stringify(obj[0]));
+
+        let items = [];
+        this.state.card_dataSource.map((item) => {
+            items.push(item);
+        });
+        this.setState({ card_dataSource: items });
+        // // alert(obj['qty']);
     }
 
 
@@ -831,9 +837,9 @@ export default class Employee extends Component {
                                                         </TouchableOpacity>
 
                                                         <Text style={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center', fontSize: 20, paddingHorizontal: 10 }}>
-                                                            {this.getItemQty(item)}</Text>
+                                                            {item.qty}</Text>
 
-                                                        <TouchableOpacity onPress={() => this.addDishQuantity(item)} >
+                                                        <TouchableOpacity onPress={() => this.addDishQuantity(item, (parseInt(item.qty) + 1))} >
                                                             <FontAwesomeIcon icon={faPlus} color={'orange'} size={20} />
                                                         </TouchableOpacity>
                                                     </View>
