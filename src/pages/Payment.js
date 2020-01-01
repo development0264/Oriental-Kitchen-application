@@ -65,11 +65,11 @@ export default class Employee extends Component {
 
 
         AsyncStorage.getItem("Order_Dish", (err, res) => {
-            this.setState({ paymentData: JSON.parse(res) });
+            if (res) {
+                this.setState({ paymentData: JSON.parse(res) });
+            }
             console.log(JSON.parse(res));
         })
-
-
     }
 
     _retrieveData = async () => {
@@ -368,25 +368,27 @@ export default class Employee extends Component {
         var orderdishlist = [];
         var items = [];
 
-        this.state.paymentData.map((item, i) => {
-            items.push(
-                <View style={{ flexDirection: 'row' }}>
-                    <View style={{ flex: 0.2, justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 20 }}>{i + 1}</Text>
+        if (this.state.paymentData) {
+            this.state.paymentData.map((item, i) => {
+                items.push(
+                    <View style={{ flexDirection: 'row' }}>
+                        <View style={{ flex: 0.2, justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 20 }}>{i + 1}</Text>
+                        </View>
+                        <View style={{ flex: 0.4, justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 20 }}>{item.name}</Text>
+                        </View>
+                        <View style={{ flex: 0.2, justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 20 }}>{item.qty}</Text>
+                        </View>
+                        <View style={{ flex: 0.2, justifyContent: 'center' }}>
+                            <Text style={{ fontSize: 20 }}>${item.rate}</Text>
+                        </View>
                     </View>
-                    <View style={{ flex: 0.4, justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 20 }}>{item.name}</Text>
-                    </View>
-                    <View style={{ flex: 0.2, justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 20 }}>{item.qty}</Text>
-                    </View>
-                    <View style={{ flex: 0.2, justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 20 }}>${item.rate}</Text>
-                    </View>
-                </View>
+                )
+            }
             )
         }
-        )
         console.log("item" + items);
         return items;
         // AsyncStorage.getItem("Order_Dish", (err, res) => {
