@@ -12,12 +12,13 @@ import {
     KeyboardAvoidingView,
     ScrollView
 } from 'react-native';
-import { Button, Left, Right } from 'native-base';
+import { Button, Left, Right, Row, Col } from 'native-base';
 import Navbar from '../components/Navbar';
 import {
     faBars,
     faWindowClose,
 } from '@fortawesome/free-solid-svg-icons';
+import AsyncStorage from '@react-native-community/async-storage';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Dialog } from 'react-native-simple-dialogs';
 import SideMenuDrawer from '../components/SideMenuDrawer';
@@ -26,18 +27,27 @@ import CheckBox from 'react-native-check-box'
 export default class Employee extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
+            vender_id: 1,
             id: null,
             name: null,
             description: null,
             status: true,
-            dataSource: []
+            dataSource: [],
+            searchText: null,
+            add_dialog: false,
+            edit_dialog: false
         };
+        this.get_menu_data();
+
+    }
+
+    goto_add_dish(id) {
+        this.props.navigation.navigate('CreateDish', { menu_id: id });
     }
 
     add_menu = () => {
-        this.setState({ add_dialog: true });
+        this.setState({ add_dialog: true, name: null, description: null, status: true, id: null });
     };
 
     selectmenu = (id) => {
@@ -49,6 +59,7 @@ export default class Employee extends Component {
                 description: objectGroup.description,
                 status: objectGroup.status == 1 ? true : false,
             });
+            this.setState({ edit_dialog: true });
         }
     };
 
@@ -57,6 +68,7 @@ export default class Employee extends Component {
         var data = new FormData();
         data.append('id', id);
         data.append('name', this.state.name);
+        data.append('description', this.state.description);
         data.append('status', this.state.status == true ? 1 : 0);
 
         var headers = new Headers();
@@ -65,18 +77,27 @@ export default class Employee extends Component {
         headers.append('Authorization', auth);
         headers.append('Accept', 'application/json');
 
-        fetch('http://dev-fs.8d.ie/api/kitchen/updateEmployee', {
+        fetch('http://dev-fs.8d.ie/api/menu/edit-menu', {
             method: 'POST',
             headers: headers,
             body: data,
         })
             .then(response => response.json())
             .then(responseJson => {
-                console.log(responseJson);
                 if (responseJson.status == 'success') {
                     console.log(responseJson);
-                    this.setState({ edit_dialog: false });
-                    this.componentDidMount();
+                    this.setState({ edit_dialog: false, name: null, description: null, status: true, id: null });
+                    this.get_menu_data();
+                    // this.state = {
+                    //     id: null,
+                    //     name: null,
+                    //     description: null,
+                    //     status: true,
+                    //     dataSource: [],
+                    //     Search_result: '',
+                    //     add_dialog: false,
+                    //     edit_dialog: false
+                    // };
                 } else {
                     alert('Something wrong happened.');
                 }
@@ -118,7 +139,7 @@ export default class Employee extends Component {
         this.setState({ Search_result: '', Searchtext: '' });
     };
 
-    deletePress = () => {
+    deletePress = (id) => {
         Alert.alert(
             'Are sure you want to delete?',
             'Once deleted, You want able to recover',
@@ -131,7 +152,7 @@ export default class Employee extends Component {
                 {
                     text: 'Yes',
                     onPress: () => {
-                        this.deleteYesPress(this.state.Employeeid);
+                        //this.deleteYesPress(id);
                     },
                 },
             ],
@@ -177,6 +198,7 @@ export default class Employee extends Component {
         } else {
 
             var data = new FormData();
+            data.append('vender_id', this.state.vender_id);
             data.append('name', this.state.name);
             data.append('description', this.state.description);
             data.append('status', this.state.status == true ? 1 : 0);
@@ -188,7 +210,7 @@ export default class Employee extends Component {
             headers.append('Authorization', auth);
             headers.append('Accept', 'application/json');
 
-            fetch('http://dev-fs.8d.ie/api/kitchen/addEmployee', {
+            fetch('http://dev-fs.8d.ie/api/menu/add-menu', {
                 method: 'POST',
                 headers: headers,
                 body: data,
@@ -196,25 +218,8 @@ export default class Employee extends Component {
                 .then(response => response.json())
                 .then(responseJson => {
                     if (responseJson.status == 'success') {
-                        // console.log('username', this.state.username);
-                        // console.log('firstname', this.state.firstName);
-                        // console.log('lastname', this.state.lastName);
-                        // console.log('email', this.state.email);
-                        // console.log('phone', this.state.phone);
-                        // console.log('password', this.state.password);
-                        // console.log('Confirm password', this.state.repassword);
-                        // console.log('Role', this.state.role);
-                        // console.log('avatar', {
-                        //   name: this.state.avatar.fileName,
-                        //   type: this.state.avatar.type,
-                        //   uri:
-                        //     Platform.OS === 'android'
-                        //       ? this.state.avatar.uri
-                        //       : this.state.avatar.uri.replace('file://', ''),
-                        // });
-                        console.log(responseJson);
-                        this.setState({ add_dialog: false });
-                        this.componentDidMount();
+                        this.setState({ add_dialog: false, name: null, description: null, status: true, id: null });
+                        this.get_menu_data();
                     } else {
                         alert('Something wrong happened');
                     }
@@ -226,30 +231,30 @@ export default class Employee extends Component {
         }
     };
 
-    componentDidMount() {
+    get_menu_data() {
 
         try {
             AsyncStorage.getItem('visited_onces', (err, res) => {
                 if (res === null || res === 'null' || res === "") {
                     this.props.navigation.replace('login');
                 } else {
+                    var data = new FormData()
+                    data.append('vender_id', 1);
 
-                    var headers = new Headers();
-                    let auth =
-                        'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
-                    headers.append('Authorization', auth);
-                    headers.append('Accept', 'application/json');
-                    console.log(headers);
-                    fetch('http://dev-fs.8d.ie/api/kitchen/getEmployees', {
+                    fetch('http://dev-fs.8d.ie/api/menu/menu', {
                         method: 'POST',
-                        headers: headers,
+                        body: data
+                        //headers: headers,
                     })
                         .then(response => response.json())
                         .then(responseJson => {
                             if (responseJson) {
-                                const dataSource = [];
-                                console.log(responseJson);
-                                this.setState({ dataSource: responseJson.employees });
+                                //alert(JSON.stringify(responseJson["data"]))
+
+                                if (responseJson["status"] == "success") {
+                                    this.setState({ dataSource: responseJson["data"] });
+                                }
+                                //alert(JSON.stringify(this.state.dataSource))
                                 //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
                             } else {
                                 alert('Something wrong happened');
@@ -258,15 +263,28 @@ export default class Employee extends Component {
                         .catch(error => {
                             console.error(error);
                         });
-                    var user = JSON.parse(res)
-                    this.setState({ customer_id: user.id })
-                    this.getalldishes()
-                    this._getcartitem();
                 }
             });
         } catch (error) {
         }
     }
+
+    // searchFilterFunction = (text) => {
+
+    //     if (text != "") {
+    //         const newData = this.state.hotdishes.filter(item => {
+    //             const itemData = `${item.dish_name.toUpperCase()}`;
+    //             //alert(itemData)
+    //             const textData = text.toUpperCase();
+    //             //alert(textData)
+    //             //alert(itemData.indexOf(textData))
+    //             return itemData.indexOf(textData) > -1;
+    //         });
+    //         this.setState({ hotdishes: newData });
+    //     } else {
+    //         this.setState({ hotdishes: this.state.hotdishesnew });
+    //     }
+    // };
 
     render() {
         var { height, width } = Dimensions.get('window');
@@ -363,7 +381,10 @@ export default class Employee extends Component {
                                                         flexWrap: 'wrap',
                                                     }}
                                                     placeholder="Type name here.."
-                                                    onChangeText={username => this.setState({ name })}
+                                                    onChangeText={name =>
+                                                        this.setState({ name })
+                                                    }
+                                                    defaultValue={this.state.name}
                                                 />
                                             </View>
                                             <View
@@ -392,7 +413,10 @@ export default class Employee extends Component {
                                                         flexWrap: 'wrap',
                                                     }}
                                                     placeholder="Type description here.."
-                                                    onChangeText={firstName => this.setState({ description })}
+                                                    onChangeText={description =>
+                                                        this.setState({ description })
+                                                    }
+                                                    defaultValue={this.state.description}
                                                 />
                                             </View>
 
@@ -507,7 +531,7 @@ export default class Employee extends Component {
                                                         borderRadius: 50,
                                                         flexWrap: 'wrap',
                                                     }}
-                                                    placeholder="Type message here.."
+                                                    placeholder="Type name here.."
                                                     onChangeText={name =>
                                                         this.setState({ name })
                                                     }
@@ -539,7 +563,7 @@ export default class Employee extends Component {
                                                         borderRadius: 50,
                                                         flexWrap: 'wrap',
                                                     }}
-                                                    placeholder="Type message here.."
+                                                    placeholder="Type description here.."
                                                     onChangeText={description =>
                                                         this.setState({ description })
                                                     }
@@ -580,7 +604,7 @@ export default class Employee extends Component {
                                         <View style={{ flex: 0.9 }}>
                                             <TouchableOpacity
                                                 style={styles.delete_btn}
-                                                onPress={() => this.deletePress()}>
+                                                onPress={() => this.deletePress(this.state.id)}>
                                                 <Text style={{ fontSize: width * 0.025, color: 'white' }}>
                                                     Delete
                                                 </Text>
@@ -589,7 +613,7 @@ export default class Employee extends Component {
                                         <View>
                                             <TouchableOpacity
                                                 style={styles.add_btn}
-                                                onPress={() => this.updatePress(this.state.Employeeid)}>
+                                                onPress={() => this.updatePress(this.state.id)}>
                                                 <Text style={{ fontSize: width * 0.025, color: 'white' }}>
                                                     Update
                                                 </Text>
@@ -634,8 +658,9 @@ export default class Employee extends Component {
                                     placeholder=" "
                                     numberOfLines={1}
                                     onChangeText={(Searchtext) =>
-                                        this.setState({ Searchtext: Searchtext })
+                                        this.setState({ searchText: Searchtext })
                                     }
+                                    //onSubmitEditing={() => this.searchFilterFunction(this.state.searchText)}
                                     defaultValue={this.state.Searchtext}
                                 />
                             </View>
@@ -768,87 +793,71 @@ export default class Employee extends Component {
                                             paddingBottom: 2,
                                             paddingTop: 2,
                                         }}>
-                                        Created Date
+                                        Actions
                                     </Text>
                                 </View>
                             </View>
-                            {this.state.Search_result == '' ? (
-                                <FlatList
-                                    pagingEnabled={true}
-                                    data={this.state.dataSource}
-                                    showsHorizontalScrollIndicator={false}
-                                    renderItem={({ item }) => (
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                this.selectEmployee(item.id);
-                                            }}>
-                                            <View style={styles.dynamic_list_view}>
-                                                <View style={{ flex: 0.5, alignItems: 'center' }}>
-                                                    <Text style={{ fontSize: width * 0.025 }}>
-                                                        {item.name}
-                                                    </Text>
-                                                </View>
-                                                <View style={{ flex: 0.5, alignItems: 'center' }}>
-                                                    <Text style={{ fontSize: width * 0.025 }}>
-                                                        {item.description}
-                                                    </Text>
-                                                </View>
-                                                <View style={{ flex: 0.5, alignItems: 'center' }}>
-                                                    {item.status == 1 ? (
-                                                        <Text style={{ fontSize: width * 0.025 }}>Yes</Text>
-                                                    ) : (
-                                                            <Text style={{ fontSize: width * 0.025 }}>No</Text>
-                                                        )}
-                                                </View>
-                                                <View style={{ flex: 0.5, alignItems: 'center' }}>
-                                                    <Text style={{ fontSize: width * 0.025 }}>
-                                                        {item.created_at}
-                                                    </Text>
-                                                </View>
-                                            </View>
-                                        </TouchableOpacity>
-                                    )}
-                                    keyExtractor={({ id }, index) => id}
-                                />
-                            ) : (
-                                    <FlatList
-                                        pagingEnabled={true}
-                                        data={this.state.Search_result}
-                                        showsHorizontalScrollIndicator={false}
-                                        renderItem={({ item }) => (
-                                            <TouchableOpacity
-                                                onPress={() => {
-                                                    this.selectEmployee(item.id);
-                                                }}>
-                                                <View style={styles.dynamic_list_view}>
-                                                    <View style={{ flex: 0.5, alignItems: 'center' }}>
-                                                        <Text style={{ fontSize: width * 0.025 }}>
-                                                            {item.name}
-                                                        </Text>
-                                                    </View>
-                                                    <View style={{ flex: 0.5, alignItems: 'center' }}>
-                                                        <Text style={{ fontSize: width * 0.025 }}>
-                                                            {item.description}
-                                                        </Text>
-                                                    </View>
-                                                    <View style={{ flex: 0.5, alignItems: 'center' }}>
-                                                        {item.status == 1 ? (
-                                                            <Text style={{ fontSize: width * 0.025 }}>Yes</Text>
-                                                        ) : (
-                                                                <Text style={{ fontSize: width * 0.025 }}>No</Text>
-                                                            )}
-                                                    </View>
-                                                    <View style={{ flex: 0.5, alignItems: 'center' }}>
-                                                        <Text style={{ fontSize: width * 0.025 }}>
-                                                            {item.created_at}
-                                                        </Text>
-                                                    </View>
-                                                </View>
-                                            </TouchableOpacity>
-                                        )}
-                                        keyExtractor={({ id }, index) => id}
-                                    />
+
+                            <FlatList
+                                pagingEnabled={true}
+                                data={this.state.dataSource}
+                                showsHorizontalScrollIndicator={false}
+                                renderItem={({ item }) => (
+                                    <View style={styles.dynamic_list_view}>
+                                        <View style={{ flex: 0.5, alignItems: 'center' }}>
+                                            <Text style={{ fontSize: width * 0.025 }}>
+                                                {item.name}
+                                            </Text>
+                                        </View>
+                                        <View style={{ flex: 0.5, alignItems: 'center' }}>
+                                            <Text style={{ fontSize: width * 0.025 }}>
+                                                {item.description}
+                                            </Text>
+                                        </View>
+                                        <View style={{ flex: 0.5, alignItems: 'center' }}>
+                                            {item.status == 1 ? (
+                                                <Text style={{ fontSize: width * 0.025 }}>Yes</Text>
+                                            ) : (
+                                                    <Text style={{ fontSize: width * 0.025 }}>No</Text>
+                                                )}
+                                        </View>
+                                        <View style={{ flex: 0.5, alignItems: 'center' }}>
+                                            {/* <Button onPress={() => this._sideMenuDrawer.open()} transparent>
+                                                <FontAwesomeIcon icon={faBars} color={'white'} size={25} />
+                                            </Button> */}
+                                            <Row>
+                                                <Col style={{ width: 80 }}>
+                                                    <Button onPress={() => this.selectmenu(item.id)} style={{
+                                                        fontSize: width * 0.02,
+                                                        backgroundColor: '#ff9500',
+                                                        color: 'white',
+                                                        borderRadius: 80,
+                                                        padding: 15,
+                                                        paddingBottom: 2,
+                                                        paddingTop: 2,
+                                                    }}>
+                                                        <Text style={{ color: 'white', fontSize: 18 }}> Edit </Text>
+                                                    </Button>
+                                                </Col>
+                                                <Col style={{ marginLeft: 10, width: 110 }}>
+                                                    <Button onPress={() => this.goto_add_dish(item.id)} style={{
+                                                        fontSize: width * 0.02,
+                                                        backgroundColor: '#ff9500',
+                                                        color: 'white',
+                                                        borderRadius: 80,
+                                                        padding: 15,
+                                                        paddingBottom: 2,
+                                                        paddingTop: 2,
+                                                    }}>
+                                                        <Text style={{ color: 'white', fontSize: 18 }}> Add Dish </Text>
+                                                    </Button>
+                                                </Col>
+                                            </Row>
+                                        </View>
+                                    </View>
                                 )}
+                                keyExtractor={({ id }, index) => id}
+                            />
                         </View>
 
 
