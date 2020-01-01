@@ -450,8 +450,15 @@ export default class CreateDish extends Component {
     create_new_dish() {
         this.setState({
             isadd: !this.state.isadd,
-            dishname: null
+            dishname: null,
+            dishdescription: null,
+            isPopular: false,
+            dishrate: 0,
+            //isadd: false,
+            isdishedit: false,
+            ingredientexixts: []
         })
+        AsyncStorage.setItem("INGREDIENT", "")
     }
 
     render() {
