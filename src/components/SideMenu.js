@@ -8,7 +8,7 @@ import { ScrollView, LayoutAnimation, UIManager, Linking, Image, TouchableOpacit
 import { View, List, ListItem, Body, Left, Right, Icon, Item, Input, Button, Grid, Col } from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faHistory, faStar, faBell, faUsers, faShare, faSignOutAlt, faMoneyBill } from '@fortawesome/free-solid-svg-icons'
+import { faHistory, faStar, faBell, faUsers, faShare, faSignOutAlt, faMoneyBill, faConciergeBell } from '@fortawesome/free-solid-svg-icons'
 // Our custom files and classes import
 import Text from './Text';
 import { NavigationEvents } from 'react-navigation';
@@ -390,15 +390,9 @@ var vendermenuItems = [
     page: 'History'
   },
   {
-    id: 7,
-    title: 'Create Dish',
-    icon: faStar,
-    page: 'CreateDish'
-  },
-  {
     id: 8,
     title: 'Menu',
-    icon: faStar,
+    icon: faConciergeBell,
     page: 'Menu'
   },
   {

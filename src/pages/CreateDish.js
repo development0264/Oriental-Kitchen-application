@@ -43,7 +43,8 @@ export default class CreateDish extends Component {
             isadd: false,
             isdishedit: false,
             menu_id: this.props.navigation.state.params.menu_id,
-            dish_id: null
+            dish_id: null,
+            customer_id: null
         }
 
         AsyncStorage.setItem("INGREDIENT", "")
@@ -226,6 +227,7 @@ export default class CreateDish extends Component {
             "vender_id": 1,
             'dish_id': this.state.dish_id,
             "name": this.state.dishname,
+            "customer_id": null,
             "employee_id": null,
             "description": this.state.dishdescription,
             "is_popular": this.state.isPopular == true ? 1 : 0,
@@ -431,6 +433,7 @@ export default class CreateDish extends Component {
         this.setState({ isPopular: obj.is_popular == 0 ? false : true })
         this.setState({ dishrate: obj.rate })
         this.setState({ dish_id: obj.id })
+        this.setState({ add_dialog: true })
         var ingredientsList = [];
         for (var i = 0; i < obj.ingredient.length; i++) {
             var ingredients = {};
@@ -446,7 +449,8 @@ export default class CreateDish extends Component {
     //create Dish
     create_new_dish() {
         this.setState({
-            isadd: !this.state.isadd
+            isadd: !this.state.isadd,
+            dishname: null
         })
     }
 
@@ -716,7 +720,9 @@ export default class CreateDish extends Component {
                             </View>
                             <View style={{ marginTop: 20, borderTopColor: 'lightgrey', borderTopWidth: 1 }}>
                                 <TouchableOpacity style={styles.add_btn} onPress={() => this.handleAddDish()}>
-                                    <Text style={{ fontSize: width * 0.03, color: 'white' }}>Create</Text>
+                                    <Text style={{ fontSize: width * 0.03, color: 'white' }}>
+                                        {this.state.isdishedit == true ? "Update" : "Create"}
+                                    </Text>
                                 </TouchableOpacity>
                             </View>
                         </Dialog>

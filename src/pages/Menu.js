@@ -34,6 +34,7 @@ export default class Employee extends Component {
             description: null,
             status: true,
             dataSource: [],
+            dataSourcenew: [],
             searchText: null,
             add_dialog: false,
             edit_dialog: false
@@ -88,16 +89,6 @@ export default class Employee extends Component {
                     console.log(responseJson);
                     this.setState({ edit_dialog: false, name: null, description: null, status: true, id: null });
                     this.get_menu_data();
-                    // this.state = {
-                    //     id: null,
-                    //     name: null,
-                    //     description: null,
-                    //     status: true,
-                    //     dataSource: [],
-                    //     Search_result: '',
-                    //     add_dialog: false,
-                    //     edit_dialog: false
-                    // };
                 } else {
                     alert('Something wrong happened.');
                 }
@@ -107,36 +98,9 @@ export default class Employee extends Component {
             });
     };
 
-    searchResult = () => {
-        var headers = new Headers();
-        let auth =
-            'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImViNTE5MmFmNjYyZjkxMTQzYTE1ZDQ2OTZkNTg2ZGY0MmYyMDkxMmFiMGZjYWY1ZDJmNDg4YmQwOWZiOGFjNDkwZWVkODViODMzYTM1MjEyIn0.eyJhdWQiOiIxIiwianRpIjoiZWI1MTkyYWY2NjJmOTExNDNhMTVkNDY5NmQ1ODZkZjQyZjIwOTEyYWIwZmNhZjVkMmY0ODhiZDA5ZmI4YWM0OTBlZWQ4NWI4MzNhMzUyMTIiLCJpYXQiOjE1NzY2Njk4MDMsIm5iZiI6MTU3NjY2OTgwMywiZXhwIjoxNjA4MjkyMjAzLCJzdWIiOiIxNCIsInNjb3BlcyI6W119.WamiILeUa8pz0xFLiFQJVJ33QLrsjIU48QU4Nx1H5UBKCq2p28GnYlfkAG2ySCTaqhqxoNTvQ6kqSCoPRl4qFWSQyOxb_51hquwD_59nCgVkASRqxym4Pthcd9CAbme1m-InVgALwNTRl7VwHGch3XE3fdfA8AN_nuRlF0GJ_uQWDDapNHPSCd_EtxpCDmlcW8k4zCzcHY27_gwuLRr_LlI-bztJZQdKlK-kWDzvDmxBYKE_DbxAeVt7BCwX1DZpcqPjNxgLoo0QXir8fOFkOoZdS4y-k3wY0IPJybO-_Pmj-DkJ8Oq4eu9XXpraW50AHXvYz_sWcUm_WikYWUOkjjPp682DiaaR8TUWF75M6C403m-TgqCMTQXJWkukLeWunpH43V6h4iQf4uGtWLbJUPus2HDDMPhEWziFjHJB2_X0iBFlKmdCqeFtjisMENYsNRs3Q4KFmd7FjctiOs0_DbyonmlQ-yYV_DDlYHhz83gxEEC-1fCyFISA99VAEv2Hwx4vOeJ2sdh0NcCXpCmaGZFPdXoU5_Ae5mGgvNF1UHcuwluq1bbQx0-mgZ1JsFmQbFYs4QuQ4MeIzhqC_yj0bOY3Lv3vt3vNs2cq2vWHFSNy1FwvTXPkaka4FxHSIPA3D2fluR4BgegK9uT4A86YQmIXFWdGUzjtuWF6OiZBy1Q';
-        headers.append('Authorization', auth);
-        headers.append('Accept', 'application/json');
-
-        var data = new FormData();
-        data.append('name', this.state.Searchtext);
-
-        fetch('http://dev-fs.8d.ie/api/kitchen/searchEmployee', {
-            method: 'POST',
-            headers: headers,
-            body: data,
-        })
-            .then(response => response.json())
-            .then(responseJson => {
-                if (responseJson.status == 'success') {
-                    this.setState({ Search_result: responseJson.Employee });
-                } else {
-                    alert('Something wrong happened');
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    };
-
     clear = () => {
-        this.setState({ Search_result: '', Searchtext: '' });
+        this.setState({ searchText: null });
+        this.setState({ dataSource: this.state.dataSourcenew });
     };
 
     deletePress = (id) => {
@@ -253,6 +217,7 @@ export default class Employee extends Component {
 
                                 if (responseJson["status"] == "success") {
                                     this.setState({ dataSource: responseJson["data"] });
+                                    this.setState({ dataSourcenew: responseJson["data"] });
                                 }
                                 //alert(JSON.stringify(this.state.dataSource))
                                 //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
@@ -269,22 +234,18 @@ export default class Employee extends Component {
         }
     }
 
-    // searchFilterFunction = (text) => {
-
-    //     if (text != "") {
-    //         const newData = this.state.hotdishes.filter(item => {
-    //             const itemData = `${item.dish_name.toUpperCase()}`;
-    //             //alert(itemData)
-    //             const textData = text.toUpperCase();
-    //             //alert(textData)
-    //             //alert(itemData.indexOf(textData))
-    //             return itemData.indexOf(textData) > -1;
-    //         });
-    //         this.setState({ hotdishes: newData });
-    //     } else {
-    //         this.setState({ hotdishes: this.state.hotdishesnew });
-    //     }
-    // };
+    searchFilterFunction = (text) => {
+        if (text != "") {
+            const newData = this.state.dataSource.filter(item => {
+                const itemData = `${item.description.toUpperCase()}`;
+                const textData = text.toUpperCase();
+                return itemData.indexOf(textData) > -1;
+            });
+            this.setState({ dataSource: newData });
+        } else {
+            this.setState({ dataSource: this.state.dataSourcenew });
+        }
+    };
 
     render() {
         var { height, width } = Dimensions.get('window');
@@ -660,8 +621,8 @@ export default class Employee extends Component {
                                     onChangeText={(Searchtext) =>
                                         this.setState({ searchText: Searchtext })
                                     }
-                                    //onSubmitEditing={() => this.searchFilterFunction(this.state.searchText)}
-                                    defaultValue={this.state.Searchtext}
+                                    onSubmitEditing={() => this.searchFilterFunction(this.state.searchText)}
+                                    defaultValue={this.state.searchText}
                                 />
                             </View>
                             <View
@@ -670,29 +631,25 @@ export default class Employee extends Component {
                                     justifyContent: 'center',
                                     flexDirection: 'row',
                                 }}>
-                                {this.state.Search_result != '' ? (
-                                    <TouchableOpacity
-                                        style={{ marginHorizontal: 30 }}
-                                        onPress={() => {
-                                            this.clear(' ');
-                                        }}>
-                                        <Text
-                                            style={{
-                                                fontSize: width * 0.03,
-                                                backgroundColor: '#ff9500',
-                                                paddingLeft: 10,
-                                                paddingRight: 10,
-                                                color: 'white',
-                                                borderRadius: 10,
-                                            }}>
-                                            CLEAR
-                                        </Text>
-                                    </TouchableOpacity>
-                                ) : null}
                                 <TouchableOpacity
+                                    style={{ marginHorizontal: 30 }}
                                     onPress={() => {
-                                        this.searchResult();
+                                        this.clear(' ');
                                     }}>
+                                    <Text
+                                        style={{
+                                            fontSize: width * 0.03,
+                                            backgroundColor: '#ff9500',
+                                            paddingLeft: 10,
+                                            paddingRight: 10,
+                                            color: 'white',
+                                            borderRadius: 10,
+                                        }}>
+                                        CLEAR
+                                        </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => this.searchFilterFunction(this.state.searchText)}>
                                     <Text
                                         style={{
                                             fontSize: width * 0.03,
