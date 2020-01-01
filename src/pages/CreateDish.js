@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, Platform, StyleSheet, Text, View, Image, FlatList, TouchableOpacity, TextInput, AsyncStorage, ToastAndroid } from 'react-native';
+import { Dimensions, Platform, StyleSheet, Text, View, Image, FlatList, TouchableOpacity, TextInput, AsyncStorage, ToastAndroid, Slider } from 'react-native';
 import { Button, Left, Right, Toast, Row, Col } from 'native-base';
 import Navbar from '../components/Navbar';
 import { faBars, faBackward, faArrowUp, faArrowDown, faPlus, faMinus, faWindowClose, faCamera } from '@fortawesome/free-solid-svg-icons';
@@ -21,7 +21,6 @@ export default class CreateDish extends Component {
             token: "",
             dataSource: [],
             ListdataSource: [],
-            dataSource_inside: {},
             add_dialog: false,
             show_dialog: false,
             img_uri: "",
@@ -43,7 +42,8 @@ export default class CreateDish extends Component {
             groupmax: 0,
             isadd: false,
             isdishedit: false,
-            menu_id: this.props.navigation.state.params.menu_id
+            menu_id: this.props.navigation.state.params.menu_id,
+            dish_id: null
         }
 
         AsyncStorage.setItem("INGREDIENT", "")
@@ -51,19 +51,14 @@ export default class CreateDish extends Component {
             if (res != null) {
                 this.setState({ ingredientexixts: JSON.parse(res) })
             }
-            this.callvenderingredient();
+            this.getvenderingredient();
             this.vendermenu();
         })
 
     }
 
-    create_new_dish() {
-        this.setState({
-            isadd: !this.state.isadd
-        })
-    }
-
-    callvenderingredient() {
+    //vender ingredient
+    getvenderingredient() {
         // this.setState({ qty: '' });
         var headers = new Headers();
         let auth = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjU2MTE1NTZiYTJmZjUxZDlmNTg4ZWY0N2MxY2EzNDZiN2Q2NWQ5YjEyZGIxYzJkZWZkZTRlMjg3NzU2YTQ4NjE0YmY4YWU0OWQ0ZDZkM2VjIn0.eyJhdWQiOiIxIiwianRpIjoiNTYxMTU1NmJhMmZmNTFkOWY1ODhlZjQ3YzFjYTM0NmI3ZDY1ZDliMTJkYjFjMmRlZmRlNGUyODc3NTZhNDg2MTRiZjhhZTQ5ZDRkNmQzZWMiLCJpYXQiOjE1NzIwMTExMTcsIm5iZiI6MTU3MjAxMTExNywiZXhwIjoxNjAzNjMzNTE3LCJzdWIiOiIzMSIsInNjb3BlcyI6W119.tbhBgFC_mbmVdP924vH0RcIhmOa7Vd8tPnLIGeFMjFz9TptGIFXDf9jp44yEYSAR5JZq31kz3yth92lQnMgdSg-ah1vqyo_OWETzMTxlQaRbpSnuWX9tFGT53wbbR4QHCrTMGi72cumIvMV0E4z-XqxKJnMjiWN91HhPznGiVlT5gu1Y9AUDpxn1vXuNRNYhHO_3jxqJIqxucCln-ZMeZ38-jUgcj_bi7b5gS62mX08KuLqpNMJTzC3PLjW7krbuHS0Ac8TLVDrYH0sDgK4waXmDaNNY8Sp1wx1MHUN1Jzmwog1ACUvyrasT4J2aoxbr0L_Mvyqu-nSpMexZw4CkrM8h8h1sAjPp4JCxKRtzVyBKTaFzXg6ZNWYEzo19MgWHa0Noj23t2TZeVULO3udmt5wyMY4W9rKpFW1JoaUb5inmFTCDTdUSdFXNpMBGYi-Jx3lP5H1pkPI4IFfzOvgFEy0FrekPClC622JNRlLoVllJSTNFN-660kcwQltG6vETH8Xb4isF03GeLhwew7z4P0cGyw_wIsvhyCOx3uEB2vJnpf5QTCVD1knqZYkwxnfbPs7zcos1oWJOmFADkbNeBx1Ti3hBzW16eXN3kKGmoY9W5FVTZSq0M9W_rQI_n7tvl9BqaTukiSpRwMJw1FuDFpr9T5P3ANFR6m8LzhOkPhs';
@@ -82,6 +77,7 @@ export default class CreateDish extends Component {
 
                     for (var i = 0; i < responseJson.ingredientGroups.length; i++) {
                         responseJson.ingredientGroups[i].isgroup = true;
+                        responseJson.ingredientGroups[i].group = "Yes";
                         ingredientGroups.push(responseJson.ingredientGroups[i])
                         for (var j = 0; j < responseJson.ingredientGroups[i].ingredients.length; j++) {
                             responseJson.ingredientGroups[i].ingredients[j].idingredient = responseJson.ingredientGroups[i].ingredients[j].id;
@@ -91,17 +87,19 @@ export default class CreateDish extends Component {
                             responseJson.ingredientGroups[i].ingredients[j].groupname = responseJson.ingredientGroups[i].name;
                             responseJson.ingredientGroups[i].ingredients[j].groupmax = responseJson.ingredientGroups[i].max;
                             responseJson.ingredientGroups[i].ingredients[j].ingredient_group_id = responseJson.ingredientGroups[i].id;
+                            responseJson.ingredientGroups[i].ingredients[j].group = "No";
                             ingredientGroups.push(responseJson.ingredientGroups[i].ingredients[j])
                         }
                     }
                     console.log(responseJson.ingredientGroups);
-                    this.setState({ dataSource: ingredientGroups, dataSource_inside: responseJson.ingredientGroups.ingredients });
+                    this.setState({ dataSource: ingredientGroups });
                 }
             }).catch((error) => {
                 console.error(error);
             });
     }
 
+    //vender menu
     vendermenu = async () => {
         try {
             var data = new FormData()
@@ -150,8 +148,9 @@ export default class CreateDish extends Component {
 
     }
 
+    //Open for quantiry
     ingredients_data = (item) => {
-        //this.setState({ qty: '' });
+        //this.setState({ qty: '' });       
         if (item.isgroup == false) {
             this.setState({ did: item.idingredient });
             this.setState({ groupname: item.groupname });
@@ -161,14 +160,17 @@ export default class CreateDish extends Component {
             this.setState({ ingredient_group_id: item.ingredient_group_id });
             this.setState({ groupmax: item.groupmax });
             this.setState({ quantity: 1 });
+            //alert((item.id))
             this.state.ingredientexixts.map((items) => {
                 if (item.id == items.id) {
-                    this.setState({ quantity: items.qty });
+                    //alert(parseInt(items.qty))
+                    this.setState({ quantity: parseInt(items.qty) });
                 }
             })
             this.setState({ show_dialog: true });
         }
     }
+
 
     opencamera = () => {
         const options = {
@@ -192,6 +194,7 @@ export default class CreateDish extends Component {
         });
     }
 
+    //check with group quantity
     addQuantity() {
         if ((this.state.quantity + 1) <= this.state.max) {
             this.setState({ quantity: this.state.quantity + 1 })
@@ -201,8 +204,8 @@ export default class CreateDish extends Component {
         }
     }
 
-
-    create_dish() {
+    //Save Dish
+    save_dish() {
 
         var ingredientsList = [];
 
@@ -221,88 +224,78 @@ export default class CreateDish extends Component {
 
         var data = {
             "vender_id": 1,
+            'dish_id': this.state.dish_id,
             "name": this.state.dishname,
             "employee_id": null,
             "description": this.state.dishdescription,
-            "is_popular": this.state.isPopular,
+            "is_popular": this.state.isPopular == true ? 1 : 0,
             //"rate": this.state.dishrate,
             "ingredients": ingredientsList,
         }
 
         if (this.state.dishname != "" && this.state.dishname != null) {
-            //return
-            if (this.state.isdishedit == false) {
-                fetch("http://dev-fs.8d.ie/api/dishes", {
-                    method: "POST",
-                    headers: headers,
-                    body: JSON.stringify(data)
-                })
-                    .then((response) => response.json())
-                    .then((responseJson) => {
+            //return           
+            fetch("http://dev-fs.8d.ie/api/dishes", {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(data)
+            })
+                .then((response) => response.json())
+                .then((responseJsonDish) => {
+
+                    //dish added successfully
+                    if (responseJsonDish["dish"] != undefined) {
+                        //dish add to menu                      
+
+                        var data = new FormData()
+                        data.append('dish_id', responseJsonDish["dish"][0].id);
+                        data.append('menu_id', this.state.menu_id);
 
 
-                        //dish added successfully
-                        if (responseJson["dish"] != undefined) {
-                            ToastAndroid.show('Dish creatded successfully !', ToastAndroid.SHORT);
-
-                            //dish add to menu
-                            var headers = new Headers();
-                            headers.append('Content-Type', 'application/json');
-
-                            var data = new FormData()
-                            data.append('dish_id', responseJson["dish"][0].id);
-                            data.append('menu_id', this.state.menu_id);
+                        fetch("http://dev-fs.8d.ie/api/menu/add-dish-menu", {
+                            method: "POST",
+                            body: data
+                        })
+                            .then((response) => response.json())
+                            .then((responseJson) => {
 
 
-                            fetch("http://dev-fs.8d.ie/api/menu/add-dish-menu", {
-                                method: "POST",
-                                headers: headers,
-                                body: data
-                            })
-                                .then((response) => response.json())
-                                .then((responseJson) => {
+                                //add rate for dish
+                                var headers = new Headers();
+                                headers.append('Content-Type', 'application/json');
 
-                                    //add rate for dish
-                                    var headers = new Headers();
-                                    headers.append('Content-Type', 'application/json');
+                                var rdata = {
+                                    "dish_id": responseJsonDish["dish"][0].id,
+                                    "vender_id": this.state.venderid,
+                                    "rate": this.state.dishrate
+                                }
 
-                                    var rdata = {
-                                        "dish_id": responseJson["dish"][0].id,
-                                        "vender_id": this.state.venderid,
-                                        "rate": this.state.dishrate
-                                    }
-
-                                    fetch("http://dev-fs.8d.ie/api/dishes/add_dish_rate", {
-                                        method: "POST",
-                                        headers: headers,
-                                        body: JSON.stringify(rdata)
-                                    })
-                                        .then((response) => response.json())
-                                        .then((responseJson) => {
-
-                                            if (responseJson.status == "success") {
-                                                this.setState({ resp: responseJson, networkError: false });
-                                                //alert("Please check dishrate if");
-                                                ToastAndroid.show('Dish creatded successfully !', ToastAndroid.SHORT);
-
-                                                AsyncStorage.setItem("INGREDIENT", "");
-                                                this.setState({ ingredientexixts: [] })
-                                            } else {
-                                                //alert("Please check dishrate else");
-                                                ToastAndroid.show('Dish does not creatded successfully !', ToastAndroid.SHORT);
-                                            }
-                                        })
-
+                                fetch("http://dev-fs.8d.ie/api/dishes/add_dish_rate", {
+                                    method: "POST",
+                                    headers: headers,
+                                    body: JSON.stringify(rdata)
                                 })
-                        } else {
-                            //ToastAndroid.show('Dish does not creatded successfully !', ToastAndroid.SHORT);
-                            ToastAndroid.show('Please Check your Code !', ToastAndroid.SHORT);
-                        }
-                    })
-            }
-            else {
+                                    .then((response) => response.json())
+                                    .then((responseJson) => {
 
-            }
+                                        if (responseJson.status == "success") {
+                                            this.setState({ resp: responseJson, networkError: false });
+                                            ToastAndroid.show('Dish creatded successfully !', ToastAndroid.SHORT);
+
+                                            AsyncStorage.setItem("INGREDIENT", "");
+                                            this.vendermenu();
+                                            this.setState({ ingredientexixts: [], isadd: false })
+
+                                        } else {
+                                            ToastAndroid.show('Dish does not creatded successfully !', ToastAndroid.SHORT);
+                                        }
+                                    })
+
+                            })
+                    } else {
+                        ToastAndroid.show('Please Check your Code !', ToastAndroid.SHORT);
+                    }
+                })
         }
         else {
             this.setState({ add_dialog: true })
@@ -310,7 +303,7 @@ export default class CreateDish extends Component {
         }
     }
 
-
+    //Add ingredient for Dish
     add_Dish_ingredient() {
         var success = false;
         var isqtyupdate = false;
@@ -339,8 +332,6 @@ export default class CreateDish extends Component {
                             isqtyupdate = true
                         }
                     }
-                    alert(item.group_id)
-                    alert(this.state.ingredient_group_id)
                     if (item.group_id == this.state.ingredient_group_id) {
                         group_count++
                     }
@@ -350,13 +341,6 @@ export default class CreateDish extends Component {
                 }
             }
             if (success) {
-                // Toast.show({
-                //   text: 'This ingredient already exist !',
-                //   position: 'bottom',
-                //   type: 'danger',
-                //   buttonText: 'Dismiss',
-                //   duration: 3000
-                // });
                 ToastAndroid.show('This ingredient already exist !', ToastAndroid.SHORT);
                 this.getindiexistingqtyAdd(ingredients)
                 this.setState({ add_dialog: false })
@@ -389,26 +373,14 @@ export default class CreateDish extends Component {
                     }
                 }
             }
-
-
-            // AsyncStorage.getItem("INGREDIENT", (err, res) => {
-            //   if (!res) {
-            //     global.ingList = []
-            //   }
-            //   else {
-            //     global.ingList = JSON.parse(res)
-            //     this.getindiqty(this.state)
-            //   }
-            // });
         });
     }
 
+    //Update Quantity on Add
     getindiexistingqtyAdd(items) {
         var itemsarray = [];
         AsyncStorage.getItem("INGREDIENT", (err, res) => {
             if (res != null) {
-                //alert(res)
-                //ingredientsList = JSON.parse(res);
                 this.setState({ ingredientexixts: JSON.parse(res) })
                 this.state.ingredientexixts.map((item) => {
                     if (item.id == items.id) {
@@ -417,7 +389,7 @@ export default class CreateDish extends Component {
                                 <View style={{ position: 'absolute', bottom: 15, right: 15, justifyContent: 'center', alignItems: 'center', height: 15, width: 15, backgroundColor: Colors.navbarBackgroundColor, borderRadius: 200 / 2 }}>
                                     <Text style={{ color: 'white' }}>{item.qty}</Text>
                                 </View>
-                            </View >
+                            </View>
                         );
                     }
                 })
@@ -447,23 +419,39 @@ export default class CreateDish extends Component {
         return itemsarray
     }
 
-
-    selectdish(id) {
+    //Edit Dish From id
+    editdish(id) {
         var obj = this.state.ListdataSource.find(o => o.id = id)
-        //alert(JSON.stringify(obj.ingredient))
+        //alert((obj.ingredient.length))
         this.setState({ isadd: true })
-        this.setState({ ingredientexixts: obj.ingredient })
+        //this.setState({ ingredientexixts: obj.ingredient })
         this.setState({ isdishedit: true })
         this.setState({ dishname: obj.name })
         this.setState({ dishdescription: obj.description })
-        this.setState({ isPopular: obj.is_popular == 0 ? true : true })
+        this.setState({ isPopular: obj.is_popular == 0 ? false : true })
         this.setState({ dishrate: obj.rate })
+        this.setState({ dish_id: obj.id })
+        var ingredientsList = [];
+        for (var i = 0; i < obj.ingredient.length; i++) {
+            var ingredients = {};
+            ingredients['id'] = obj.ingredient[i].ingredient_id;
+            ingredients['qty'] = obj.ingredient[i].qty;
+            ingredients['group_id'] = obj.ingredient[i].ingredient_group_id;
+            ingredientsList.push(ingredients)
+            AsyncStorage.setItem("INGREDIENT", JSON.stringify(ingredientsList));
+            this.getindiexistingqtyAdd(ingredients)
+        }
     }
 
+    //create Dish
+    create_new_dish() {
+        this.setState({
+            isadd: !this.state.isadd
+        })
+    }
 
     render() {
         var { height, width } = Dimensions.get('window');
-        console.log(width);
         var left = (
             <Left style={{ flex: 1 }}>
                 {this.state.isadd == false ?
@@ -624,7 +612,7 @@ export default class CreateDish extends Component {
                                     <View style={{ flex: 0.5, alignItems: 'center' }}>
                                         <Row>
                                             <Col style={{ width: 80 }}>
-                                                <Button onPress={() => this.selectdish(item.id)} style={{
+                                                <Button onPress={() => this.editdish(item.id)} style={{
                                                     fontSize: width * 0.02,
                                                     backgroundColor: '#ff9500',
                                                     color: 'white',
@@ -682,7 +670,6 @@ export default class CreateDish extends Component {
                                             placeholder="Type message here.."
                                             value={this.state.dishdescription}
                                             onChangeText={(dishdescription) => this.setState({ dishdescription })}
-                                        //onChangeText={this.setName}
                                         />
                                     </View>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
@@ -694,7 +681,6 @@ export default class CreateDish extends Component {
                                             placeholder="Type message here.."
                                             value={this.state.dishrate.toString()}
                                             onChangeText={(dishrate) => this.setState({ dishrate })}
-                                        // onChangeText={this.setName}
                                         />
                                     </View>
                                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 15 }}>
@@ -791,31 +777,6 @@ export default class CreateDish extends Component {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-                                {/* <View style={{ borderTopWidth: 1, borderColor: '#ccccde', flex: 1, width: 250, maxHeight: 200, marginBottom: -100 }}>
-              <View>
-
-                <View style={{ flex: 1, flexDirection: 'row' }}>
-                  <Button block icon transparent onPress={() => this.setState({ quantity: this.state.quantity > 0 ? this.state.quantity - 1 : 0 })} >
-                    <Icon name='ios-remove' style={{ color: Colors.navbarBackgroundColor }} />
-                  </Button>
-
-                  <Text style={{ textAlign: 'center', justifyContent: 'center', alignItems: 'center', fontSize: 14, marginLeft: 10 }}>{this.state.quantity}</Text>
-
-
-                  <Button block icon transparent onPress={() => this.addingredient()}>
-                    <Icon style={{ color: Colors.navbarBackgroundColor }} name='ios-add' />
-                  </Button>
-                </View>
-                <View style={{ paddingTop: 10 }}>
-                  {this.state.isexisting == true ?
-                    < Dialog.Button label="Add" style={{ width: 60, height: 30, marginRight: -20, padding: 3, textAlign: 'center', color: 'white', borderRadius: 100, borderWidth: 1, backgroundColor: 'orange', borderColor: 'orange' }} onPress={() => this.addToBasketExisting()} />
-                    :
-                    <Dialog.Button label="Add" style={{ width: 60, height: 30, marginRight: -20, padding: 3, textAlign: 'center', color: 'white', borderRadius: 100, borderWidth: 1, backgroundColor: 'orange', borderColor: 'orange' }} onPress={() => this.addToBasket()} />
-                  }
-                </View>
-
-              </View>
-            </View> */}
                             </View>
                         </Dialog >
 
@@ -832,16 +793,15 @@ export default class CreateDish extends Component {
                                                 style={{ height: 150, width: 150 }}
                                                 source={{ uri: 'http://dev-fs.8d.ie/storage/' + item.cover }}
                                             />
-                                            <Text>{item.name}</Text>
+                                            {/* <Text>{item.name}-{item.id}-{item.group}</Text> */}
                                         </TouchableOpacity>
                                         {this.getindiexistingqty(item)}
-
                                     </View>}
                             />
                         </View>
                         <View style={{ flex: 0.1, backgroundColor: '#ff9500' }}>
                             <TouchableOpacity style={{ justifyContent: 'center', alignSelf: 'center' }}
-                                onPress={() => this.create_dish()}>
+                                onPress={() => this.save_dish()}>
                                 <Text style={{ fontSize: width * 0.03, color: 'white' }}>Save</Text>
                             </TouchableOpacity>
                         </View>

@@ -13,7 +13,7 @@ import Employee from './pages/Employee';
 import History from './pages/History';
 import Payment from './pages/Payment';
 import IngrediantsGroups from './pages/IngrediantsGroups';
-// import CreateDish from './pages/CreateDish';
+import CreateDish from './pages/CreateDish';
 import Menu from './pages/Menu';
 import Splashscreen from './components/Splashscreen';
 
@@ -73,12 +73,12 @@ const AppNavigator = createStackNavigator({
             header: null,
         }
     },
-    // CreateDish: {
-    //     screen: CreateDish,
-    //     navigationOptions: {
-    //         header: null,
-    //     }
-    // },
+    CreateDish: {
+        screen: CreateDish,
+        navigationOptions: {
+            header: null,
+        }
+    },
     Menu: {
         screen: Menu,
         navigationOptions: {
