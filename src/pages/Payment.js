@@ -72,6 +72,15 @@ export default class Employee extends Component {
         })
     }
 
+    tempFunction = () => {
+        AsyncStorage.getItem("Order_Dish", (err, res) => {
+            if (res) {
+                this.setState({ paymentData: JSON.parse(res) });
+            }
+            console.log(JSON.parse(res));
+        })
+    }
+
     _retrieveData = async () => {
         try {
             const value = await AsyncStorage.getItem('visited_onces');
@@ -156,6 +165,7 @@ export default class Employee extends Component {
 
     take_payment = () => {
         this.setState({ payment_dialog: true });
+        this.tempFunction();
     }
 
 
