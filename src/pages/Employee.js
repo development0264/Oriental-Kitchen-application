@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Dimensions,
   Image,
@@ -12,7 +12,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
-import { Button, Left, Right, Grid, Col, Row, Picker } from 'native-base';
+import {Button, Left, Right, Grid, Col, Row, Picker} from 'native-base';
 import Navbar from '../components/Navbar';
 import {
   faBars,
@@ -22,9 +22,9 @@ import {
   faEye,
   faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { Card } from 'react-native-elements';
-import { Dialog } from 'react-native-simple-dialogs';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {Card} from 'react-native-elements';
+import {Dialog} from 'react-native-simple-dialogs';
 import RNImagePicker from 'react-native-image-picker';
 import SideMenu from '../components/SideMenu';
 import SideMenuDrawer from '../components/SideMenuDrawer';
@@ -67,7 +67,7 @@ export default class Employee extends Component {
       Employeeid: '',
       hidePassword: true,
       count: 0,
-      userDetail: ""
+      userDetail: '',
       // dataSourcePicker : []
     };
     this.dataSourcePicker = [];
@@ -78,7 +78,7 @@ export default class Employee extends Component {
     try {
       const value = await AsyncStorage.getItem('visited_onces');
       if (value !== null) {
-        this.setState({ userDetail: JSON.parse(value), count: 1 });
+        this.setState({userDetail: JSON.parse(value), count: 1});
         this.componentDidMount();
       }
     } catch (error) {
@@ -92,9 +92,9 @@ export default class Employee extends Component {
     });
   }
   add_employee = () => {
-    this.setState({ add_dialog: true });
+    this.setState({add_dialog: true});
   };
-  selectEmployee = (id) => {
+  selectEmployee = id => {
     var data = new FormData();
     data.append('id', id);
     const user_details = this.state.userDetail;
@@ -113,7 +113,7 @@ export default class Employee extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({ edit_dialog: true });
+          this.setState({edit_dialog: true});
           this.setState({
             Employeeid: responseJson.Employee.id,
             Editusername: responseJson.Employee.user_name,
@@ -139,14 +139,14 @@ export default class Employee extends Component {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (reg.test(text) === false) {
       console.log('Email is Not Correct');
-      this.setState({ email: text });
+      this.setState({email: text});
       return false;
     } else {
-      this.setState({ email: text });
+      this.setState({email: text});
       console.log('Email is Correct');
     }
   };
-  updatePress = (id) => {
+  updatePress = id => {
     var data = new FormData();
     data.append('id', id);
     data.append('first_name', this.state.Editfirstname);
@@ -157,7 +157,7 @@ export default class Employee extends Component {
     data.append('password', this.state.Editpassword);
     data.append('password_confirmation', this.state.Editpassword);
     data.append('status', this.state.status);
-    if (this.state.avatar != "") {
+    if (this.state.avatar != '') {
       data.append('photo', {
         name: this.state.avatar.fileName,
         type: this.state.avatar.type,
@@ -186,7 +186,7 @@ export default class Employee extends Component {
         console.log(responseJson);
         if (responseJson.status == 'success') {
           console.log(responseJson);
-          this.setState({ edit_dialog: false, img_uri: "" });
+          this.setState({edit_dialog: false, img_uri: ''});
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -217,7 +217,7 @@ export default class Employee extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({ Search_result: responseJson.Employee });
+          this.setState({Search_result: responseJson.Employee});
         } else {
           alert('Something wrong happened');
         }
@@ -227,7 +227,7 @@ export default class Employee extends Component {
       });
   };
   clear = () => {
-    this.setState({ Search_result: '', Searchtext: '' });
+    this.setState({Search_result: '', Searchtext: ''});
   };
   deletePress = () => {
     Alert.alert(
@@ -246,7 +246,7 @@ export default class Employee extends Component {
           },
         },
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
   deleteYesPress = id => {
@@ -269,7 +269,7 @@ export default class Employee extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({ edit_dialog: false, img_uri: "" });
+          this.setState({edit_dialog: false, img_uri: ''});
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -346,7 +346,7 @@ export default class Employee extends Component {
               //       : this.state.avatar.uri.replace('file://', ''),
               // });
               console.log(responseJson);
-              this.setState({ add_dialog: false });
+              this.setState({add_dialog: false});
               this.componentDidMount();
             } else {
               alert('Something wrong happened');
@@ -360,8 +360,8 @@ export default class Employee extends Component {
   };
 
   roleList = () => {
-    return this.dataSourcePicker.map(item => {
-      return <Picker.Item label={item.name} value={item.id} />;
+    return this.dataSourcePicker.map((item, index) => {
+      return <Picker.Item label={item.name} value={item.id} key={index} />;
     });
   };
   opencamera = () => {
@@ -403,7 +403,7 @@ export default class Employee extends Component {
           if (responseJson) {
             const dataSource = [];
             console.log(responseJson);
-            this.setState({ dataSource: responseJson.employees });
+            this.setState({dataSource: responseJson.employees});
             //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
           } else {
             alert('Something wrong happened');
@@ -424,16 +424,20 @@ export default class Employee extends Component {
             // this.setState({dataSource: responseJson.Roles});
             var MyArr;
             let i = 0;
-            for (i = 0; i < responseJson.Roles.length; i++) {
-              //this.dataSourcePicker['name'+i] = responseJson.Roles[i].name
-              MyArr = {
-                id: responseJson.Roles[i].id,
-                name: responseJson.Roles[i].display_name,
-              };
-              this.dataSourcePicker.push(MyArr);
+            if (responseJson.Roles != null) {
+              for (i = 0; i < responseJson.Roles.length; i++) {
+                //this.dataSourcePicker['name'+i] = responseJson.Roles[i].name
+                MyArr = {
+                  id: responseJson.Roles[i].id,
+                  name: responseJson.Roles[i].display_name,
+                };
+                this.dataSourcePicker.push(MyArr);
+              }
             }
             // let hello = JSON.stringify(this.dataSourcePicker);
-            this.setState({ role_details: JSON.stringify(this.dataSourcePicker) });
+            this.setState({
+              role_details: JSON.stringify(this.dataSourcePicker),
+            });
             console.log(this.dataSourcePicker);
             console.log(JSON.stringify(this.dataSourcePicker));
             //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
@@ -448,27 +452,30 @@ export default class Employee extends Component {
   }
 
   render() {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     console.log(width);
     var left = (
-      <Left style={{ flex: 1 }}>
+      <Left style={{flex: 1}}>
         <Button onPress={() => this._sideMenuDrawer.open()} transparent>
           <FontAwesomeIcon icon={faBars} color={'white'} size={25} />
         </Button>
       </Left>
     );
     var right = (
-      <Right style={{ flex: 1 }}>
+      <Right style={{flex: 1}}>
         <TouchableOpacity onPress={() => this.add_employee()}>
           <Image
-            style={{ width: 45, height: 45 }}
+            style={{width: 45, height: 45}}
             source={require('../images/add_employee.png')}
           />
         </TouchableOpacity>
       </Right>
     );
     return (
-      <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} style={{ zIndex: 1 }} navigation={this.props}>
+      <SideMenuDrawer
+        ref={ref => (this._sideMenuDrawer = ref)}
+        style={{zIndex: 1}}
+        navigation={this.props}>
         <View style={styles.container}>
           <KeyboardAvoidingView behavior="padding" enabled>
             <Dialog
@@ -482,10 +489,10 @@ export default class Employee extends Component {
                 alignSelf: 'center',
                 backgroundColor: '#efeff4',
               }}
-              onTouchOutside={() => this.setState({ add_dialog: false })}>
+              onTouchOutside={() => this.setState({add_dialog: false})}>
               <ScrollView>
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={{ flex: 0.95 }}>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 0.95}}>
                     <Text
                       style={{
                         textAlign: 'center',
@@ -498,9 +505,9 @@ export default class Employee extends Component {
                       Add Employee
                     </Text>
                   </View>
-                  <View style={{ justifyContent: 'center' }}>
+                  <View style={{justifyContent: 'center'}}>
                     <TouchableOpacity
-                      onPress={() => this.setState({ add_dialog: false })}>
+                      onPress={() => this.setState({add_dialog: false})}>
                       <FontAwesomeIcon
                         icon={faWindowClose}
                         color={'#ff9500'}
@@ -509,7 +516,7 @@ export default class Employee extends Component {
                     </TouchableOpacity>
                   </View>
                 </View>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{flexDirection: 'row'}}>
                   <View
                     style={{
                       flex: 0.6,
@@ -517,10 +524,10 @@ export default class Employee extends Component {
                       borderRightColor: 'lightgrey',
                       padding: 10,
                     }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <View style={{ width: 150 }}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           User Name:
                         </Text>
                       </View>
@@ -538,7 +545,7 @@ export default class Employee extends Component {
                           flexWrap: 'wrap',
                         }}
                         placeholder="Type message here.."
-                        onChangeText={username => this.setState({ username })}
+                        onChangeText={username => this.setState({username})}
                       />
                     </View>
                     <View
@@ -547,9 +554,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           First Name:
                         </Text>
                       </View>
@@ -567,7 +574,7 @@ export default class Employee extends Component {
                           flexWrap: 'wrap',
                         }}
                         placeholder="Type message here.."
-                        onChangeText={firstName => this.setState({ firstName })}
+                        onChangeText={firstName => this.setState({firstName})}
                       />
                     </View>
                     <View
@@ -576,9 +583,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           Last Name:
                         </Text>
                       </View>
@@ -596,7 +603,7 @@ export default class Employee extends Component {
                           flexWrap: 'wrap',
                         }}
                         placeholder="Type message here.."
-                        onChangeText={lastName => this.setState({ lastName })}
+                        onChangeText={lastName => this.setState({lastName})}
                       />
                     </View>
                     <View
@@ -605,9 +612,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           Email:
                         </Text>
                       </View>
@@ -636,9 +643,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           Phone:
                         </Text>
                       </View>
@@ -656,7 +663,7 @@ export default class Employee extends Component {
                           flexWrap: 'wrap',
                         }}
                         placeholder="Type message here.."
-                        onChangeText={phone => this.setState({ phone })}
+                        onChangeText={phone => this.setState({phone})}
                       />
                     </View>
                     <View
@@ -665,9 +672,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           Password:
                         </Text>
                       </View>
@@ -687,7 +694,7 @@ export default class Employee extends Component {
                         }}
                         placeholder="Type message here.."
                         secureTextEntry={this.state.hidePassword}
-                        onChangeText={password => this.setState({ password })}
+                        onChangeText={password => this.setState({password})}
                       />
 
                       <View
@@ -700,7 +707,7 @@ export default class Employee extends Component {
                         {this.state.hidePassword == true ? (
                           <TouchableOpacity
                             onPress={() => {
-                              this.setState({ hidePassword: false });
+                              this.setState({hidePassword: false});
                             }}>
                             <FontAwesomeIcon
                               icon={faEyeSlash}
@@ -709,17 +716,17 @@ export default class Employee extends Component {
                             />
                           </TouchableOpacity>
                         ) : (
-                            <TouchableOpacity
-                              onPress={() => {
-                                this.setState({ hidePassword: true });
-                              }}>
-                              <FontAwesomeIcon
-                                icon={faEye}
-                                color={'#76726d'}
-                                size={25}
-                              />
-                            </TouchableOpacity>
-                          )}
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.setState({hidePassword: true});
+                            }}>
+                            <FontAwesomeIcon
+                              icon={faEye}
+                              color={'#76726d'}
+                              size={25}
+                            />
+                          </TouchableOpacity>
+                        )}
                       </View>
                     </View>
                     <View
@@ -728,9 +735,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           Re-type:
                         </Text>
                       </View>
@@ -750,7 +757,7 @@ export default class Employee extends Component {
                           marginRight: 15,
                         }}
                         placeholder="Type message here.."
-                        onChangeText={repassword => this.setState({ repassword })}
+                        onChangeText={repassword => this.setState({repassword})}
                         secureTextEntry={true}
                       />
                     </View>
@@ -760,18 +767,18 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 160 }}>
+                      <View style={{width: 160}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           Role:
                         </Text>
                       </View>
                       <Picker
                         note
                         mode="dropdown"
-                        style={{ width: '40%' }}
+                        style={{width: '40%'}}
                         selectedValue={this.state.role}
-                        onValueChange={value => this.setState({ role: value })}>
+                        onValueChange={value => this.setState({role: value})}>
                         {this.roleList()}
                       </Picker>
                     </View>
@@ -782,7 +789,7 @@ export default class Employee extends Component {
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
-                    <View style={{ position: 'relative' }}>
+                    <View style={{position: 'relative'}}>
                       {this.state.img_uri == '' ? (
                         <Image
                           style={{
@@ -792,14 +799,14 @@ export default class Employee extends Component {
                           }}
                           source={require('../images/profile-circle-picture-8.png')}></Image>
                       ) : (
-                          <Image
-                            style={{
-                              width: 200,
-                              height: 200,
-                              borderRadius: 200 / 2,
-                            }}
-                            source={{ uri: this.state.img_uri }}></Image>
-                        )}
+                        <Image
+                          style={{
+                            width: 200,
+                            height: 200,
+                            borderRadius: 200 / 2,
+                          }}
+                          source={{uri: this.state.img_uri}}></Image>
+                      )}
                       <View style={styles.camera_icon}>
                         <TouchableOpacity onPress={() => this.opencamera()}>
                           <FontAwesomeIcon
@@ -823,7 +830,7 @@ export default class Employee extends Component {
                     onPress={() => {
                       this.showDetail();
                     }}>
-                    <Text style={{ fontSize: width * 0.03, color: 'white' }}>
+                    <Text style={{fontSize: width * 0.03, color: 'white'}}>
                       Add
                     </Text>
                   </TouchableOpacity>
@@ -841,10 +848,12 @@ export default class Employee extends Component {
                 alignSelf: 'center',
                 backgroundColor: '#efeff4',
               }}
-              onTouchOutside={() => this.setState({ edit_dialog: false, img_uri: "" })}>
+              onTouchOutside={() =>
+                this.setState({edit_dialog: false, img_uri: ''})
+              }>
               <ScrollView>
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={{ flex: 0.95 }}>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 0.95}}>
                     <Text
                       style={{
                         textAlign: 'center',
@@ -857,9 +866,11 @@ export default class Employee extends Component {
                       Edit Employee
                     </Text>
                   </View>
-                  <View style={{ justifyContent: 'center' }}>
+                  <View style={{justifyContent: 'center'}}>
                     <TouchableOpacity
-                      onPress={() => this.setState({ edit_dialog: false, img_uri: "" })}>
+                      onPress={() =>
+                        this.setState({edit_dialog: false, img_uri: ''})
+                      }>
                       <FontAwesomeIcon
                         icon={faWindowClose}
                         color={'#ff9500'}
@@ -868,7 +879,7 @@ export default class Employee extends Component {
                     </TouchableOpacity>
                   </View>
                 </View>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{flexDirection: 'row'}}>
                   <View
                     style={{
                       flex: 0.6,
@@ -876,10 +887,10 @@ export default class Employee extends Component {
                       borderRightColor: 'lightgrey',
                       padding: 10,
                     }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                      <View style={{ width: 150 }}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           User Name:
                         </Text>
                       </View>
@@ -898,7 +909,7 @@ export default class Employee extends Component {
                         }}
                         placeholder="Type message here.."
                         onChangeText={Editusername =>
-                          this.setState({ Editusername })
+                          this.setState({Editusername})
                         }
                         defaultValue={this.state.Editusername}
                       />
@@ -909,9 +920,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           First Name:
                         </Text>
                       </View>
@@ -930,7 +941,7 @@ export default class Employee extends Component {
                         }}
                         placeholder="Type message here.."
                         onChangeText={Editfirstname =>
-                          this.setState({ Editfirstname })
+                          this.setState({Editfirstname})
                         }
                         defaultValue={this.state.Editfirstname}
                       />
@@ -941,9 +952,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           Last Name:
                         </Text>
                       </View>
@@ -962,7 +973,7 @@ export default class Employee extends Component {
                         }}
                         placeholder="Type message here.."
                         onChangeText={Editlastname =>
-                          this.setState({ Editlastname })
+                          this.setState({Editlastname})
                         }
                         defaultValue={this.state.Editlastname}
                       />
@@ -973,9 +984,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           Email:
                         </Text>
                       </View>
@@ -994,7 +1005,7 @@ export default class Employee extends Component {
                           flexWrap: 'wrap',
                         }}
                         placeholder="Type message here.."
-                        onChangeText={Editemail => this.setState({ Editemail })}
+                        onChangeText={Editemail => this.setState({Editemail})}
                         defaultValue={this.state.Editemail}
                       />
                     </View>
@@ -1004,9 +1015,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           Phone:
                         </Text>
                       </View>
@@ -1024,7 +1035,7 @@ export default class Employee extends Component {
                           flexWrap: 'wrap',
                         }}
                         placeholder="Type message here.."
-                        onChangeText={Editphone => this.setState({ Editphone })}
+                        onChangeText={Editphone => this.setState({Editphone})}
                         defaultValue={this.state.Editphone}
                       />
                     </View>
@@ -1034,9 +1045,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           Password:
                         </Text>
                       </View>
@@ -1055,7 +1066,7 @@ export default class Employee extends Component {
                         }}
                         placeholder="Type message here.."
                         onChangeText={Editpassword =>
-                          this.setState({ Editpassword })
+                          this.setState({Editpassword})
                         }
                         defaultValue={this.state.Editpassword}
                         secureTextEntry={this.state.hidePassword}
@@ -1070,7 +1081,7 @@ export default class Employee extends Component {
                         {this.state.hidePassword ? (
                           <TouchableOpacity
                             onPress={() => {
-                              this.setState({ hidePassword: false });
+                              this.setState({hidePassword: false});
                             }}>
                             <FontAwesomeIcon
                               icon={faEyeSlash}
@@ -1079,17 +1090,17 @@ export default class Employee extends Component {
                             />
                           </TouchableOpacity>
                         ) : (
-                            <TouchableOpacity
-                              onPress={() => {
-                                this.setState({ hidePassword: true });
-                              }}>
-                              <FontAwesomeIcon
-                                icon={faEye}
-                                color={'#76726d'}
-                                size={25}
-                              />
-                            </TouchableOpacity>
-                          )}
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.setState({hidePassword: true});
+                            }}>
+                            <FontAwesomeIcon
+                              icon={faEye}
+                              color={'#76726d'}
+                              size={25}
+                            />
+                          </TouchableOpacity>
+                        )}
                       </View>
                     </View>
                     <View
@@ -1098,9 +1109,9 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 150 }}>
+                      <View style={{width: 150}}>
                         <Text
-                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          style={{fontSize: width * 0.02, color: '#76726d'}}>
                           Re-type:
                         </Text>
                       </View>
@@ -1120,7 +1131,7 @@ export default class Employee extends Component {
                         }}
                         placeholder="Type message here.."
                         onChangeText={Editpassword =>
-                          this.setState({ Editpassword })
+                          this.setState({Editpassword})
                         }
                         defaultValue={this.state.Editpassword}
                         secureTextEntry={true}
@@ -1132,18 +1143,18 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         marginTop: 15,
                       }}>
-                      <View style={{ width: 160 }}>
-                        <Text style={{ fontSize: width * 0.02, color: 'grey' }}>
+                      <View style={{width: 160}}>
+                        <Text style={{fontSize: width * 0.02, color: 'grey'}}>
                           Role:
                         </Text>
                       </View>
                       <Picker
                         note
                         mode="dropdown"
-                        style={{ width: '40%' }}
+                        style={{width: '40%'}}
                         selectedValue={this.state.Editrole}
                         onValueChange={Editrole =>
-                          this.setState({ Editrole: Editrole })
+                          this.setState({Editrole: Editrole})
                         }>
                         {this.roleList()}
                       </Picker>
@@ -1155,7 +1166,7 @@ export default class Employee extends Component {
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
-                    <View style={{ position: 'relative' }}>
+                    <View style={{position: 'relative'}}>
                       {this.state.img_uri == '' ? (
                         <Image
                           style={{
@@ -1169,14 +1180,14 @@ export default class Employee extends Component {
                               this.state.EditImage,
                           }}></Image>
                       ) : (
-                          <Image
-                            style={{
-                              width: 200,
-                              height: 200,
-                              borderRadius: 200 / 2,
-                            }}
-                            source={{ uri: this.state.img_uri }}></Image>
-                        )}
+                        <Image
+                          style={{
+                            width: 200,
+                            height: 200,
+                            borderRadius: 200 / 2,
+                          }}
+                          source={{uri: this.state.img_uri}}></Image>
+                      )}
                       <View style={styles.camera_icon}>
                         <TouchableOpacity onPress={() => this.opencamera()}>
                           <FontAwesomeIcon
@@ -1196,11 +1207,11 @@ export default class Employee extends Component {
                     borderTopWidth: 1,
                     flexDirection: 'row',
                   }}>
-                  <View style={{ flex: 0.9 }}>
+                  <View style={{flex: 0.9}}>
                     <TouchableOpacity
                       style={styles.delete_btn}
                       onPress={() => this.deletePress()}>
-                      <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
                         Delete
                       </Text>
                     </TouchableOpacity>
@@ -1209,7 +1220,7 @@ export default class Employee extends Component {
                     <TouchableOpacity
                       style={styles.add_btn}
                       onPress={() => this.updatePress(this.state.Employeeid)}>
-                      <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
                         Update
                       </Text>
                     </TouchableOpacity>
@@ -1232,7 +1243,7 @@ export default class Employee extends Component {
                 margin: 10,
                 marginLeft: 40,
               }}>
-              <Text style={{ fontSize: width * 0.03 }}>Name:</Text>
+              <Text style={{fontSize: width * 0.03}}>Name:</Text>
               <TextInput
                 style={{
                   borderColor: 'gray',
@@ -1249,8 +1260,8 @@ export default class Employee extends Component {
                 }}
                 placeholder=" "
                 numberOfLines={1}
-                onChangeText={(Searchtext) =>
-                  this.setState({ Searchtext: Searchtext })
+                onChangeText={Searchtext =>
+                  this.setState({Searchtext: Searchtext})
                 }
                 defaultValue={this.state.Searchtext}
               />
@@ -1263,7 +1274,7 @@ export default class Employee extends Component {
               }}>
               {this.state.Search_result != '' ? (
                 <TouchableOpacity
-                  style={{ marginHorizontal: 30 }}
+                  style={{marginHorizontal: 30}}
                   onPress={() => {
                     this.clear(' ');
                   }}>
@@ -1297,7 +1308,7 @@ export default class Employee extends Component {
               </TouchableOpacity>
             </View>
           </View>
-          <View style={{ flex: 0.8 }}>
+          <View style={{flex: 0.8}}>
             <View
               style={{
                 flexDirection: 'row',
@@ -1371,70 +1382,70 @@ export default class Employee extends Component {
                 pagingEnabled={true}
                 data={this.state.dataSource}
                 showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <TouchableOpacity
                     onPress={() => {
                       this.selectEmployee(item.id);
                     }}>
                     <View style={styles.dynamic_list_view}>
-                      <View style={{ flex: 0.5, alignItems: 'center' }}>
-                        <Text style={{ fontSize: width * 0.025 }}>
+                      <View style={{flex: 0.5, alignItems: 'center'}}>
+                        <Text style={{fontSize: width * 0.025}}>
                           {item.name}
                         </Text>
                       </View>
-                      <View style={{ flex: 0.5, alignItems: 'center' }}>
-                        <Text style={{ fontSize: width * 0.025 }}>
+                      <View style={{flex: 0.5, alignItems: 'center'}}>
+                        <Text style={{fontSize: width * 0.025}}>
                           {item.display_name}
                         </Text>
                       </View>
-                      <View style={{ flex: 0.5, alignItems: 'center' }}>
+                      <View style={{flex: 0.5, alignItems: 'center'}}>
                         {item.status == 1 ? (
-                          <Text style={{ fontSize: width * 0.025 }}>Yes</Text>
+                          <Text style={{fontSize: width * 0.025}}>Yes</Text>
                         ) : (
-                            <Text style={{ fontSize: width * 0.025 }}>No</Text>
-                          )}
+                          <Text style={{fontSize: width * 0.025}}>No</Text>
+                        )}
                       </View>
                     </View>
                   </TouchableOpacity>
                 )}
-                keyExtractor={({ id }, index) => id}
+                keyExtractor={({id}, index) => id}
               />
             ) : (
-                <FlatList
-                  pagingEnabled={true}
-                  data={this.state.Search_result}
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity
-                      onPress={() => {
-                        this.selectEmployee(item.id);
-                      }}>
-                      <View style={styles.dynamic_list_view}>
-                        <View style={{ flex: 0.5, alignItems: 'center' }}>
-                          <Text style={{ fontSize: width * 0.025 }}>
-                            {item.name}
-                          </Text>
-                        </View>
-                        <View style={{ flex: 0.5, alignItems: 'center' }}>
-                          <Text style={{ fontSize: width * 0.025 }}>
-                            {item.display_name}
-                          </Text>
-                        </View>
-                        <View style={{ flex: 0.5, alignItems: 'center' }}>
-                          {item.status == 1 ? (
-                            <Text style={{ fontSize: width * 0.025 }}>Yes</Text>
-                          ) : (
-                              <Text style={{ fontSize: width * 0.025 }}>No</Text>
-                            )}
-                        </View>
+              <FlatList
+                pagingEnabled={true}
+                data={this.state.Search_result}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({item}) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.selectEmployee(item.id);
+                    }}>
+                    <View style={styles.dynamic_list_view}>
+                      <View style={{flex: 0.5, alignItems: 'center'}}>
+                        <Text style={{fontSize: width * 0.025}}>
+                          {item.name}
+                        </Text>
                       </View>
-                    </TouchableOpacity>
-                  )}
-                  keyExtractor={({ id }, index) => id}
-                />
-              )}
+                      <View style={{flex: 0.5, alignItems: 'center'}}>
+                        <Text style={{fontSize: width * 0.025}}>
+                          {item.display_name}
+                        </Text>
+                      </View>
+                      <View style={{flex: 0.5, alignItems: 'center'}}>
+                        {item.status == 1 ? (
+                          <Text style={{fontSize: width * 0.025}}>Yes</Text>
+                        ) : (
+                          <Text style={{fontSize: width * 0.025}}>No</Text>
+                        )}
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={({id}, index) => id}
+              />
+            )}
           </View>
-          <View style={{ flex: 0.08, backgroundColor: '#ff9500' }}></View>
+          <View style={{flex: 0.08, backgroundColor: '#ff9500'}}></View>
         </View>
       </SideMenuDrawer>
     );
