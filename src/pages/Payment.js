@@ -36,6 +36,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 
+var price = 0;
 export default class Employee extends Component {
   constructor(props) {
     super(props);
@@ -58,6 +59,7 @@ export default class Employee extends Component {
       isPopular: false,
       quantity: 1,
       dishqty: 1,
+      qty: 1,
       // d_name: '',
       max: null,
       cover: null,
@@ -74,14 +76,27 @@ export default class Employee extends Component {
       // getValue: '',count: 0,
       userDetail: '',
       paymentData: [],
+      totalPriceCustom: 0,
       dishPrice: '',
+      takeTotal: '',
     };
     this.dishQty = [];
     this._retrieveData();
 
     AsyncStorage.getItem('INGREDIENT', (err, res) => {
       if (res != null) {
+        var price = 0;
+        let totalList = [];
         this.setState({ingredientexixts: JSON.parse(res)});
+        totalList = JSON.parse(res);
+        console.log(totalList);
+        totalList.map(item => {
+          var total = item.qty * parseFloat(item.price);
+          console.log('total = ' + total);
+          price = price + total;
+        });
+        console.log('Price= ' + price);
+        this.setState({totalPriceCustom: price});
       }
       this.main_callvenderingredient();
     });
@@ -94,12 +109,32 @@ export default class Employee extends Component {
     });
   }
 
-  tempFunction = () => {
+  orderFunction = () => {
     AsyncStorage.getItem('Order_Dish', (err, res) => {
       if (res) {
         this.setState({paymentData: JSON.parse(res)});
       }
       console.log(JSON.parse(res));
+    });
+  };
+
+  customFunction = () => {
+    AsyncStorage.getItem('INGREDIENT', (err, res) => {
+      if (res != null) {
+        var price = 0;
+        let totalList = [];
+        this.setState({ingredientexixts: JSON.parse(res)});
+        totalList = JSON.parse(res);
+        console.log(totalList);
+        totalList.map(item => {
+          var total = item.qty * parseFloat(item.price);
+          console.log('total = ' + total);
+          price = price + total;
+        });
+        console.log('Price= ' + price);
+        this.setState({totalPriceCustom: price});
+      }
+      // this.main_callvenderingredient();
     });
   };
 
@@ -170,6 +205,7 @@ export default class Employee extends Component {
           for (var i = 0; i < responseJson.data.length; i++) {
             responseJson.data[i].qty = 1;
           }
+          console.log('responseJson.data');
           console.log(responseJson.data);
           this.setState({card_dataSource: responseJson.data});
           // console.log(this.dishQty);
@@ -184,7 +220,8 @@ export default class Employee extends Component {
 
   take_payment = () => {
     this.setState({payment_dialog: true});
-    this.tempFunction();
+    this.orderFunction();
+    this.customFunction();
   };
 
   onDigitPresssum = digit => {
@@ -399,77 +436,109 @@ export default class Employee extends Component {
 
     if (this.state.paymentData) {
       this.state.paymentData.map((item, i) => {
+        var total = item.qty * parseInt(item.rate);
+        console.log('total = ' + total);
+        price = price + total;
+        console.log('price = ' + price);
         items.push(
           <View style={{flexDirection: 'row'}}>
             <View style={{flex: 0.2, justifyContent: 'center'}}>
               <Text style={{fontSize: 20}}>{i + 1}</Text>
             </View>
-            <View style={{flex: 0.4, justifyContent: 'center'}}>
+            <View style={{flex: 0.35, justifyContent: 'center'}}>
               <Text style={{fontSize: 20}}>{item.name}</Text>
             </View>
-            <View style={{flex: 0.2, justifyContent: 'center'}}>
-              <Text style={{fontSize: 20}}>{item.qty}</Text>
+            <View style={{flex: 0.25, justifyContent: 'center'}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginLeft: 10,
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.subDish(item, parseInt(item.qty) - 1);
+                  }}>
+                  <FontAwesomeIcon icon={faMinus} size={20} color={'#ff9500'} />
+                </TouchableOpacity>
+                <Text style={{fontSize: 20, marginHorizontal: 5}}>
+                  {item.qty}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.addDish(item, parseInt(item.qty) + 1);
+                  }}>
+                  <FontAwesomeIcon icon={faPlus} size={20} color={'#ff9500'} />
+                </TouchableOpacity>
+              </View>
             </View>
             <View style={{flex: 0.2, justifyContent: 'center'}}>
               <Text style={{fontSize: 20}}>${item.rate * item.qty}</Text>
             </View>
           </View>,
         );
-        items.push(this.showCustomDish(i + 1));
       });
+      items.push(this.showCustomDish(this.state.paymentData.length));
+      // this.setState({takeTotal: price});
+      // Alert.alert(this.state.takeTotal);
     }
     return items;
   };
 
   showCustomDish = i => {
-    var items = [];
-
-    if (this.state.ingredientexixts) {
-      this.state.ingredientexixts.map(item => {
-        items.push(
-          <View style={{flexDirection: 'row'}}>
-            <View style={{flex: 0.2, justifyContent: 'center'}}>
-              <Text style={{fontSize: 20}}>{i + 1}</Text>
-            </View>
-            <View style={{flex: 0.4, justifyContent: 'center'}}>
-              <Text style={{fontSize: 20}}>Custom Dish</Text>
-            </View>
-            <View style={{flex: 0.2, justifyContent: 'center'}}>
-              <Text style={{fontSize: 20}}>{this.totalQty(item)}</Text>
-            </View>
-            <View style={{flex: 0.2, justifyContent: 'center'}}>
-              <Text style={{fontSize: 20}}>
-                ${this.totalQty(item) * this.totalPrice(item)}
-              </Text>
-            </View>
-          </View>,
-        );
-      });
-    }
-    return items;
+    return (
+      <View style={{flexDirection: 'row'}}>
+        <View style={{flex: 0.2, justifyContent: 'center'}}>
+          <Text style={{fontSize: 20}}>{i + 1}</Text>
+        </View>
+        <View style={{flex: 0.35, justifyContent: 'center'}}>
+          <Text style={{fontSize: 20}}>Custom Dish</Text>
+        </View>
+        <View style={{flex: 0.25, justifyContent: 'center'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginLeft: 10,
+            }}>
+            <TouchableOpacity
+              onPress={() => {
+                this.setState({
+                  qty: this.state.qty > 1 ? this.state.qty - 1 : 1,
+                });
+              }}>
+              <FontAwesomeIcon icon={faMinus} size={20} color={'#ff9500'} />
+            </TouchableOpacity>
+            <Text style={{fontSize: 20, marginHorizontal: 5}}>
+              {this.state.qty}
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                this.setState({
+                  qty:
+                    this.state.qty < 1
+                      ? (this.state.qty = 1)
+                      : this.state.qty + 1,
+                });
+              }}>
+              <FontAwesomeIcon icon={faPlus} size={20} color={'#ff9500'} />
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={{flex: 0.2, justifyContent: 'center'}}>
+          <Text style={{fontSize: 20}}>
+            ${(this.state.qty * this.state.totalPriceCustom).toFixed(2)}
+          </Text>
+        </View>
+      </View>
+    );
   };
-
-  totalQty = item => {
-    return item.qty;
-  };
-
-  totalPrice = item => {
-    return item.price;
-  };
-
-  //   totalPrice = (item) => {
-  //     var Price = 0;
-  //     for (var i = 0; i < item.length; i++) {
-  //       Qty = Qty + item[i].qty;
-  //     }
-  //     return Qty;
-  //   };
 
   card_add_dish(item) {
     var success = false;
     var isqtyupdate = false;
     var orderdishlist = [];
-    console.log('Dish' + item.name);
+    console.log('Dish: ' + item.name);
     AsyncStorage.getItem('Order_Dish', (err, res) => {
       console.log(res);
       if (!res) {
@@ -519,7 +588,7 @@ export default class Employee extends Component {
     ingredients['id'] = this.state.did;
     ingredients['qty'] = this.state.quantity;
     ingredients['price'] = this.state.dishPrice;
-    console.log(ingredients);
+    // console.log(ingredients);
     AsyncStorage.getItem('INGREDIENT', (err, res) => {
       if (!res) {
         var ing = [];
@@ -531,6 +600,7 @@ export default class Employee extends Component {
       } else {
         //alert(this.state.did)
         var group_count = 0;
+        console.log(res);
         ingredientsList = JSON.parse(res);
         console.log(ingredientsList);
         ingredientsList.map(item => {
@@ -557,7 +627,7 @@ export default class Employee extends Component {
           ToastAndroid.SHORT,
         );
         this.getindiexistingqtyAdd(ingredients);
-        this.setState({add_dish_dialog: false});
+        this.setState({select_dish_dialog: false});
       } else {
         if (isqtyupdate) {
           ToastAndroid.show('Ingredient update quantity !', ToastAndroid.SHORT);
@@ -573,6 +643,7 @@ export default class Employee extends Component {
           } else {
             AsyncStorage.setItem('INGREDIENT', JSON.stringify(ingredientsList));
             this.getindiexistingqtyAdd(ingredients);
+            this.setState({select_dish_dialog: false});
           }
         } else {
           if (isgroupmax) {
@@ -587,7 +658,7 @@ export default class Employee extends Component {
               ToastAndroid.SHORT,
             );
             AsyncStorage.setItem('INGREDIENT', JSON.stringify(ingredientsList));
-            this.setState({add_dish_dialog: false});
+            this.setState({select_dish_dialog: false});
             this.getindiexistingqtyAdd(ingredients);
           }
         }
@@ -699,6 +770,46 @@ export default class Employee extends Component {
       items.push(item);
     });
     this.setState({card_dataSource: items});
+    // // alert(obj['qty']);
+  }
+
+  addDish(item, cart_quantity) {
+    // alert(JSON.stringify(cart_quantity));
+    item.qty = cart_quantity < 1 ? (cart_quantity = 1) : cart_quantity;
+    // // var obj = this.state.card_dataSource.filter(o => o.id == item.id);
+    // // obj[0].qty = obj[0].qty + 1;
+    // // alert(JSON.stringify(obj[0]));
+
+    let items = [];
+    this.state.paymentData.map(item => {
+      items.push(item);
+    });
+    this.setState({paymentData: items});
+    // // alert(obj['qty']);
+  }
+
+  subDishQuantity(item, cart_quantity) {
+    item.qty = cart_quantity > 1 ? cart_quantity : (cart_quantity = 1);
+    let items = [];
+    this.state.card_dataSource.map(item => {
+      items.push(item);
+    });
+    this.setState({card_dataSource: items});
+    // // alert(obj['qty']);
+  }
+
+  subDish(item, cart_quantity) {
+    // alert(JSON.stringify(cart_quantity));
+    item.qty = cart_quantity > 1 ? cart_quantity : (cart_quantity = 1);
+    // // var obj = this.state.card_dataSource.filter(o => o.id == item.id);
+    // // obj[0].qty = obj[0].qty + 1;
+    // // alert(JSON.stringify(obj[0]));
+
+    let items = [];
+    this.state.paymentData.map(item => {
+      items.push(item);
+    });
+    this.setState({paymentData: items});
     // // alert(obj['qty']);
   }
 
@@ -1146,12 +1257,10 @@ export default class Employee extends Component {
                             }}>
                             <TouchableOpacity
                               onPress={() =>
-                                this.setState({
-                                  dishqty:
-                                    this.state.dishqty > 1
-                                      ? this.state.dishqty - 1
-                                      : 1,
-                                })
+                                this.subDishQuantity(
+                                  item,
+                                  parseInt(item.qty) - 1,
+                                )
                               }>
                               <FontAwesomeIcon
                                 icon={faMinus}
@@ -1782,7 +1891,10 @@ export default class Employee extends Component {
                   paddingVertical: 10,
                   color: 'grey',
                 }}>
-                Total : {this.state.cash}
+                Total :{' '}
+                {parseFloat(this.state.cash) +
+                  this.state.qty * this.state.totalPriceCustom +
+                  this.state.takeTotal}
               </Text>
               <Text
                 style={{
@@ -1802,7 +1914,7 @@ export default class Employee extends Component {
                 value={isSwitchOn}
                 style={styles.btnswitch}
                 color="white"
-                thumbTintColor="orange"
+                thumbColor="orange"
                 onValueChange={() => {
                   this.setState({isSwitchOn: !isSwitchOn});
                 }}
