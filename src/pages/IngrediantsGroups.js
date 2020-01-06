@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Dimensions,
   Image,
@@ -10,7 +10,7 @@ import {
   Alert,
   KeyboardAvoidingView,
 } from 'react-native';
-import { Button, Left, Right, Picker, Col, Row, Grid } from 'native-base';
+import {Button, Left, Right, Picker, Col, Row, Grid} from 'native-base';
 import Navbar from '../components/Navbar';
 import CheckBox from '@react-native-community/checkbox';
 import {
@@ -19,11 +19,11 @@ import {
   faArrowDown,
   faCamera,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { Card } from 'react-native-elements';
-import { Dialog } from 'react-native-simple-dialogs';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {Card} from 'react-native-elements';
+import {Dialog} from 'react-native-simple-dialogs';
 import RNImagePicker from 'react-native-image-picker';
-import { ScrollView } from 'react-native-gesture-handler';
+import {ScrollView} from 'react-native-gesture-handler';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -38,7 +38,7 @@ export default class IngrediantsGroups extends Component {
       description: '',
       sequence: '',
       weight: '',
-      status: '',
+      status: '1',
       img_uri: '',
       avatar: '',
       cover: '',
@@ -49,7 +49,7 @@ export default class IngrediantsGroups extends Component {
       add_description: '',
       add_sequence: 0,
       add_weight: '',
-      add_status: '',
+      add_status: '1',
       editname: '',
       editmax: 0,
       editmin: 0,
@@ -79,7 +79,7 @@ export default class IngrediantsGroups extends Component {
       dialog: false,
       dataSourceIngredient: [],
       count: 0,
-      userDetail: ""
+      userDetail: '',
     };
     this._retrieveData();
   }
@@ -88,7 +88,7 @@ export default class IngrediantsGroups extends Component {
     try {
       const value = await AsyncStorage.getItem('visited_onces');
       if (value !== null) {
-        this.setState({ userDetail: JSON.parse(value), count: 1 });
+        this.setState({userDetail: JSON.parse(value), count: 1});
         this.componentDidMount();
       }
     } catch (error) {
@@ -103,15 +103,19 @@ export default class IngrediantsGroups extends Component {
   }
 
   add_employee = () => {
-    this.setState({ add_dialog: true });
+    this.setState({add_dialog: true, img_uri: ''});
   };
 
   add_ingredient = id => {
-    this.setState({ add_ingredient_dialog: true, ingredient_group_id: id });
+    this.setState({
+      add_ingredient_dialog: true,
+      ingredient_group_id: id,
+      cover: '',
+    });
   };
 
   edit_ingredient = () => {
-    this.setState({ edit_ingredient_dialog: true });
+    this.setState({edit_ingredient_dialog: true});
   };
 
   addCheckBox = () => {
@@ -123,7 +127,7 @@ export default class IngrediantsGroups extends Component {
           {
             text: 'No',
             onPress: () =>
-              this.setState({ change_response: 0, checked: !this.state.checked }),
+              this.setState({change_response: 0, checked: !this.state.checked}),
             style: 'cancel',
           },
           {
@@ -135,10 +139,10 @@ export default class IngrediantsGroups extends Component {
               }),
           },
         ],
-        { cancelable: false },
+        {cancelable: false},
       );
     }
-    this.setState({ checked: !this.state.checked });
+    this.setState({checked: !this.state.checked});
   };
 
   updateCheckBox = () => {
@@ -165,10 +169,10 @@ export default class IngrediantsGroups extends Component {
               }),
           },
         ],
-        { cancelable: false },
+        {cancelable: false},
       );
     }
-    this.setState({ editis_main: !this.state.editis_main });
+    this.setState({editis_main: !this.state.editis_main});
   };
 
   updatePress = id => {
@@ -178,9 +182,9 @@ export default class IngrediantsGroups extends Component {
       this.state.editis_main = 0;
     }
     if (this.state.editis_main == 1) {
-      this.setState({ editis_main: true });
+      this.setState({editis_main: true});
     } else {
-      this.setState({ editis_main: false });
+      this.setState({editis_main: false});
     }
     var data = new FormData();
     data.append('id', id);
@@ -218,7 +222,7 @@ export default class IngrediantsGroups extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({ edit_dialog: false, img_uri: "" });
+          this.setState({edit_dialog: false, img_uri: ''});
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -246,11 +250,11 @@ export default class IngrediantsGroups extends Component {
           },
         },
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
 
-  deleteYesIngredientGroup = (id) => {
+  deleteYesIngredientGroup = id => {
     const user_details = this.state.userDetail;
     var headers = new Headers();
     let auth = 'Bearer ' + user_details.userToken;
@@ -269,7 +273,7 @@ export default class IngrediantsGroups extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({ edit_dialog: false });
+          this.setState({edit_dialog: false});
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -297,12 +301,11 @@ export default class IngrediantsGroups extends Component {
           },
         },
       ],
-      { cancelable: false },
+      {cancelable: false},
     );
   };
 
-  deleteYesIngredient = (id) => {
-
+  deleteYesIngredient = id => {
     const user_details = this.state.userDetail;
     var headers = new Headers();
     let auth = 'Bearer ' + user_details.userToken;
@@ -321,7 +324,7 @@ export default class IngrediantsGroups extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({ edit_ingredient_dialog: false });
+          this.setState({edit_ingredient_dialog: false});
           this.componentDidMount();
           this.getIngredientGroup();
           alert('Delete record successfully');
@@ -389,7 +392,8 @@ export default class IngrediantsGroups extends Component {
             ? this.state.avatar.uri
             : this.state.avatar.uri.replace('file://', ''),
       });
-      console.log(data);
+      // alert(JSON.stringify(data));
+      // return;
       const user_details = this.state.userDetail;
       var headers = new Headers();
       let auth = 'Bearer ' + user_details.userToken;
@@ -403,9 +407,9 @@ export default class IngrediantsGroups extends Component {
       })
         .then(response => response.json())
         .then(responseJson => {
-          console.log(responseJson);
+          alert(JSON.stringify(responseJson));
           if (responseJson.status == 'success') {
-            this.setState({ add_dialog: false, img_uri: "" });
+            this.setState({add_dialog: false, img_uri: ''});
             this.componentDidMount();
           } else {
             alert('Something wrong happened');
@@ -486,15 +490,12 @@ export default class IngrediantsGroups extends Component {
       .then(response => response.json())
       .then(responseJson => {
         console.log(responseJson);
-        this.setState({ add_ingredient_dialog: false, cover: "" });
+        this.setState({add_ingredient_dialog: false, cover: ''});
         this.componentDidMount();
-      })
-      .catch(error => {
-        console.error(error);
       });
   };
 
-  getIngredient = (id) => {
+  getIngredient = id => {
     var data = new FormData();
     data.append('id', id);
 
@@ -514,7 +515,7 @@ export default class IngrediantsGroups extends Component {
       .then(responseJson => {
         if (responseJson.status == 'success') {
           console.log(responseJson);
-          this.setState({ edit_ingredient_dialog: true });
+          this.setState({edit_ingredient_dialog: true});
           this.setState({
             Ingredientid: responseJson.ingredient.id,
             Ingredienttaxid: responseJson.ingredient.tax_id,
@@ -537,7 +538,7 @@ export default class IngrediantsGroups extends Component {
       });
   };
 
-  updateIngredient = (id) => {
+  updateIngredient = id => {
     var data = new FormData();
     data.append('id', id);
     data.append('ingredient_group_id', this.state.ingredient_group_id);
@@ -577,10 +578,10 @@ export default class IngrediantsGroups extends Component {
         console.log(responseJson);
         if (responseJson.status == 'success') {
           console.log(responseJson);
-          this.setState({ edit_ingredient_dialog: false, cover: "" });
+          this.setState({edit_ingredient_dialog: false, cover: ''});
           this.componentDidMount();
           this.getIngredientGroup();
-          alert('Update record successfully');
+          // alert('Update record successfully');
         } else {
           alert('Something wrong happened');
         }
@@ -609,11 +610,11 @@ export default class IngrediantsGroups extends Component {
       .then(responseJson => {
         if (responseJson.status == 'success') {
           console.log(responseJson);
-          this.setState({ edit_dialog: true });
+          this.setState({edit_dialog: true});
           if (responseJson.ingredient_group.is_main == 1) {
-            this.setState({ editis_main: true });
+            this.setState({editis_main: true});
           } else {
-            this.setState({ editis_main: false });
+            this.setState({editis_main: false});
           }
           this.setState({
             ingrediant_id: responseJson.ingredient_group.id,
@@ -654,7 +655,7 @@ export default class IngrediantsGroups extends Component {
           console.log(responseJson);
           if (responseJson) {
             if (responseJson.status == 'success') {
-              this.setState({ dataSource: responseJson.ingredient_group });
+              this.setState({dataSource: responseJson.ingredient_group});
             }
           } else {
             alert('Something wrong happened');
@@ -668,20 +669,20 @@ export default class IngrediantsGroups extends Component {
   }
 
   render() {
-    const { checked, editis_main } = this.state;
-    var { height, width } = Dimensions.get('window');
+    const {checked, editis_main} = this.state;
+    var {height, width} = Dimensions.get('window');
     var left = (
-      <Left style={{ flex: 1 }}>
+      <Left style={{flex: 1}}>
         <Button onPress={() => this._sideMenuDrawer.open()} transparent>
           <FontAwesomeIcon icon={faBars} color={'white'} size={25} />
         </Button>
       </Left>
     );
     var right = (
-      <Right style={{ flex: 1 }}>
+      <Right style={{flex: 1}}>
         <TouchableOpacity onPress={() => this.add_employee()}>
           <Image
-            style={{ width: 45, height: 45 }}
+            style={{width: 45, height: 45}}
             source={require('../images/add_employee.png')}
           />
         </TouchableOpacity>
@@ -689,7 +690,10 @@ export default class IngrediantsGroups extends Component {
     );
 
     return (
-      <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} style={{ zIndex: 1 }} navigation={this.props}>
+      <SideMenuDrawer
+        ref={ref => (this._sideMenuDrawer = ref)}
+        style={{zIndex: 1}}
+        navigation={this.props}>
         <View>
           <ScrollView>
             <Navbar left={left} right={right} title="IngrediantsGroups" />
@@ -706,10 +710,12 @@ export default class IngrediantsGroups extends Component {
                   alignSelf: 'center',
                   backgroundColor: '#efeff4',
                 }}
-                onTouchOutside={() => this.setState({ add_dialog: false, img_uri: "" })}>
+                onTouchOutside={() =>
+                  this.setState({add_dialog: false, img_uri: ''})
+                }>
                 <ScrollView>
-                  <View style={{ flexDirection: 'row' }}>
-                    <View style={{ flex: 0.95 }}>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 0.95}}>
                       <Text
                         style={{
                           textAlign: 'center',
@@ -720,11 +726,13 @@ export default class IngrediantsGroups extends Component {
                           fontSize: 23,
                         }}>
                         Add IngrediantsGroups
-                    </Text>
+                      </Text>
                     </View>
-                    <View style={{ justifyContent: 'center' }}>
+                    <View style={{justifyContent: 'center'}}>
                       <TouchableOpacity
-                        onPress={() => this.setState({ add_dialog: false, img_uri: "" })}>
+                        onPress={() =>
+                          this.setState({add_dialog: false, img_uri: ''})
+                        }>
                         <FontAwesomeIcon
                           icon={faWindowClose}
                           color={'#ff9500'}
@@ -733,7 +741,7 @@ export default class IngrediantsGroups extends Component {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <View style={{ flexDirection: 'row' }}>
+                  <View style={{flexDirection: 'row'}}>
                     <View
                       style={{
                         flex: 0.6,
@@ -742,12 +750,13 @@ export default class IngrediantsGroups extends Component {
                         padding: 10,
                         paddingTop: 25,
                       }}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <View style={{ width: 150 }}>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Name:
-                        </Text>
+                          </Text>
                         </View>
                         <TextInput
                           style={{
@@ -763,7 +772,7 @@ export default class IngrediantsGroups extends Component {
                             flexWrap: 'wrap',
                           }}
                           placeholder="Type message here.."
-                          onChangeText={text => this.setState({ add_name: text })}
+                          onChangeText={text => this.setState({add_name: text})}
                           value={this.state.add_name}
                         />
                       </View>
@@ -773,11 +782,11 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{ width: 150 }}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Max:
-                        </Text>
+                          </Text>
                         </View>
                         <TextInput
                           style={{
@@ -796,7 +805,7 @@ export default class IngrediantsGroups extends Component {
                           number={true}
                           keyboardType="numeric"
                           onChangeText={number =>
-                            this.setState({ add_max: number })
+                            this.setState({add_max: number})
                           }
                           value={this.state.add_max}
                         />
@@ -807,11 +816,11 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{ width: 150 }}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Min:
-                        </Text>
+                          </Text>
                         </View>
                         <TextInput
                           style={{
@@ -830,7 +839,7 @@ export default class IngrediantsGroups extends Component {
                           number={true}
                           keyboardType="numeric"
                           onChangeText={number =>
-                            this.setState({ add_min: number })
+                            this.setState({add_min: number})
                           }
                           value={this.state.add_min}
                         />
@@ -841,11 +850,11 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{ width: 150, alignSelf: 'flex-start' }}>
+                        <View style={{width: 150, alignSelf: 'flex-start'}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Description:
-                        </Text>
+                          </Text>
                         </View>
                         <TextInput
                           style={{
@@ -864,7 +873,7 @@ export default class IngrediantsGroups extends Component {
                           multiline={true}
                           underlineColorAndroid="transparent"
                           onChangeText={text =>
-                            this.setState({ add_description: text })
+                            this.setState({add_description: text})
                           }
                           value={this.state.add_description}
                         />
@@ -876,19 +885,19 @@ export default class IngrediantsGroups extends Component {
                           marginTop: 15,
                           marginRight: 50,
                         }}>
-                        <View style={{ width: 150 }}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Status :
-                        </Text>
+                          </Text>
                         </View>
                         <Picker
                           note
                           mode="dropdown"
-                          style={{ width: '39%', marginLeft: 12 }}
+                          style={{width: '39%', marginLeft: 12}}
                           selectedValue={this.state.add_status}
                           onValueChange={add_status =>
-                            this.setState({ add_status: add_status })
+                            this.setState({add_status: add_status})
                           }>
                           <Picker.Item label="Enable" value="1" />
                           <Picker.Item label="Disable" value="0" />
@@ -901,16 +910,16 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 10,
                         }}>
-                        <View style={{ width: 150 }}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Is Main? :
-                        </Text>
+                          </Text>
                         </View>
                         <CheckBox
-                          style={{ marginLeft: 15 }}
+                          style={{marginLeft: 15}}
                           status={checked ? 'checked' : 'unchecked'}
-                          tintColors={{ true: 'orange' }}
+                          tintColors={{true: 'orange'}}
                           value={checked}
                           onValueChange={() => this.addCheckBox()}
                         />
@@ -922,11 +931,11 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{ width: 150 }}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Sequence:
-                        </Text>
+                          </Text>
                         </View>
                         <TextInput
                           style={{
@@ -946,7 +955,7 @@ export default class IngrediantsGroups extends Component {
                           number={true}
                           keyboardType="numeric"
                           onChangeText={number =>
-                            this.setState({ add_sequence: number })
+                            this.setState({add_sequence: number})
                           }
                           value={this.state.add_sequence}
                         />
@@ -958,7 +967,7 @@ export default class IngrediantsGroups extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}>
-                      <View style={{ position: 'relative' }}>
+                      <View style={{position: 'relative'}}>
                         {this.state.img_uri == '' ? (
                           <Image
                             style={{
@@ -968,14 +977,14 @@ export default class IngrediantsGroups extends Component {
                             }}
                             source={require('../images/profile-circle-picture-8.png')}></Image>
                         ) : (
-                            <Image
-                              style={{
-                                width: 200,
-                                height: 200,
-                                borderRadius: 200 / 2,
-                              }}
-                              source={{ uri: this.state.img_uri }}></Image>
-                          )}
+                          <Image
+                            style={{
+                              width: 200,
+                              height: 200,
+                              borderRadius: 200 / 2,
+                            }}
+                            source={{uri: this.state.img_uri}}></Image>
+                        )}
                         <View style={styles.camera_icon}>
                           <TouchableOpacity onPress={() => this.opencamera()}>
                             <FontAwesomeIcon
@@ -999,9 +1008,9 @@ export default class IngrediantsGroups extends Component {
                       onPress={() => {
                         this.addDetail();
                       }}>
-                      <Text style={{ fontSize: width * 0.03, color: 'white' }}>
+                      <Text style={{fontSize: width * 0.03, color: 'white'}}>
                         Add
-                    </Text>
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </ScrollView>
@@ -1018,10 +1027,12 @@ export default class IngrediantsGroups extends Component {
                   alignSelf: 'center',
                   backgroundColor: '#efeff4',
                 }}
-                onTouchOutside={() => this.setState({ edit_dialog: false, img_uri: "" })}>
+                onTouchOutside={() =>
+                  this.setState({edit_dialog: false, img_uri: ''})
+                }>
                 <ScrollView>
-                  <View style={{ flexDirection: 'row' }}>
-                    <View style={{ flex: 0.95 }}>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 0.95}}>
                       <Text
                         style={{
                           textAlign: 'center',
@@ -1034,9 +1045,11 @@ export default class IngrediantsGroups extends Component {
                         Edit IngrediantsGroups{' '}
                       </Text>
                     </View>
-                    <View style={{ justifyContent: 'center' }}>
+                    <View style={{justifyContent: 'center'}}>
                       <TouchableOpacity
-                        onPress={() => this.setState({ edit_dialog: false, img_uri: "" })}>
+                        onPress={() =>
+                          this.setState({edit_dialog: false, img_uri: ''})
+                        }>
                         <FontAwesomeIcon
                           icon={faWindowClose}
                           color={'#ff9500'}
@@ -1045,7 +1058,7 @@ export default class IngrediantsGroups extends Component {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                  <View style={{flexDirection: 'row', marginTop: 15}}>
                     <View
                       style={{
                         flex: 0.6,
@@ -1053,12 +1066,13 @@ export default class IngrediantsGroups extends Component {
                         borderRightColor: 'lightgrey',
                         padding: 10,
                       }}>
-                      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <View style={{ width: 150 }}>
+                      <View
+                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Name :
-                        </Text>
+                          </Text>
                         </View>
                         <TextInput
                           style={{
@@ -1074,7 +1088,7 @@ export default class IngrediantsGroups extends Component {
                             flexWrap: 'wrap',
                           }}
                           placeholder="Type message here.."
-                          onChangeText={editname => this.setState({ editname })}
+                          onChangeText={editname => this.setState({editname})}
                           defaultValue={this.state.editname}
                         />
                       </View>
@@ -1084,11 +1098,11 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{ width: 150 }}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Max :
-                        </Text>
+                          </Text>
                         </View>
                         <TextInput
                           style={{
@@ -1112,7 +1126,7 @@ export default class IngrediantsGroups extends Component {
                           // defaultValue={this.state.editmax}
                           //value={parseInt(this.state.editmax)}
 
-                          onChangeText={text => this.setState({ editmax: text })}
+                          onChangeText={text => this.setState({editmax: text})}
                           value={this.state.editmax.toString()}
                         />
                       </View>
@@ -1122,11 +1136,11 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{ width: 150 }}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Min :
-                        </Text>
+                          </Text>
                         </View>
                         <TextInput
                           style={{
@@ -1148,7 +1162,7 @@ export default class IngrediantsGroups extends Component {
                           //     this.setState({ editmin })
                           // }
                           // defaultValue={this.state.editmin}
-                          onChangeText={text => this.setState({ editmin: text })}
+                          onChangeText={text => this.setState({editmin: text})}
                           value={this.state.editmin.toString()}
                         />
                       </View>
@@ -1158,11 +1172,11 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{ width: 150, alignSelf: 'flex-start' }}>
+                        <View style={{width: 150, alignSelf: 'flex-start'}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Description :
-                        </Text>
+                          </Text>
                         </View>
 
                         <TextInput
@@ -1182,7 +1196,7 @@ export default class IngrediantsGroups extends Component {
                           multiline={true}
                           underlineColorAndroid="transparent"
                           onChangeText={editdescription =>
-                            this.setState({ editdescription })
+                            this.setState({editdescription})
                           }
                           defaultValue={this.state.editdescription}
                         />
@@ -1194,19 +1208,19 @@ export default class IngrediantsGroups extends Component {
                           marginTop: 15,
                           marginRight: 50,
                         }}>
-                        <View style={{ width: 150 }}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Status :
-                        </Text>
+                          </Text>
                         </View>
                         <Picker
                           note
                           mode="dropdown"
-                          style={{ width: '39%', marginLeft: 12 }}
+                          style={{width: '39%', marginLeft: 12}}
                           selectedValue={this.state.editstatus.toString()}
                           onValueChange={editstatus =>
-                            this.setState({ editstatus: editstatus })
+                            this.setState({editstatus: editstatus})
                           }>
                           <Picker.Item label="Enable" value="1" />
                           <Picker.Item label="Disable" value="0" />
@@ -1218,16 +1232,16 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{ width: 150 }}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Is_Main:
-                        </Text>
+                          </Text>
                         </View>
                         <CheckBox
-                          style={{ marginLeft: 15 }}
+                          style={{marginLeft: 15}}
                           status={editis_main ? 'checked' : 'unchecked'}
-                          tintColors={{ true: 'orange' }}
+                          tintColors={{true: 'orange'}}
                           value={editis_main}
                           onValueChange={() => this.updateCheckBox()}
                         />
@@ -1238,11 +1252,11 @@ export default class IngrediantsGroups extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{ width: 150 }}>
+                        <View style={{width: 150}}>
                           <Text
-                            style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Sequence :
-                        </Text>
+                          </Text>
                         </View>
                         <TextInput
                           style={{
@@ -1263,7 +1277,7 @@ export default class IngrediantsGroups extends Component {
                           // onChangeText={editsequence => this.setState({ editsequence })}
                           // defaultValue={this.state.editsequence}
                           onChangeText={text =>
-                            this.setState({ editsequence: text })
+                            this.setState({editsequence: text})
                           }
                           value={this.state.editsequence.toString()}
                         />
@@ -1275,7 +1289,7 @@ export default class IngrediantsGroups extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}>
-                      <View style={{ position: 'relative' }}>
+                      <View style={{position: 'relative'}}>
                         {this.state.img_uri == '' ? (
                           <Image
                             style={{
@@ -1284,17 +1298,18 @@ export default class IngrediantsGroups extends Component {
                               borderRadius: 200 / 2,
                             }}
                             source={{
-                              uri: 'http://dev-fs.8d.ie/' + this.state.editcover,
+                              uri:
+                                'http://dev-fs.8d.ie/' + this.state.editcover,
                             }}></Image>
                         ) : (
-                            <Image
-                              style={{
-                                width: 200,
-                                height: 200,
-                                borderRadius: 200 / 2,
-                              }}
-                              source={{ uri: this.state.img_uri }}></Image>
-                          )}
+                          <Image
+                            style={{
+                              width: 200,
+                              height: 200,
+                              borderRadius: 200 / 2,
+                            }}
+                            source={{uri: this.state.img_uri}}></Image>
+                        )}
                         <View style={styles.camera_icon}>
                           <TouchableOpacity onPress={() => this.opencamera()}>
                             <FontAwesomeIcon
@@ -1315,24 +1330,24 @@ export default class IngrediantsGroups extends Component {
                       flexDirection: 'row',
                       justifyContent: 'space-around',
                     }}>
-                    <View style={{ flex: 0.9, marginTop: 10 }}>
+                    <View style={{flex: 0.9, marginTop: 10}}>
                       <TouchableOpacity
                         style={styles.delete_btn}
                         onPress={() => this.deleteIngredientGroup()}>
-                        <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
                           Delete
-                      </Text>
+                        </Text>
                       </TouchableOpacity>
                     </View>
-                    <View style={{ marginTop: 10 }}>
+                    <View style={{marginTop: 10}}>
                       <TouchableOpacity
                         style={styles.add_btn}
                         onPress={() =>
                           this.updatePress(this.state.ingrediant_id)
                         }>
-                        <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
                           Update
-                      </Text>
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -1351,11 +1366,15 @@ export default class IngrediantsGroups extends Component {
                   backgroundColor: '#efeff4',
                 }}
                 onTouchOutside={() =>
-                  this.setState({ add_ingredient_dialog: false, dialog: false, cover: "" })
+                  this.setState({
+                    add_ingredient_dialog: false,
+                    dialog: false,
+                    cover: '',
+                  })
                 }>
                 <ScrollView>
-                  <View style={{ flexDirection: 'row' }}>
-                    <View style={{ flex: 0.95 }}>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 0.95}}>
                       <Text
                         style={{
                           textAlign: 'center',
@@ -1366,15 +1385,15 @@ export default class IngrediantsGroups extends Component {
                           fontSize: 23,
                         }}>
                         Ingrediants
-                    </Text>
+                      </Text>
                     </View>
-                    <View style={{ justifyContent: 'center' }}>
+                    <View style={{justifyContent: 'center'}}>
                       <TouchableOpacity
                         onPress={() =>
                           this.setState({
                             add_ingredient_dialog: false,
                             dialog: false,
-                            cover: ""
+                            cover: '',
                           })
                         }>
                         <FontAwesomeIcon
@@ -1385,52 +1404,64 @@ export default class IngrediantsGroups extends Component {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <View style={{ flexDirection: 'row', marginTop: 10 }}>
-                    <View style={{ flex: 0.5 }}>
+                  <View style={{flexDirection: 'row', marginTop: 10}}>
+                    <View style={{flex: 0.5}}>
                       {this.state.dialog == false ? (
                         <TouchableOpacity
                           style={styles.add}
                           onPress={() =>
-                            this.setState({ add_ingredient_dialog: true })
+                            this.setState({
+                              add_ingredient_dialog: true,
+                              cover: '',
+                            })
                           }>
-                          <Text style={{ color: 'white', fontSize: 20 }}>
+                          <Text style={{color: 'white', fontSize: 20}}>
                             Insert
-                        </Text>
+                          </Text>
                         </TouchableOpacity>
                       ) : (
-                          <TouchableOpacity
-                            style={styles.inactive_add}
-                            onPress={() => this.setState({ dialog: false })}>
-                            <Text style={{ color: 'white', fontSize: 20 }}>
-                              Insert
-                        </Text>
-                          </TouchableOpacity>
-                        )}
+                        <TouchableOpacity
+                          style={styles.inactive_add}
+                          onPress={() =>
+                            this.setState({dialog: false, cover: ''})
+                          }>
+                          <Text style={{color: 'white', fontSize: 20}}>
+                            Insert
+                          </Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
-                    <View style={{ flex: 0.5 }}>
+                    <View style={{flex: 0.5}}>
                       {this.state.dialog == true ? (
                         <TouchableOpacity
                           style={styles.add}
                           onPress={() =>
-                            this.setState({ add_ingredient_dialog: false })
+                            this.setState({
+                              add_ingredient_dialog: false,
+                              cover: '',
+                            })
                           }>
-                          <Text style={{ color: 'white', fontSize: 20 }}>View</Text>
+                          <Text style={{color: 'white', fontSize: 20}}>
+                            View
+                          </Text>
                         </TouchableOpacity>
                       ) : (
-                          <TouchableOpacity
-                            style={styles.inactive_add}
-                            onPress={() => {
-                              this.getIngredientGroup();
-                            }}>
-                            <Text style={{ color: 'white', fontSize: 20 }}>View</Text>
-                          </TouchableOpacity>
-                        )}
+                        <TouchableOpacity
+                          style={styles.inactive_add}
+                          onPress={() => {
+                            this.getIngredientGroup();
+                          }}>
+                          <Text style={{color: 'white', fontSize: 20}}>
+                            View
+                          </Text>
+                        </TouchableOpacity>
+                      )}
                     </View>
                   </View>
                   {this.state.dialog == true ? (
                     <ScrollView>
-                      <Grid style={{ marginTop: 15 }}>
-                        <Row style={{ height: 30, marginVertical: 20 }}>
+                      <Grid style={{marginTop: 15}}>
+                        <Row style={{height: 30, marginVertical: 20}}>
                           <Col style={styles.add}>
                             <Text style={styles.grid_text}>Name</Text>
                           </Col>
@@ -1451,336 +1482,339 @@ export default class IngrediantsGroups extends Component {
                       </Grid>
                     </ScrollView>
                   ) : (
-                      <View>
-                        <ScrollView>
-                          <View style={{ flexDirection: 'row' }}>
+                    <View>
+                      <ScrollView>
+                        <View style={{flexDirection: 'row'}}>
+                          <View
+                            style={{
+                              flex: 0.6,
+                              borderRightWidth: 1,
+                              borderRightColor: 'lightgrey',
+                              padding: 10,
+                              paddingTop: 25,
+                            }}>
                             <View
                               style={{
-                                flex: 0.6,
-                                borderRightWidth: 1,
-                                borderRightColor: 'lightgrey',
-                                padding: 10,
-                                paddingTop: 25,
+                                flexDirection: 'row',
+                                alignItems: 'center',
                               }}>
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                }}>
-                                <View style={{ width: 150 }}>
-                                  <Text
-                                    style={{
-                                      fontSize: width * 0.02,
-                                      color: '#76726d',
-                                    }}>
-                                    taxId:
-                              </Text>
-                                </View>
-                                <TextInput
+                              <View style={{width: 150}}>
+                                <Text
                                   style={{
-                                    borderColor: 'white',
-                                    height: 40,
-                                    width: '60%',
-                                    paddingLeft: 15,
-                                    marginLeft: 15,
-                                    borderWidth: 1,
-                                    textAlignVertical: 'top',
-                                    backgroundColor: 'white',
-                                    borderRadius: 50,
-                                    flexWrap: 'wrap',
-                                  }}
-                                  placeholder="Type message here.."
-                                  onChangeText={tax_id =>
-                                    this.setState({ tax_id: tax_id })
-                                  }
-                                />
+                                    fontSize: width * 0.02,
+                                    color: '#76726d',
+                                  }}>
+                                  taxId:
+                                </Text>
                               </View>
-                              <View
+                              <TextInput
                                 style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  marginTop: 15,
-                                }}>
-                                <View style={{ width: 150 }}>
-                                  <Text
-                                    style={{
-                                      fontSize: width * 0.02,
-                                      color: '#76726d',
-                                    }}>
-                                    Name:
-                              </Text>
-                                </View>
-                                <TextInput
-                                  style={{
-                                    borderColor: 'white',
-                                    height: 40,
-                                    width: '60%',
-                                    paddingLeft: 15,
-                                    marginLeft: 15,
-                                    borderWidth: 1,
-                                    textAlignVertical: 'top',
-                                    backgroundColor: 'white',
-                                    borderRadius: 50,
-                                    flexWrap: 'wrap',
-                                  }}
-                                  placeholder="Type message here.."
-                                  onChangeText={name => this.setState({ name: name })}
-                                />
-                              </View>
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  marginTop: 15,
-                                }}>
-                                <View style={{ width: 150 }}>
-                                  <Text
-                                    style={{
-                                      fontSize: width * 0.02,
-                                      color: '#76726d',
-                                    }}>
-                                    Price:
-                              </Text>
-                                </View>
-                                <TextInput
-                                  style={{
-                                    borderColor: 'white',
-                                    height: 40,
-                                    width: '60%',
-                                    paddingLeft: 15,
-                                    marginLeft: 15,
-                                    borderWidth: 1,
-                                    textAlignVertical: 'top',
-                                    backgroundColor: 'white',
-                                    borderRadius: 50,
-                                    flexWrap: 'wrap',
-                                  }}
-                                  placeholder="Type message here.."
-                                  onChangeText={price =>
-                                    this.setState({ price: price })
-                                  }
-                                />
-                              </View>
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  marginTop: 15,
-                                }}>
-                                <View style={{ width: 150 }}>
-                                  <Text
-                                    style={{
-                                      fontSize: width * 0.02,
-                                      color: '#76726d',
-                                    }}>
-                                    Max:
-                              </Text>
-                                </View>
-                                <TextInput
-                                  style={{
-                                    borderColor: 'white',
-                                    height: 40,
-                                    width: '60%',
-                                    paddingLeft: 15,
-                                    marginLeft: 15,
-                                    borderWidth: 1,
-                                    textAlignVertical: 'top',
-                                    backgroundColor: 'white',
-                                    borderRadius: 50,
-                                    flexWrap: 'wrap',
-                                  }}
-                                  placeholder="Type message here.."
-                                  onChangeText={max => this.setState({ max: max })}
-                                />
-                              </View>
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  marginTop: 15,
-                                }}>
-                                <View style={{ width: 150 }}>
-                                  <Text
-                                    style={{
-                                      fontSize: width * 0.02,
-                                      color: '#76726d',
-                                    }}>
-                                    Description:
-                              </Text>
-                                </View>
-                                <TextInput
-                                  style={{
-                                    borderColor: 'white',
-                                    height: 80,
-                                    width: '60%',
-                                    paddingLeft: 15,
-                                    marginLeft: 15,
-                                    borderWidth: 1,
-                                    textAlignVertical: 'top',
-                                    backgroundColor: 'white',
-                                    borderRadius: 10,
-                                    flexWrap: 'wrap',
-                                  }}
-                                  placeholder="Type message here.."
-                                  multiline={true}
-                                  underlineColorAndroid="transparent"
-                                  onChangeText={description =>
-                                    this.setState({ description: description })
-                                  }
-                                />
-                              </View>
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  marginTop: 15,
-                                }}>
-                                <View style={{ width: 150 }}>
-                                  <Text
-                                    style={{
-                                      fontSize: width * 0.02,
-                                      color: '#76726d',
-                                    }}>
-                                    Sequence:
-                              </Text>
-                                </View>
-                                <TextInput
-                                  style={{
-                                    borderColor: 'white',
-                                    height: 40,
-                                    width: '60%',
-                                    paddingLeft: 15,
-                                    marginLeft: 15,
-                                    borderWidth: 1,
-                                    textAlignVertical: 'top',
-                                    backgroundColor: 'white',
-                                    borderRadius: 50,
-                                    flexWrap: 'wrap',
-                                  }}
-                                  placeholder="Type message here.."
-                                  onChangeText={sequence =>
-                                    this.setState({ sequence: sequence })
-                                  }
-                                />
-                              </View>
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  marginTop: 15,
-                                }}>
-                                <View style={{ width: 150 }}>
-                                  <Text
-                                    style={{
-                                      fontSize: width * 0.02,
-                                      color: '#76726d',
-                                    }}>
-                                    Weight:
-                              </Text>
-                                </View>
-                                <TextInput
-                                  style={{
-                                    borderColor: 'white',
-                                    height: 40,
-                                    width: '60%',
-                                    paddingLeft: 15,
-                                    marginLeft: 15,
-                                    borderWidth: 1,
-                                    textAlignVertical: 'top',
-                                    backgroundColor: 'white',
-                                    borderRadius: 50,
-                                    flexWrap: 'wrap',
-                                  }}
-                                  placeholder="Type message here.."
-                                  onChangeText={weight =>
-                                    this.setState({ weight: weight })
-                                  }
-                                />
-                              </View>
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  alignItems: 'center',
-                                  marginTop: 15,
-                                }}>
-                                <View style={{ width: 160 }}>
-                                  <Text
-                                    style={{
-                                      fontSize: width * 0.02,
-                                      color: '#76726d',
-                                    }}>
-                                    Status:
-                              </Text>
-                                </View>
-                                <Picker
-                                  note
-                                  mode="dropdown"
-                                  style={{ width: '40%' }}
-                                  selectedValue={this.state.status.toString()}
-                                  onValueChange={status =>
-                                    this.setState({ status: status })
-                                  }>
-                                  <Picker.Item label="Enable" value="1" />
-                                  <Picker.Item label="Disable" value="0" />
-                                </Picker>
-                              </View>
+                                  borderColor: 'white',
+                                  height: 40,
+                                  width: '60%',
+                                  paddingLeft: 15,
+                                  marginLeft: 15,
+                                  borderWidth: 1,
+                                  textAlignVertical: 'top',
+                                  backgroundColor: 'white',
+                                  borderRadius: 50,
+                                  flexWrap: 'wrap',
+                                }}
+                                placeholder="Type message here.."
+                                onChangeText={tax_id =>
+                                  this.setState({tax_id: tax_id})
+                                }
+                              />
                             </View>
                             <View
                               style={{
-                                flex: 0.4,
-                                justifyContent: 'center',
+                                flexDirection: 'row',
                                 alignItems: 'center',
+                                marginTop: 15,
                               }}>
-                              <View style={{ position: 'relative' }}>
-                                {this.state.cover == '' ? (
-                                  <Image
-                                    style={{
-                                      width: 200,
-                                      height: 200,
-                                      borderRadius: 200 / 2,
-                                    }}
-                                    source={require('../images/profile-circle-picture-8.png')}></Image>
-                                ) : (
-                                    <Image
-                                      style={{
-                                        width: 200,
-                                        height: 200,
-                                        borderRadius: 200 / 2,
-                                      }}
-                                      source={{ uri: this.state.cover }}></Image>
-                                  )}
-                                <View style={styles.camera_icon}>
-                                  <TouchableOpacity
-                                    onPress={() => this.opencamera()}>
-                                    <FontAwesomeIcon
-                                      icon={faCamera}
-                                      color={'black'}
-                                      size={45}
-                                    />
-                                  </TouchableOpacity>
-                                </View>
+                              <View style={{width: 150}}>
+                                <Text
+                                  style={{
+                                    fontSize: width * 0.02,
+                                    color: '#76726d',
+                                  }}>
+                                  Name:
+                                </Text>
+                              </View>
+                              <TextInput
+                                style={{
+                                  borderColor: 'white',
+                                  height: 40,
+                                  width: '60%',
+                                  paddingLeft: 15,
+                                  marginLeft: 15,
+                                  borderWidth: 1,
+                                  textAlignVertical: 'top',
+                                  backgroundColor: 'white',
+                                  borderRadius: 50,
+                                  flexWrap: 'wrap',
+                                }}
+                                placeholder="Type message here.."
+                                onChangeText={name =>
+                                  this.setState({name: name})
+                                }
+                              />
+                            </View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginTop: 15,
+                              }}>
+                              <View style={{width: 150}}>
+                                <Text
+                                  style={{
+                                    fontSize: width * 0.02,
+                                    color: '#76726d',
+                                  }}>
+                                  Price:
+                                </Text>
+                              </View>
+                              <TextInput
+                                style={{
+                                  borderColor: 'white',
+                                  height: 40,
+                                  width: '60%',
+                                  paddingLeft: 15,
+                                  marginLeft: 15,
+                                  borderWidth: 1,
+                                  textAlignVertical: 'top',
+                                  backgroundColor: 'white',
+                                  borderRadius: 50,
+                                  flexWrap: 'wrap',
+                                }}
+                                placeholder="Type message here.."
+                                onChangeText={price =>
+                                  this.setState({price: price})
+                                }
+                              />
+                            </View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginTop: 15,
+                              }}>
+                              <View style={{width: 150}}>
+                                <Text
+                                  style={{
+                                    fontSize: width * 0.02,
+                                    color: '#76726d',
+                                  }}>
+                                  Max:
+                                </Text>
+                              </View>
+                              <TextInput
+                                style={{
+                                  borderColor: 'white',
+                                  height: 40,
+                                  width: '60%',
+                                  paddingLeft: 15,
+                                  marginLeft: 15,
+                                  borderWidth: 1,
+                                  textAlignVertical: 'top',
+                                  backgroundColor: 'white',
+                                  borderRadius: 50,
+                                  flexWrap: 'wrap',
+                                }}
+                                placeholder="Type message here.."
+                                onChangeText={max => this.setState({max: max})}
+                              />
+                            </View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginTop: 15,
+                              }}>
+                              <View style={{width: 150}}>
+                                <Text
+                                  style={{
+                                    fontSize: width * 0.02,
+                                    color: '#76726d',
+                                  }}>
+                                  Description:
+                                </Text>
+                              </View>
+                              <TextInput
+                                style={{
+                                  borderColor: 'white',
+                                  height: 80,
+                                  width: '60%',
+                                  paddingLeft: 15,
+                                  marginLeft: 15,
+                                  borderWidth: 1,
+                                  textAlignVertical: 'top',
+                                  backgroundColor: 'white',
+                                  borderRadius: 10,
+                                  flexWrap: 'wrap',
+                                }}
+                                placeholder="Type message here.."
+                                multiline={true}
+                                underlineColorAndroid="transparent"
+                                onChangeText={description =>
+                                  this.setState({description: description})
+                                }
+                              />
+                            </View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginTop: 15,
+                              }}>
+                              <View style={{width: 150}}>
+                                <Text
+                                  style={{
+                                    fontSize: width * 0.02,
+                                    color: '#76726d',
+                                  }}>
+                                  Sequence:
+                                </Text>
+                              </View>
+                              <TextInput
+                                style={{
+                                  borderColor: 'white',
+                                  height: 40,
+                                  width: '60%',
+                                  paddingLeft: 15,
+                                  marginLeft: 15,
+                                  borderWidth: 1,
+                                  textAlignVertical: 'top',
+                                  backgroundColor: 'white',
+                                  borderRadius: 50,
+                                  flexWrap: 'wrap',
+                                }}
+                                placeholder="Type message here.."
+                                onChangeText={sequence =>
+                                  this.setState({sequence: sequence})
+                                }
+                              />
+                            </View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginTop: 15,
+                              }}>
+                              <View style={{width: 150}}>
+                                <Text
+                                  style={{
+                                    fontSize: width * 0.02,
+                                    color: '#76726d',
+                                  }}>
+                                  Weight:
+                                </Text>
+                              </View>
+                              <TextInput
+                                style={{
+                                  borderColor: 'white',
+                                  height: 40,
+                                  width: '60%',
+                                  paddingLeft: 15,
+                                  marginLeft: 15,
+                                  borderWidth: 1,
+                                  textAlignVertical: 'top',
+                                  backgroundColor: 'white',
+                                  borderRadius: 50,
+                                  flexWrap: 'wrap',
+                                }}
+                                placeholder="Type message here.."
+                                onChangeText={weight =>
+                                  this.setState({weight: weight})
+                                }
+                              />
+                            </View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginTop: 15,
+                              }}>
+                              <View style={{width: 160}}>
+                                <Text
+                                  style={{
+                                    fontSize: width * 0.02,
+                                    color: '#76726d',
+                                  }}>
+                                  Status:
+                                </Text>
+                              </View>
+                              <Picker
+                                note
+                                mode="dropdown"
+                                style={{width: '40%'}}
+                                selectedValue={this.state.status}
+                                onValueChange={status =>
+                                  this.setState({status: status})
+                                }>
+                                <Picker.Item label="Enable" value="1" />
+                                <Picker.Item label="Disable" value="0" />
+                              </Picker>
+                            </View>
+                          </View>
+                          <View
+                            style={{
+                              flex: 0.4,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                            }}>
+                            <View style={{position: 'relative'}}>
+                              {this.state.cover == '' ? (
+                                <Image
+                                  style={{
+                                    width: 200,
+                                    height: 200,
+                                    borderRadius: 200 / 2,
+                                  }}
+                                  source={require('../images/profile-circle-picture-8.png')}></Image>
+                              ) : (
+                                <Image
+                                  style={{
+                                    width: 200,
+                                    height: 200,
+                                    borderRadius: 200 / 2,
+                                  }}
+                                  source={{uri: this.state.cover}}></Image>
+                              )}
+                              <View style={styles.camera_icon}>
+                                <TouchableOpacity
+                                  onPress={() => this.opencamera()}>
+                                  <FontAwesomeIcon
+                                    icon={faCamera}
+                                    color={'black'}
+                                    size={45}
+                                  />
+                                </TouchableOpacity>
                               </View>
                             </View>
                           </View>
-                        </ScrollView>
-                        <View
-                          style={{
-                            marginTop: 20,
-                            borderTopColor: 'lightgrey',
-                            borderTopWidth: 1,
-                          }}>
-                          <TouchableOpacity
-                            style={styles.add_btn}
-                            onPress={() => {
-                              this.addIngrediant();
-                            }}>
-                            <Text style={{ fontSize: width * 0.028, color: 'white' }}>
-                              Add
-                        </Text>
-                          </TouchableOpacity>
                         </View>
+                      </ScrollView>
+                      <View
+                        style={{
+                          marginTop: 20,
+                          borderTopColor: 'lightgrey',
+                          borderTopWidth: 1,
+                        }}>
+                        <TouchableOpacity
+                          style={styles.add_btn}
+                          onPress={() => {
+                            this.addIngrediant();
+                          }}>
+                          <Text
+                            style={{fontSize: width * 0.028, color: 'white'}}>
+                            Add
+                          </Text>
+                        </TouchableOpacity>
                       </View>
-                    )}
+                    </View>
+                  )}
                 </ScrollView>
               </Dialog>
               {/* Update ingredient dialog*/}
@@ -1796,11 +1830,11 @@ export default class IngrediantsGroups extends Component {
                   backgroundColor: '#efeff4',
                 }}
                 onTouchOutside={() =>
-                  this.setState({ edit_ingredient_dialog: false, cover: "" })
+                  this.setState({edit_ingredient_dialog: false, cover: ''})
                 }>
                 <ScrollView>
-                  <View style={{ flexDirection: 'row' }}>
-                    <View style={{ flex: 0.95 }}>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 0.95}}>
                       <Text
                         style={{
                           textAlign: 'center',
@@ -1811,12 +1845,15 @@ export default class IngrediantsGroups extends Component {
                           fontSize: 23,
                         }}>
                         Ingrediants
-                    </Text>
+                      </Text>
                     </View>
-                    <View style={{ justifyContent: 'center' }}>
+                    <View style={{justifyContent: 'center'}}>
                       <TouchableOpacity
                         onPress={() =>
-                          this.setState({ edit_ingredient_dialog: false, cover: "" })
+                          this.setState({
+                            edit_ingredient_dialog: false,
+                            cover: '',
+                          })
                         }>
                         <FontAwesomeIcon
                           icon={faWindowClose}
@@ -1827,7 +1864,7 @@ export default class IngrediantsGroups extends Component {
                     </View>
                   </View>
                   <View>
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{flexDirection: 'row'}}>
                       <View
                         style={{
                           flex: 0.6,
@@ -1837,15 +1874,15 @@ export default class IngrediantsGroups extends Component {
                           paddingTop: 25,
                         }}>
                         <View
-                          style={{ flexDirection: 'row', alignItems: 'center' }}>
-                          <View style={{ width: 150 }}>
+                          style={{flexDirection: 'row', alignItems: 'center'}}>
+                          <View style={{width: 150}}>
                             <Text
                               style={{
                                 fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               taxId:
-                          </Text>
+                            </Text>
                           </View>
                           <TextInput
                             style={{
@@ -1862,7 +1899,7 @@ export default class IngrediantsGroups extends Component {
                             }}
                             placeholder="Type message here.."
                             onChangeText={Ingredienttaxid =>
-                              this.setState({ Ingredienttaxid: Ingredienttaxid })
+                              this.setState({Ingredienttaxid: Ingredienttaxid})
                             }
                             defaultValue={this.state.Ingredienttaxid.toString()}
                           />
@@ -1873,14 +1910,14 @@ export default class IngrediantsGroups extends Component {
                             alignItems: 'center',
                             marginTop: 15,
                           }}>
-                          <View style={{ width: 150 }}>
+                          <View style={{width: 150}}>
                             <Text
                               style={{
                                 fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Name:
-                          </Text>
+                            </Text>
                           </View>
                           <TextInput
                             style={{
@@ -1897,7 +1934,7 @@ export default class IngrediantsGroups extends Component {
                             }}
                             placeholder="Type message here.."
                             onChangeText={Ingredientname =>
-                              this.setState({ Ingredientname: Ingredientname })
+                              this.setState({Ingredientname: Ingredientname})
                             }
                             defaultValue={this.state.Ingredientname}
                           />
@@ -1908,14 +1945,14 @@ export default class IngrediantsGroups extends Component {
                             alignItems: 'center',
                             marginTop: 15,
                           }}>
-                          <View style={{ width: 150 }}>
+                          <View style={{width: 150}}>
                             <Text
                               style={{
                                 fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Price:
-                          </Text>
+                            </Text>
                           </View>
                           <TextInput
                             style={{
@@ -1932,7 +1969,7 @@ export default class IngrediantsGroups extends Component {
                             }}
                             placeholder="Type message here.."
                             onChangeText={Ingredientprice =>
-                              this.setState({ Ingredientprice: Ingredientprice })
+                              this.setState({Ingredientprice: Ingredientprice})
                             }
                             defaultValue={this.state.Ingredientprice}
                           />
@@ -1943,14 +1980,14 @@ export default class IngrediantsGroups extends Component {
                             alignItems: 'center',
                             marginTop: 15,
                           }}>
-                          <View style={{ width: 150 }}>
+                          <View style={{width: 150}}>
                             <Text
                               style={{
                                 fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Max:
-                          </Text>
+                            </Text>
                           </View>
                           <TextInput
                             style={{
@@ -1967,7 +2004,7 @@ export default class IngrediantsGroups extends Component {
                             }}
                             placeholder="Type message here.."
                             onChangeText={Ingredientmax =>
-                              this.setState({ Ingredientmax: Ingredientmax })
+                              this.setState({Ingredientmax: Ingredientmax})
                             }
                             defaultValue={this.state.Ingredientmax.toString()}
                           />
@@ -1978,14 +2015,14 @@ export default class IngrediantsGroups extends Component {
                             alignItems: 'center',
                             marginTop: 15,
                           }}>
-                          <View style={{ width: 150 }}>
+                          <View style={{width: 150}}>
                             <Text
                               style={{
                                 fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Description:
-                          </Text>
+                            </Text>
                           </View>
                           <TextInput
                             style={{
@@ -2004,7 +2041,7 @@ export default class IngrediantsGroups extends Component {
                             multiline={true}
                             underlineColorAndroid="transparent"
                             onChangeText={Ingredientdesc =>
-                              this.setState({ Ingredientdesc: Ingredientdesc })
+                              this.setState({Ingredientdesc: Ingredientdesc})
                             }
                             defaultValue={this.state.Ingredientdesc}
                           />
@@ -2015,14 +2052,14 @@ export default class IngrediantsGroups extends Component {
                             alignItems: 'center',
                             marginTop: 15,
                           }}>
-                          <View style={{ width: 150 }}>
+                          <View style={{width: 150}}>
                             <Text
                               style={{
                                 fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Sequence:
-                          </Text>
+                            </Text>
                           </View>
                           <TextInput
                             style={{
@@ -2039,7 +2076,7 @@ export default class IngrediantsGroups extends Component {
                             }}
                             placeholder="Type message here.."
                             onChangeText={Ingredientseq =>
-                              this.setState({ Ingredientseq: Ingredientseq })
+                              this.setState({Ingredientseq: Ingredientseq})
                             }
                             defaultValue={this.state.Ingredientseq.toString()}
                           />
@@ -2050,14 +2087,14 @@ export default class IngrediantsGroups extends Component {
                             alignItems: 'center',
                             marginTop: 15,
                           }}>
-                          <View style={{ width: 150 }}>
+                          <View style={{width: 150}}>
                             <Text
                               style={{
                                 fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Weight:
-                          </Text>
+                            </Text>
                           </View>
                           <TextInput
                             style={{
@@ -2087,19 +2124,19 @@ export default class IngrediantsGroups extends Component {
                             alignItems: 'center',
                             marginTop: 15,
                           }}>
-                          <View style={{ width: 160 }}>
+                          <View style={{width: 160}}>
                             <Text
                               style={{
                                 fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Status:
-                          </Text>
+                            </Text>
                           </View>
                           <Picker
                             note
                             mode="dropdown"
-                            style={{ width: '40%' }}
+                            style={{width: '40%'}}
                             selectedValue={this.state.Ingredientstatus.toString()}
                             onValueChange={status =>
                               this.setState({
@@ -2117,7 +2154,7 @@ export default class IngrediantsGroups extends Component {
                           justifyContent: 'center',
                           alignItems: 'center',
                         }}>
-                        <View style={{ position: 'relative' }}>
+                        <View style={{position: 'relative'}}>
                           {this.state.cover == '' ? (
                             <Image
                               style={{
@@ -2131,14 +2168,14 @@ export default class IngrediantsGroups extends Component {
                                   this.state.Ingredientimage,
                               }}></Image>
                           ) : (
-                              <Image
-                                style={{
-                                  width: 200,
-                                  height: 200,
-                                  borderRadius: 200 / 2,
-                                }}
-                                source={{ uri: this.state.cover }}></Image>
-                            )}
+                            <Image
+                              style={{
+                                width: 200,
+                                height: 200,
+                                borderRadius: 200 / 2,
+                              }}
+                              source={{uri: this.state.cover}}></Image>
+                          )}
                           <View style={styles.camera_icon}>
                             <TouchableOpacity onPress={() => this.opencamera()}>
                               <FontAwesomeIcon
@@ -2159,13 +2196,13 @@ export default class IngrediantsGroups extends Component {
                       borderTopWidth: 1,
                       flexDirection: 'row',
                     }}>
-                    <View style={{ flex: 0.9 }}>
+                    <View style={{flex: 0.9}}>
                       <TouchableOpacity
                         style={styles.delete_btn}
                         onPress={() => this.deleteIngredient()}>
-                        <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
                           Delete
-                      </Text>
+                        </Text>
                       </TouchableOpacity>
                     </View>
                     <View>
@@ -2174,19 +2211,19 @@ export default class IngrediantsGroups extends Component {
                         onPress={() =>
                           this.updateIngredient(this.state.Ingredientid)
                         }>
-                        <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
                           Update
-                      </Text>
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   </View>
                 </ScrollView>
               </Dialog>
             </KeyboardAvoidingView>
-            <View style={{ flex: 1 }}>
+            <View style={{flex: 1}}>
               {this.state.dataSource.length > 0 ? (
                 <Grid>
-                  <Row style={{ height: 60 }}>
+                  <Row style={{height: 60}}>
                     <View
                       style={{
                         flexDirection: 'row',
@@ -2195,7 +2232,7 @@ export default class IngrediantsGroups extends Component {
                         alignItems: 'center',
                         justifyContent: 'center',
                       }}>
-                      <Col style={{ alignItems: 'center', width: '10%' }}>
+                      <Col style={{alignItems: 'center', width: '10%'}}>
                         <View>
                           <Text
                             style={{
@@ -2208,10 +2245,10 @@ export default class IngrediantsGroups extends Component {
                               paddingTop: 2,
                             }}>
                             Sr.No.
-                        </Text>
+                          </Text>
                         </View>
                       </Col>
-                      <Col style={{ alignItems: 'center', width: '18%' }}>
+                      <Col style={{alignItems: 'center', width: '18%'}}>
                         <View>
                           <Text
                             style={{
@@ -2224,10 +2261,10 @@ export default class IngrediantsGroups extends Component {
                               paddingTop: 2,
                             }}>
                             Name
-                        </Text>
+                          </Text>
                         </View>
                       </Col>
-                      <Col style={{ alignItems: 'center', width: '18%' }}>
+                      <Col style={{alignItems: 'center', width: '18%'}}>
                         <View>
                           <Text
                             style={{
@@ -2240,10 +2277,10 @@ export default class IngrediantsGroups extends Component {
                               paddingTop: 2,
                             }}>
                             Max
-                        </Text>
+                          </Text>
                         </View>
                       </Col>
-                      <Col style={{ alignItems: 'center', width: '18%' }}>
+                      <Col style={{alignItems: 'center', width: '18%'}}>
                         <View>
                           <Text
                             style={{
@@ -2256,10 +2293,10 @@ export default class IngrediantsGroups extends Component {
                               paddingTop: 2,
                             }}>
                             Status
-                        </Text>
+                          </Text>
                         </View>
                       </Col>
-                      <Col style={{ alignItems: 'center', width: '18%' }}>
+                      <Col style={{alignItems: 'center', width: '18%'}}>
                         <View>
                           <Text
                             style={{
@@ -2272,10 +2309,10 @@ export default class IngrediantsGroups extends Component {
                               paddingTop: 2,
                             }}>
                             Main
-                        </Text>
+                          </Text>
                         </View>
                       </Col>
-                      <Col style={{ alignItems: 'center', width: '18%' }}>
+                      <Col style={{alignItems: 'center', width: '18%'}}>
                         <View>
                           <Text
                             style={{
@@ -2288,7 +2325,7 @@ export default class IngrediantsGroups extends Component {
                               paddingTop: 2,
                             }}>
                             Action
-                        </Text>
+                          </Text>
                         </View>
                       </Col>
                     </View>
@@ -2296,8 +2333,8 @@ export default class IngrediantsGroups extends Component {
                   {this.filldata()}
                 </Grid>
               ) : (
-                  <Grid></Grid>
-                )}
+                <Grid></Grid>
+              )}
             </View>
           </ScrollView>
         </View>
@@ -2320,25 +2357,25 @@ export default class IngrediantsGroups extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
-              <Col style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: 20 }}>{item.name}</Text>
+              <Col style={{alignItems: 'center'}}>
+                <Text style={{fontSize: 20}}>{item.name}</Text>
               </Col>
-              <Col style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: 20 }}>${item.price}</Text>
+              <Col style={{alignItems: 'center'}}>
+                <Text style={{fontSize: 20}}>${item.price}</Text>
               </Col>
-              <Col style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: 20 }}>{item.max}</Text>
+              <Col style={{alignItems: 'center'}}>
+                <Text style={{fontSize: 20}}>{item.max}</Text>
               </Col>
-              <Col style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: 20 }}>{item.weight}</Text>
+              <Col style={{alignItems: 'center'}}>
+                <Text style={{fontSize: 20}}>{item.weight}</Text>
               </Col>
-              <Col style={{ alignItems: 'center' }}>
-                <Text style={{ fontSize: 20 }}>
+              <Col style={{alignItems: 'center'}}>
+                <Text style={{fontSize: 20}}>
                   {item.status == 1 ? (
                     <Text>Enable</Text>
                   ) : (
-                      <Text>Disable</Text>
-                    )}
+                    <Text>Disable</Text>
+                  )}
                 </Text>
               </Col>
             </Row>
@@ -2358,7 +2395,7 @@ export default class IngrediantsGroups extends Component {
             onPress={() => {
               this.getIngrediants(item.id);
             }}>
-            <Row style={{ height: 60, marginBottom: 10 }}>
+            <Row style={{height: 60, marginBottom: 10}}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -2368,34 +2405,34 @@ export default class IngrediantsGroups extends Component {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <Col style={{ alignItems: 'center', width: '10%' }}>
-                  <Text style={{ fontSize: 25 }}>{i + 1}</Text>
+                <Col style={{alignItems: 'center', width: '10%'}}>
+                  <Text style={{fontSize: 25}}>{i + 1}</Text>
                 </Col>
-                <Col style={{ alignItems: 'center', width: '18%' }}>
-                  <Text style={{ fontSize: 25 }}>{item.name}</Text>
+                <Col style={{alignItems: 'center', width: '18%'}}>
+                  <Text style={{fontSize: 25}}>{item.name}</Text>
                 </Col>
-                <Col style={{ alignItems: 'center', width: '18%' }}>
-                  <Text style={{ fontSize: 25 }}>{item.max}</Text>
+                <Col style={{alignItems: 'center', width: '18%'}}>
+                  <Text style={{fontSize: 25}}>{item.max}</Text>
                 </Col>
-                <Col style={{ alignItems: 'center', width: '18%' }}>
-                  <Text style={{ fontSize: 25, marginLeft: 10 }}>
+                <Col style={{alignItems: 'center', width: '18%'}}>
+                  <Text style={{fontSize: 25, marginLeft: 10}}>
                     {item.status == 1 ? (
                       <Text>Enable</Text>
                     ) : (
-                        <Text>Disable</Text>
-                      )}
+                      <Text>Disable</Text>
+                    )}
                   </Text>
                 </Col>
-                <Col style={{ alignItems: 'center', width: '18%' }}>
-                  <Text style={{ fontSize: 25, marginLeft: 10 }}>
+                <Col style={{alignItems: 'center', width: '18%'}}>
+                  <Text style={{fontSize: 25, marginLeft: 10}}>
                     {item.is_main == 1 ? <Text>Yes</Text> : <Text>No</Text>}
                   </Text>
                 </Col>
-                <Col style={{ alignItems: 'center', width: '18%' }}>
+                <Col style={{alignItems: 'center', width: '18%'}}>
                   <TouchableOpacity
                     style={styles.add}
                     onPress={() => this.add_ingredient(item.id)}>
-                    <Text style={{ color: 'white', fontSize: 25 }}>Add</Text>
+                    <Text style={{color: 'white', fontSize: 25}}>Add</Text>
                   </TouchableOpacity>
                 </Col>
               </View>

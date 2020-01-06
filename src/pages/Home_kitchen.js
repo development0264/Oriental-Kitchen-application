@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Dimensions,
   Platform,
@@ -10,8 +10,8 @@ import {
   TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
-import { Button, Left, Right, Icon } from 'native-base';
-import { Dialog } from 'react-native-simple-dialogs';
+import {Button, Left, Right, Icon} from 'native-base';
+import {Dialog} from 'react-native-simple-dialogs';
 import Navbar from '../components/Navbar';
 import {
   faBars,
@@ -19,9 +19,9 @@ import {
   faArrowDown,
   faCamera,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import moment from 'moment';
-import { Card } from 'react-native-elements';
+import {Card} from 'react-native-elements';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -37,7 +37,7 @@ export default class Home extends Component {
       cancel_dialog: false,
       pause_dialog: false,
       count: 0,
-      userDetail: ""
+      userDetail: '',
     };
     this._retrieveData();
   }
@@ -46,7 +46,7 @@ export default class Home extends Component {
     try {
       const value = await AsyncStorage.getItem('visited_onces');
       if (value !== null) {
-        this.setState({ userDetail: JSON.parse(value), count: 1 });
+        this.setState({userDetail: JSON.parse(value), count: 1});
         this.componentDidMount();
       }
     } catch (error) {
@@ -91,7 +91,7 @@ export default class Home extends Component {
   }
 
   getOrderId = () => {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     var items = [];
     this.state.dataSource.map((item, i) => {
       items.push(
@@ -114,13 +114,13 @@ export default class Home extends Component {
   };
 
   fillOrder = () => {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     var items = [];
     this.state.dataSource.map((item, i) => {
       items.push(
         <View>
-          <View style={{ flexDirection: 'row', backgroundColor: 'black' }}>
-            <View style={{ padding: 15, flex: 0.11 }}>
+          <View style={{flexDirection: 'row', backgroundColor: 'black'}}>
+            <View style={{padding: 15, flex: 0.11}}>
               <Text
                 style={{
                   fontSize: width * 0.03,
@@ -137,13 +137,13 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <View style={{ alignItems: 'flex-end', flex: 0.5 }}>
-                <Text style={{ fontSize: width * 0.02, color: 'white' }}>
+              <View style={{alignItems: 'flex-end', flex: 0.5}}>
+                <Text style={{fontSize: width * 0.02, color: 'white'}}>
                   {item.updated_at.split(' ')[1].substring(0, 5)}
                 </Text>
               </View>
               <View
-                style={{ alignItems: 'flex-end', flex: 0.5, marginRight: 60 }}>
+                style={{alignItems: 'flex-end', flex: 0.5, marginRight: 60}}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -156,7 +156,7 @@ export default class Home extends Component {
               </View>
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <View
               style={{
                 padding: 8,
@@ -300,18 +300,18 @@ export default class Home extends Component {
                 </Text>
               </ScrollView>
             </View>
-            <View style={{ flex: 0.89 }}>
-              <View style={{ flexDirection: 'row' }}>
+            <View style={{flex: 0.89}}>
+              <View style={{flexDirection: 'row'}}>
                 <View
                   style={{
                     flex: 0.5,
                     flexDirection: 'row',
                     justifyContent: 'flex-start',
                   }}>
-                  <TouchableOpacity style={{ marginLeft: 30, marginTop: 10 }}>
+                  <TouchableOpacity style={{marginLeft: 30, marginTop: 10}}>
                     <Image source={require('../images/arrow.png')} />
                   </TouchableOpacity>
-                  <TouchableOpacity style={{ marginLeft: 30, marginTop: 10 }}>
+                  <TouchableOpacity style={{marginLeft: 30, marginTop: 10}}>
                     <Image source={require('../images/arrow-down.png')} />
                   </TouchableOpacity>
                 </View>
@@ -323,9 +323,9 @@ export default class Home extends Component {
                     marginRight: 30,
                   }}>
                   <TouchableOpacity
-                    style={{ marginLeft: 30 }}
+                    style={{marginLeft: 30}}
                     onPress={() => {
-                      this.setState({ pause_dialog: true });
+                      this.setState({pause_dialog: true});
                     }}>
                     <Text
                       style={{
@@ -341,9 +341,9 @@ export default class Home extends Component {
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={{ marginLeft: 30 }}
+                    style={{marginLeft: 30}}
                     onPress={() => {
-                      this.setState({ cancel_dialog: true });
+                      this.setState({cancel_dialog: true});
                     }}>
                     <Text
                       style={{
@@ -372,7 +372,7 @@ export default class Home extends Component {
   };
 
   fillCard = () => {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     var items = [];
     this.state.dataSource.map((item, i) => {
       {
@@ -387,8 +387,8 @@ export default class Home extends Component {
                 borderBottomWidth: 1,
                 paddingBottom: 10,
               }}>
-              <View style={{ flex: 0.9 }}>
-                <Text style={{ fontSize: 25 }}>
+              <View style={{flex: 0.9}}>
+                <Text style={{fontSize: 25}}>
                   {i + 1}
                   {'. '}
                   <Text
@@ -414,7 +414,7 @@ export default class Home extends Component {
                     fontWeight: 'bold',
                   }}>
                   X{' '}
-                  <Text style={{ fontWeight: 'bold', fontSize: 40 }}>
+                  <Text style={{fontWeight: 'bold', fontSize: 40}}>
                     {item.qty}
                   </Text>
                 </Text>
@@ -477,26 +477,29 @@ export default class Home extends Component {
   };
 
   render() {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     var left = (
-      <Left style={{ flex: 1 }}>
+      <Left style={{flex: 1}}>
         <Button onPress={() => this._sideMenuDrawer.open()} transparent>
           <FontAwesomeIcon icon={faBars} color={'white'} size={25} />
         </Button>
       </Left>
     );
     var right = (
-      <Right style={{ flex: 1 }}>
-        <Text style={{ color: 'white', fontFamily: 'Roboto', fontWeight: '100' }}>
+      <Right style={{flex: 1}}>
+        <Text style={{color: 'white', fontFamily: 'Roboto', fontWeight: '100'}}>
           Station 1
         </Text>
       </Right>
     );
     return (
-      <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} style={{ zIndex: 1 }} navigation={this.props}>
+      <SideMenuDrawer
+        ref={ref => (this._sideMenuDrawer = ref)}
+        style={{zIndex: 1}}
+        navigation={this.props}>
         <View style={styles.container}>
           <Navbar left={left} right={right} title="Kitchen" />
-          <View style={{ flex: 0.88 }}>
+          <View style={{flex: 0.88}}>
             <View>{this.fillOrder()}</View>
           </View>
           <Dialog
@@ -510,9 +513,9 @@ export default class Home extends Component {
               alignSelf: 'center',
               backgroundColor: '#efeff4',
             }}
-            onTouchOutside={() => this.setState({ pause_dialog: false })}>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 0.95 }}>
+            onTouchOutside={() => this.setState({pause_dialog: false})}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 0.95}}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -524,11 +527,11 @@ export default class Home extends Component {
                     fontWeight: 'bold',
                   }}>
                   Pause order
-              </Text>
+                </Text>
               </View>
-              <View style={{ justifyContent: 'center' }}>
+              <View style={{justifyContent: 'center'}}>
                 <TouchableOpacity
-                  onPress={() => this.setState({ pause_dialog: false })}>
+                  onPress={() => this.setState({pause_dialog: false})}>
                   <FontAwesomeIcon
                     icon={faWindowClose}
                     color={'#ff9500'}
@@ -544,7 +547,7 @@ export default class Home extends Component {
                 marginTop: 10,
               }}>
               Order will pause for 5 minutes?
-          </Text>
+            </Text>
             {this.getOrderId()}
             <View
               style={{
@@ -553,20 +556,20 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-around',
               }}>
-              <View style={{ flex: 0.9, marginTop: 10 }}>
-                <TouchableOpacity style={styles.yes} onPress={() => { }}>
-                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+              <View style={{flex: 0.9, marginTop: 10}}>
+                <TouchableOpacity style={styles.yes} onPress={() => {}}>
+                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
                     Yes
-                </Text>
+                  </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{ marginTop: 10 }}>
+              <View style={{marginTop: 10}}>
                 <TouchableOpacity
                   style={styles.no}
-                  onPress={() => this.setState({ pause_dialog: false })}>
-                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+                  onPress={() => this.setState({pause_dialog: false})}>
+                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
                     No
-                </Text>
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -582,9 +585,9 @@ export default class Home extends Component {
               alignSelf: 'center',
               backgroundColor: '#efeff4',
             }}
-            onTouchOutside={() => this.setState({ cancel_dialog: false })}>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 0.95 }}>
+            onTouchOutside={() => this.setState({cancel_dialog: false})}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 0.95}}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -596,11 +599,11 @@ export default class Home extends Component {
                     fontWeight: 'bold',
                   }}>
                   Cancel order
-              </Text>
+                </Text>
               </View>
-              <View style={{ justifyContent: 'center' }}>
+              <View style={{justifyContent: 'center'}}>
                 <TouchableOpacity
-                  onPress={() => this.setState({ cancel_dialog: false })}>
+                  onPress={() => this.setState({cancel_dialog: false})}>
                   <FontAwesomeIcon
                     icon={faWindowClose}
                     color={'#ff9500'}
@@ -616,7 +619,7 @@ export default class Home extends Component {
                 marginTop: 10,
               }}>
               Are you sure to cancel the order?
-          </Text>
+            </Text>
             {this.getOrderId()}
             <View
               style={{
@@ -625,25 +628,25 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-around',
               }}>
-              <View style={{ flex: 0.9, marginTop: 10 }}>
-                <TouchableOpacity style={styles.yes} onPress={() => { }}>
-                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+              <View style={{flex: 0.9, marginTop: 10}}>
+                <TouchableOpacity style={styles.yes} onPress={() => {}}>
+                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
                     Yes
-                </Text>
+                  </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{ marginTop: 10 }}>
+              <View style={{marginTop: 10}}>
                 <TouchableOpacity
                   style={styles.no}
-                  onPress={() => this.setState({ cancel_dialog: false })}>
-                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+                  onPress={() => this.setState({cancel_dialog: false})}>
+                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
                     No
-                </Text>
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </Dialog>
-          <View style={{ flex: 0.12, flexDirection: 'row' }}>
+          <View style={{flex: 0.12, flexDirection: 'row'}}>
             <View
               style={{
                 backgroundColor: '#ff9500',
@@ -651,9 +654,9 @@ export default class Home extends Component {
                 justifyContent: 'center',
                 padding: 20,
               }}>
-              <Text style={{ fontSize: 40, color: 'white', fontWeight: 'bold' }}>
+              <Text style={{fontSize: 40, color: 'white', fontWeight: 'bold'}}>
                 CURRENT ORDER
-            </Text>
+              </Text>
             </View>
             <View
               style={{
@@ -662,9 +665,9 @@ export default class Home extends Component {
                 justifyContent: 'center',
                 padding: 20,
               }}>
-              <Text style={{ fontSize: 40, color: 'white', fontWeight: 'bold' }}>
+              <Text style={{fontSize: 40, color: 'white', fontWeight: 'bold'}}>
                 COMPLETE
-            </Text>
+              </Text>
             </View>
           </View>
         </View>

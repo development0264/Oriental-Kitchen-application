@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, Platform, StyleSheet, Text, View, Image, FlatList, TouchableOpacity, TextInput, AsyncStorage, ToastAndroid, Slider } from 'react-native';
+import { Dimensions, Platform, StyleSheet, Text, View, Image, FlatList, TouchableOpacity, TextInput, AsyncStorage, ToastAndroid, Slider,ScrollView,KeyboardAvoidingView } from 'react-native';
 import { Button, Left, Right, Toast, Row, Col } from 'native-base';
 import Navbar from '../components/Navbar';
 import { faBars, faBackward, faArrowUp, faArrowDown, faPlus, faMinus, faWindowClose, faCamera } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +11,21 @@ import Colors from '../Colors';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import CheckBox from 'react-native-check-box'
 
+const createFormData = (photo, body) => {
+    const data = new FormData();
+
+    data.append("cover", {
+        name: photo.fileName,
+        type: photo.type,
+        uri:
+            Platform.OS === "android" ? photo.uri : photo.uri.replace("file://", "")
+    });
+
+    Object.keys(body).forEach(key => {
+        data.append(key, body[key]);
+    });
+    return data;
+};
 export default class CreateDish extends Component {
     constructor(props) {
         super(props)
@@ -22,9 +37,8 @@ export default class CreateDish extends Component {
             dataSource: [],
             ListdataSource: [],
             add_dialog: false,
-            show_dialog: false,
-            img_uri: "",
-            avatar: "",
+            show_dialog: false,          
+            avatar: null,
             isPopular: false,
             quantity: 1,
             max: null,
@@ -44,7 +58,8 @@ export default class CreateDish extends Component {
             isdishedit: false,
             menu_id: this.props.navigation.state.params.menu_id,
             dish_id: null,
-            customer_id: null
+            customer_id: null,
+            ingredientcover:null
         }
 
         AsyncStorage.setItem("INGREDIENT", "")
@@ -91,8 +106,7 @@ export default class CreateDish extends Component {
                             responseJson.ingredientGroups[i].ingredients[j].group = "No";
                             ingredientGroups.push(responseJson.ingredientGroups[i].ingredients[j])
                         }
-                    }
-                    console.log(responseJson.ingredientGroups);
+                    }                   
                     this.setState({ dataSource: ingredientGroups });
                 }
             }).catch((error) => {
@@ -102,7 +116,7 @@ export default class CreateDish extends Component {
 
     //vender menu
     vendermenu = async () => {
-        try {
+        try {           
             var data = new FormData()
             data.append('id', this.state.id);
 
@@ -150,7 +164,7 @@ export default class CreateDish extends Component {
     }
 
     //Open for quantiry
-    ingredients_data = (item) => {
+    ingredients_data = (item) => {       
         //this.setState({ qty: '' });       
         if (item.isgroup == false) {
             this.setState({ did: item.idingredient });
@@ -161,6 +175,7 @@ export default class CreateDish extends Component {
             this.setState({ ingredient_group_id: item.ingredient_group_id });
             this.setState({ groupmax: item.groupmax });
             this.setState({ quantity: 1 });
+            this.setState({ ingredientcover: item.cover });
             //alert((item.id))
             this.state.ingredientexixts.map((items) => {
                 if (item.id == items.id) {
@@ -186,9 +201,9 @@ export default class CreateDish extends Component {
                 console.log('User tapped custom button: ', response.customButton);
                 alert(response.customButton);
             } else {
-                console.log(response);
+                alert(response.uri);
                 this.setState({
-                    img_uri: response.uri,
+                    cover: response.uri,
                     avatar: response
                 });
             }
@@ -244,11 +259,12 @@ export default class CreateDish extends Component {
             })
                 .then((response) => response.json())
                 .then((responseJsonDish) => {
-
+                  
                     //dish added successfully
                     if (responseJsonDish["dish"] != undefined) {
-                        //dish add to menu                      
-
+                        //dish add to menu      
+                    
+                        
                         var data = new FormData()
                         data.append('dish_id', responseJsonDish["dish"][0].id);
                         data.append('menu_id', this.state.menu_id);
@@ -280,20 +296,52 @@ export default class CreateDish extends Component {
                                     .then((response) => response.json())
                                     .then((responseJson) => {
 
-                                        if (responseJson.status == "success") {
-                                            this.setState({ resp: responseJson, networkError: false });
-                                            ToastAndroid.show('Dish creatded successfully !', ToastAndroid.SHORT);
+                                  
+                                        //alert(this.state.avatar)
+                                        //alert(responseJsonDish["dish"][0].id)
+                            if (this.state.avatar) {
 
-                                            AsyncStorage.setItem("INGREDIENT", "");
-                                            this.vendermenu();
-                                            this.setState({ ingredientexixts: [], isadd: false })
+                                var headers = new Headers();
+                                headers.append('Accept', 'application/json');
+        
+                                fetch("http://dev-fs.8d.ie/api/dishes/edit-dishes-image", {
+                                    method: "POST",
+                                    headers: headers,
+                                    body: createFormData(this.state.avatar, { id: responseJsonDish["dish"][0].id })
+                                })
+                                    .then((response) => response.json())
+                                    .then((responseJson) => {
+                                       
+                                        alert(JSON.stringify(responseJson))
 
-                                        } else {
-                                            ToastAndroid.show('Dish does not creatded successfully !', ToastAndroid.SHORT);
-                                        }
+                                                this.setState({ resp: responseJson, networkError: false });
+                                                ToastAndroid.show('Dish creatded successfully !', ToastAndroid.SHORT);
+    
+                                                AsyncStorage.setItem("INGREDIENT", "");
+                                                this.vendermenu();
+                                                this.setState({ ingredientexixts: [], isadd: false })
+                                                                                                                                                                            
+                                    })
+        
+                            }
+
+                            else {                                
+                                this.setState({ resp: responseJson, networkError: false });
+                                ToastAndroid.show('Dish creatded successfully !', ToastAndroid.SHORT);
+
+                                AsyncStorage.setItem("INGREDIENT", "");
+                                this.vendermenu();
+                                this.setState({ ingredientexixts: [], isadd: false })
+                            }
+
                                     })
 
                             })
+
+                
+        
+
+
                     } else {
                         ToastAndroid.show('Please Check your Code !', ToastAndroid.SHORT);
                     }
@@ -323,6 +371,7 @@ export default class CreateDish extends Component {
             }
             else {
                 //alert(this.state.did)
+                console.log(JSON.parse(res));
                 var group_count = 0;
                 ingredientsList = JSON.parse(res);
                 ingredientsList.map((item) => {
@@ -424,9 +473,10 @@ export default class CreateDish extends Component {
     //Edit Dish From id
     editdish(id) {
         var obj = this.state.ListdataSource.find(o => o.id = id)
-        //alert((obj.ingredient.length))
+        //alert(JSON.stringify(obj))
         this.setState({ isadd: true })
         //this.setState({ ingredientexixts: obj.ingredient })
+        this.setState({ cover: 'http://dev-fs.8d.ie/'+obj.cover })
         this.setState({ isdishedit: true })
         this.setState({ dishname: obj.name })
         this.setState({ dishdescription: obj.description })
@@ -485,7 +535,7 @@ export default class CreateDish extends Component {
                         }} title="Create Dish">
                         <Text
                             style={{
-                                fontSize: width * 0.03,
+                                fontSize: width * 0.025,
                                 paddingHorizontal: 10,
                                 backgroundColor: '#ff9500',
                                 color: 'white',
@@ -643,11 +693,13 @@ export default class CreateDish extends Component {
                         />
                     </View>
                     :
-                    <View style={styles.container} >
+                    <View style={styles.container}>
+                        <KeyboardAvoidingView behavior="padding" enabled>
                         <Dialog
                             visible={this.state.add_dialog}
                             dialogStyle={{ borderRadius: 10, borderWidth: 10, borderColor: '#efeff4', width: '80%', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#efeff4' }}
                             onTouchOutside={() => this.setState({ add_dialog: false })} >
+                            <ScrollView>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flex: 0.95 }}>
                                     <Text style={{ textAlign: 'center', borderBottomWidth: 1, borderBottomColor: 'lightgrey', paddingBottom: 15, marginTop: 0, fontSize: 23 }}>Create Dish</Text>
@@ -711,10 +763,10 @@ export default class CreateDish extends Component {
                                 </View>
                                 <View style={{ flex: 0.4, justifyContent: 'center', alignItems: 'center' }}>
                                     <View style={{ position: 'relative' }}>
-                                        {this.state.img_uri == ""
+                                        {this.state.cover == null
                                             ? <Image style={{ width: 200, height: 200, borderRadius: 200 / 2 }} source={require("../images/profile-circle-picture-8.png")}  >
                                             </Image>
-                                            : <Image style={{ width: 200, height: 200, borderRadius: 200 / 2 }} source={{ uri: this.state.img_uri }}  >
+                                            : <Image style={{ width: 200, height: 200, borderRadius: 200 / 2 }} source={{ uri: this.state.cover }}  >
                                             </Image>
                                         }
                                         <View style={styles.camera_icon}>
@@ -732,6 +784,7 @@ export default class CreateDish extends Component {
                                     </Text>
                                 </TouchableOpacity>
                             </View>
+                            </ScrollView>
                         </Dialog>
 
                         {/* Quantity Dialog */}
@@ -755,7 +808,7 @@ export default class CreateDish extends Component {
                                         <View style={{ marginLeft: 20, marginTop: 20 }}>
                                             <Image
                                                 style={{ justifyContent: 'center', alignItems: 'center', width: 100, height: 110, backgroundColor: 'black' }}
-                                                source={{ uri: "http://dev-fs.8d.ie/storage/" + this.state.cover }}
+                                                source={{ uri: "http://dev-fs.8d.ie/" + this.state.ingredientcover }}
                                             ></Image>
                                         </View>
                                         <View style={{ marginLeft: 40, marginTop: 10 }}>
@@ -792,24 +845,102 @@ export default class CreateDish extends Component {
                                 </View>
                             </View>
                         </Dialog >
-
-                        <View style={{ flex: 0.9, flexDirection: 'row' }}>
+                        </KeyboardAvoidingView>
+                        <View style={{ flex: 0.9, flexDirection: 'row' }}>                      
                             <FlatList
                                 data={this.state.dataSource}
                                 keyExtractor={({ id }, index) => id}
                                 numColumns={8}
                                 renderItem={({ item }) =>
-                                    <View style={{ padding: 5, flexDirection: 'row', }}>
+                                    <View >
 
                                         <TouchableOpacity onPress={() => this.ingredients_data(item)}>
+                                        {item.isgroup == true ? (
+                                            <View
+                                                style={{
+                                                    flex: 1,
+                                                    padding: 2,
+                                                    flexDirection: 'row',
+                                                    backgroundColor: '#ff9500',
+                                                    height: 150,
+                                                    width: 150,
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    textAlign: 'center',
+                                                    position: 'relative',
+                                                }}>
+                                                <Image
+                                                    style={{ height: 130, width: 130, backgroundColor: '#ff9500', }}
+                                                    source={{ uri: 'http://dev-fs.8d.ie/' + item.cover }}
+                                                />
+                                                <Text
+                                                    style={{
+                                                    position: 'absolute',
+                                                    fontSize: 40,
+                                                    color: 'white',
+                                                    top: 23,
+                                                    textDecorationLine: 'line-through',
+                                                    textDecorationStyle: 'solid',
+                                                    }}>
+                                                    {item.name}
+                                                </Text>
+
+                                                <Text
+                                                    style={{
+                                                    position: 'absolute',
+                                                    fontSize: 18,
+                                                    color: 'white',
+                                                    bottom: 40,
+                                                    }}>
+                                                    MAX{' '}
+                                                    <Text
+                                                    style={{
+                                                        position: 'absolute',
+                                                        fontSize: 15,
+                                                        color: 'white',
+                                                        bottom: 40,
+                                                    }}>
+                                                    {item.max}
+                                                    </Text>{' '}
+                                                    SEL.
+                                                </Text>
+                                            </View>)
+                                            :
+                                            (
+                                                <View
+                                            style={{
+                                                flex: 1,
+                                                padding: 5,
+                                                flexDirection: 'row',
+                                                position: 'relative',
+                                                marginLeft: 8,
+                                                height: 150,
+                                                width: 150,
+                                            }}>
                                             <Image
-                                                style={{ height: 150, width: 150 }}
-                                                source={{ uri: 'http://dev-fs.8d.ie/storage/' + item.cover }}
+                                                style={{
+                                                height: 150,
+                                                width: 150,
+                                                }}
+                                                source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
                                             />
-                                            {/* <Text>{item.name}-{item.id}-{item.group}</Text> */}
+                                            <Text
+                                                style={{
+                                                position: 'absolute',
+                                                fontSize: 15,
+                                                top: 5,
+                                                marginLeft: 8,
+                                                }}>
+                                                {item.sequence}
+                                            </Text>
+                                            </View>
+                                            )
+                                            }                                        
                                         </TouchableOpacity>
+
                                         {this.getindiexistingqty(item)}
-                                    </View>}
+                                    </View>
+                                    }
                             />
                         </View>
                         <View style={{ flex: 0.1, backgroundColor: '#ff9500' }}>

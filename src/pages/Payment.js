@@ -12,6 +12,7 @@ import {
   CheckBox,
   ScrollView,
   Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
 import {Button, Left, Right, Grid, Col, Row, Picker, Switch} from 'native-base';
 import Navbar from '../components/Navbar';
@@ -62,6 +63,7 @@ export default class Employee extends Component {
       qty: 1,
       // d_name: '',
       max: null,
+      groupmax: 0,
       cover: null,
       name: null,
       description: null,
@@ -90,6 +92,7 @@ export default class Employee extends Component {
         this.setState({ingredientexixts: JSON.parse(res)});
         totalList = JSON.parse(res);
         console.log(totalList);
+        console.log('totalList');
         totalList.map(item => {
           var total = item.qty * parseFloat(item.price);
           console.log('total = ' + total);
@@ -102,19 +105,41 @@ export default class Employee extends Component {
     });
 
     AsyncStorage.getItem('Order_Dish', (err, res) => {
-      if (res) {
+      if (res != null) {
+        var price = 0;
+        let totalList = [];
         this.setState({paymentData: JSON.parse(res)});
+        totalList = JSON.parse(res);
+        console.log(totalList);
+        console.log('pay');
+        totalList.map(item => {
+          var total = item.qty * parseFloat(item.rate);
+          console.log('total = ' + total);
+          price = price + total;
+        });
+        console.log('Price= ' + price);
+        this.setState({takeTotal: price});
       }
-      console.log(JSON.parse(res));
     });
   }
-
+  // this.state.qty * this.state.totalPriceCustom + this.state.takeTotal
   orderFunction = () => {
     AsyncStorage.getItem('Order_Dish', (err, res) => {
-      if (res) {
+      if (res != null) {
+        var price = 0;
+        let totalList = [];
         this.setState({paymentData: JSON.parse(res)});
+        totalList = JSON.parse(res);
+        console.log(totalList);
+        console.log('pay');
+        totalList.map(item => {
+          var total = item.qty * parseFloat(item.rate);
+          console.log('total = ' + total);
+          price = price + total;
+        });
+        console.log('Price= ' + price);
+        this.setState({takeTotal: price});
       }
-      console.log(JSON.parse(res));
     });
   };
 
@@ -291,9 +316,12 @@ export default class Employee extends Component {
                 responseJson.ingredientGroups[i].ingredients[j].id;
               responseJson.ingredientGroups[i].ingredients[j].dishPrice =
                 responseJson.ingredientGroups[i].ingredients[j].price;
+              responseJson.ingredientGroups[i].ingredients[j].groupmax =
+                responseJson.ingredientGroups[i].max;
               responseJson.ingredientGroups[i].ingredients[
                 j
               ].isexisting = false;
+              responseJson.ingredientGroups[i].ingredients[j].ingredient_group_id = responseJson.ingredientGroups[i].id;
               responseJson.ingredientGroups[i].ingredients[j].iscreate = false;
               responseJson.ingredientGroups[i].ingredients[j].isgroup = false;
               responseJson.ingredientGroups[i].ingredients[j].groupname =
@@ -325,10 +353,13 @@ export default class Employee extends Component {
     this.setState({groupname: item.groupname});
     this.setState({max: item.max});
     this.setState({name: item.name});
+    this.setState({groupmax: item.groupmax});
+    this.setState({ ingredient_group_id: item.ingredient_group_id });
     this.setState({description: item.description});
+    this.setState({cover: item.cover});
     // console.log(item.idingredient);
     // console.log(item.groupname);
-    // console.log(item.max);
+    // console.log(item.groupmax);
     // console.log(item.name);
     // console.log(item.description);
     // console.log(item.price);
@@ -367,7 +398,7 @@ export default class Employee extends Component {
   };
 
   addQuantity() {
-    if (this.state.quantity + 1 <= this.state.max) {
+    if ((this.state.quantity + 1) <= this.state.max) {
       this.setState({quantity: this.state.quantity + 1});
     } else {
       ToastAndroid.show(
@@ -436,10 +467,10 @@ export default class Employee extends Component {
 
     if (this.state.paymentData) {
       this.state.paymentData.map((item, i) => {
-        var total = item.qty * parseInt(item.rate);
-        console.log('total = ' + total);
-        price = price + total;
-        console.log('price = ' + price);
+        // var total = item.qty * parseInt(item.rate);
+        // console.log('total = ' + total);
+        // price = price + total;
+        // console.log('price = ' + price);
         items.push(
           <View style={{flexDirection: 'row'}}>
             <View style={{flex: 0.2, justifyContent: 'center'}}>
@@ -588,6 +619,7 @@ export default class Employee extends Component {
     ingredients['id'] = this.state.did;
     ingredients['qty'] = this.state.quantity;
     ingredients['price'] = this.state.dishPrice;
+    ingredients['group_id'] = this.state.ingredient_group_id;
     // console.log(ingredients);
     AsyncStorage.getItem('INGREDIENT', (err, res) => {
       if (!res) {
@@ -618,6 +650,7 @@ export default class Employee extends Component {
         });
 
         if (this.state.groupmax == group_count) {
+          console.log('grp' + this.state.groupmax);
           isgroupmax = true;
         }
       }
@@ -759,33 +792,22 @@ export default class Employee extends Component {
   }
 
   addDishQuantity(item, cart_quantity) {
-    // alert(JSON.stringify(cart_quantity));
     item.qty = cart_quantity < 1 ? (cart_quantity = 1) : cart_quantity;
-    // // var obj = this.state.card_dataSource.filter(o => o.id == item.id);
-    // // obj[0].qty = obj[0].qty + 1;
-    // // alert(JSON.stringify(obj[0]));
 
     let items = [];
     this.state.card_dataSource.map(item => {
       items.push(item);
     });
     this.setState({card_dataSource: items});
-    // // alert(obj['qty']);
   }
 
   addDish(item, cart_quantity) {
-    // alert(JSON.stringify(cart_quantity));
     item.qty = cart_quantity < 1 ? (cart_quantity = 1) : cart_quantity;
-    // // var obj = this.state.card_dataSource.filter(o => o.id == item.id);
-    // // obj[0].qty = obj[0].qty + 1;
-    // // alert(JSON.stringify(obj[0]));
-
     let items = [];
     this.state.paymentData.map(item => {
       items.push(item);
     });
-    this.setState({paymentData: items});
-    // // alert(obj['qty']);
+    this.setState({paymentData: items, takeTotal: item.rate * item.qty});
   }
 
   subDishQuantity(item, cart_quantity) {
@@ -795,22 +817,15 @@ export default class Employee extends Component {
       items.push(item);
     });
     this.setState({card_dataSource: items});
-    // // alert(obj['qty']);
   }
 
   subDish(item, cart_quantity) {
-    // alert(JSON.stringify(cart_quantity));
     item.qty = cart_quantity > 1 ? cart_quantity : (cart_quantity = 1);
-    // // var obj = this.state.card_dataSource.filter(o => o.id == item.id);
-    // // obj[0].qty = obj[0].qty + 1;
-    // // alert(JSON.stringify(obj[0]));
-
     let items = [];
     this.state.paymentData.map(item => {
       items.push(item);
     });
-    this.setState({paymentData: items});
-    // // alert(obj['qty']);
+    this.setState({paymentData: items, takeTotal: item.rate * item.qty});
   }
 
   render() {
@@ -859,37 +874,177 @@ export default class Employee extends Component {
         style={{zIndex: 1}}
         navigation={this.props}>
         <View style={styles.container}>
-          <Dialog
-            visible={this.state.select_dish_dialog}
-            dialogStyle={{
-              borderRadius: 10,
-              borderWidth: 10,
-              borderColor: '#efeff4',
-              width: '50%',
-              height: '50%',
-              justifyContent: 'center',
-              alignSelf: 'center',
-              backgroundColor: '#efeff4',
-            }}
-            onTouchOutside={() => this.setState({select_dish_dialog: false})}>
-            <View style={{height: '100%'}}>
+          <KeyboardAvoidingView behavior="padding" enabled>
+            <Dialog
+              visible={this.state.select_dish_dialog}
+              dialogStyle={{
+                borderRadius: 10,
+                borderWidth: 10,
+                borderColor: '#efeff4',
+                width: '50%',
+                height: '50%',
+                justifyContent: 'center',
+                alignSelf: 'center',
+                backgroundColor: '#efeff4',
+              }}
+              onTouchOutside={() => this.setState({select_dish_dialog: false})}>
+              <View style={{height: '100%'}}>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 1}}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'lightgrey',
+                        paddingBottom: 15,
+                        marginBottom: 0,
+                        fontSize: 23,
+                      }}>
+                      Select {this.state.groupname}
+                    </Text>
+                  </View>
+                  <View style={{justifyContent: 'center'}}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.setState({select_dish_dialog: false})
+                      }>
+                      <FontAwesomeIcon
+                        icon={faWindowClose}
+                        color={'#ff9500'}
+                        size={25}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={{flex: 1, width: 250, maxHeight: 200}}>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{marginLeft: 20, marginTop: 20}}>
+                      {console.log('http://dev-fs.8d.ie/' + this.state.cover)}
+                      <Image
+                        style={{
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          width: 100,
+                          height: 110,
+                          backgroundColor: 'black',
+                        }}
+                        source={{
+                          uri: 'http://dev-fs.8d.ie/' + this.state.cover,
+                        }}></Image>
+                    </View>
+                    <View style={{marginLeft: 40, marginTop: 10}}>
+                      <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+                        {this.state.name}
+                      </Text>
+                      <Text style={{fontSize: 16, width: 350, marginTop: 10}}>
+                        {this.state.description}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    borderTopWidth: 1,
+                    borderColor: '#ccccde',
+                    flex: 1,
+                    width: 530,
+                    maxHeight: 150,
+                    marginBottom: -100,
+                  }}>
+                  <View style={{flex: 1, flexDirection: 'row'}}>
+                    <Button
+                      block
+                      icon
+                      transparent
+                      style={{marginTop: 10}}
+                      onPress={() =>
+                        this.setState({
+                          quantity:
+                            this.state.quantity > 1
+                              ? this.state.quantity - 1
+                              : 1,
+                        })
+                      }>
+                      <FontAwesomeIcon
+                        icon={faMinus}
+                        color={'orange'}
+                        size={20}
+                      />
+                    </Button>
+
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontSize: 20,
+                        marginLeft: 30,
+                        marginTop: 20,
+                      }}>
+                      {this.state.quantity}
+                    </Text>
+
+                    <Button
+                      block
+                      icon
+                      transparent
+                      style={{marginLeft: 30, marginTop: 10}}
+                      onPress={() => this.addQuantity()}>
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        color={'orange'}
+                        size={20}
+                      />
+                    </Button>
+
+                    <TouchableOpacity
+                      style={{
+                        paddingLeft: 30,
+                        paddingRight: 30,
+                        marginBottom: 80,
+                        marginLeft: 320,
+                        borderRadius: 10,
+                        justifyContent: 'center',
+                        alignSelf: 'center',
+                        backgroundColor: '#ff9500',
+                      }}
+                      onPress={() => this.add_Dish_ingredient()}>
+                      <Text style={{fontSize: 20, color: 'white'}}>Add</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </Dialog>
+
+            <Dialog
+              visible={this.state.add_dish_dialog}
+              dialogStyle={{
+                borderRadius: 10,
+                borderWidth: 10,
+                borderColor: '#efeff4',
+                width: '80%',
+                justifyContent: 'center',
+                alignSelf: 'center',
+                backgroundColor: '#efeff4',
+              }}
+              onTouchOutside={() => this.setState({add_dish_dialog: false})}>
               <View style={{flexDirection: 'row'}}>
-                <View style={{flex: 1}}>
+                <View style={{flex: 0.95}}>
                   <Text
                     style={{
                       textAlign: 'center',
                       borderBottomWidth: 1,
                       borderBottomColor: 'lightgrey',
                       paddingBottom: 15,
-                      marginBottom: 0,
+                      marginTop: 0,
                       fontSize: 23,
                     }}>
-                    Select {this.state.groupname}
+                    Create Dish
                   </Text>
                 </View>
                 <View style={{justifyContent: 'center'}}>
                   <TouchableOpacity
-                    onPress={() => this.setState({select_dish_dialog: false})}>
+                    onPress={() => this.setState({add_dish_dialog: false})}>
                     <FontAwesomeIcon
                       icon={faWindowClose}
                       color={'#ff9500'}
@@ -898,541 +1053,20 @@ export default class Employee extends Component {
                   </TouchableOpacity>
                 </View>
               </View>
-              <View style={{flex: 1, width: 250, maxHeight: 200}}>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{marginLeft: 20, marginTop: 20}}>
-                    <Image
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: 100,
-                        height: 110,
-                        backgroundColor: 'black',
-                      }}
-                      source={{
-                        uri: 'http://dev-fs.8d.ie/storage/' + this.state.cover,
-                      }}></Image>
-                  </View>
-                  <View style={{marginLeft: 40, marginTop: 10}}>
-                    <Text style={{fontSize: 20, fontWeight: 'bold'}}>
-                      {this.state.name}
-                    </Text>
-                    <Text style={{fontSize: 16, width: 350, marginTop: 10}}>
-                      {this.state.description}
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              <View
-                style={{
-                  borderTopWidth: 1,
-                  borderColor: '#ccccde',
-                  flex: 1,
-                  width: 530,
-                  maxHeight: 150,
-                  marginBottom: -100,
-                }}>
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                  <Button
-                    block
-                    icon
-                    transparent
-                    style={{marginTop: 10}}
-                    onPress={() =>
-                      this.setState({
-                        quantity:
-                          this.state.quantity > 1 ? this.state.quantity - 1 : 1,
-                      })
-                    }>
-                    <FontAwesomeIcon
-                      icon={faMinus}
-                      color={'orange'}
-                      size={20}
-                    />
-                  </Button>
-
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      fontSize: 20,
-                      marginLeft: 30,
-                      marginTop: 20,
-                    }}>
-                    {this.state.quantity}
-                  </Text>
-
-                  <Button
-                    block
-                    icon
-                    transparent
-                    style={{marginLeft: 30, marginTop: 10}}
-                    onPress={() => this.addQuantity()}>
-                    <FontAwesomeIcon icon={faPlus} color={'orange'} size={20} />
-                  </Button>
-
-                  <TouchableOpacity
-                    style={{
-                      paddingLeft: 30,
-                      paddingRight: 30,
-                      marginBottom: 80,
-                      marginLeft: 320,
-                      borderRadius: 10,
-                      justifyContent: 'center',
-                      alignSelf: 'center',
-                      backgroundColor: '#ff9500',
-                    }}
-                    onPress={() => this.add_Dish_ingredient()}>
-                    <Text style={{fontSize: 20, color: 'white'}}>Add</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </Dialog>
-
-          <Dialog
-            visible={this.state.add_dish_dialog}
-            dialogStyle={{
-              borderRadius: 10,
-              borderWidth: 10,
-              borderColor: '#efeff4',
-              width: '80%',
-              justifyContent: 'center',
-              alignSelf: 'center',
-              backgroundColor: '#efeff4',
-            }}
-            onTouchOutside={() => this.setState({add_dish_dialog: false})}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 0.95}}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    borderBottomWidth: 1,
-                    borderBottomColor: 'lightgrey',
-                    paddingBottom: 15,
-                    marginTop: 0,
-                    fontSize: 23,
-                  }}>
-                  Create Dish
-                </Text>
-              </View>
-              <View style={{justifyContent: 'center'}}>
-                <TouchableOpacity
-                  onPress={() => this.setState({add_dish_dialog: false})}>
-                  <FontAwesomeIcon
-                    icon={faWindowClose}
-                    color={'#ff9500'}
-                    size={25}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <View
-                style={{
-                  flex: 0.6,
-                  borderRightWidth: 1,
-                  borderRightColor: 'lightgrey',
-                  padding: 50,
-                }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <View style={{width: 150}}>
-                    <Text style={{fontSize: width * 0.02, color: '#76726d'}}>
-                      Dish Name:
-                    </Text>
-                  </View>
-                  <TextInput
-                    style={{
-                      borderColor: 'white',
-                      height: 40,
-                      width: '60%',
-                      paddingLeft: 15,
-                      marginLeft: 15,
-                      borderWidth: 1,
-                      textAlignVertical: 'top',
-                      backgroundColor: 'white',
-                      borderRadius: 50,
-                      flexWrap: 'wrap',
-                    }}
-                    placeholder="Type message here.."
-                    value={this.state.dishname}
-                    onChangeText={text => this.setState({dishname: text})}
-                  />
-                </View>
+              <View style={{flexDirection: 'row'}}>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: 15,
+                    flex: 0.6,
+                    borderRightWidth: 1,
+                    borderRightColor: 'lightgrey',
+                    padding: 50,
                   }}>
-                  <View style={{width: 150}}>
-                    <Text style={{fontSize: width * 0.02, color: '#76726d'}}>
-                      Dish Description:
-                    </Text>
-                  </View>
-                  <TextInput
-                    style={{
-                      borderColor: 'white',
-                      height: 40,
-                      width: '60%',
-                      paddingLeft: 15,
-                      marginLeft: 15,
-                      borderWidth: 1,
-                      textAlignVertical: 'top',
-                      backgroundColor: 'white',
-                      borderRadius: 50,
-                      flexWrap: 'wrap',
-                    }}
-                    placeholder="Type message here.."
-                    value={this.state.dishdescription}
-                    onChangeText={text =>
-                      this.setState({dishdescription: text})
-                    }
-                  />
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: 15,
-                  }}>
-                  <View style={{width: 150}}>
-                    <Text style={{fontSize: width * 0.02, color: '#76726d'}}>
-                      Popular:
-                    </Text>
-                  </View>
-                  {/* <CheckBox
-                                    style={{ flex: 1, marginLeft: 15, }}
-                                    tintColors={{ true: 'orange' }}
-                                    value={this.state.isPopular}
-                                    onValueChange={() => this.setState({ isPopular: !this.state.isPopular })}
-                                    leftText={"PopularCheck"}
-                                /> */}
-                </View>
-              </View>
-              <View
-                style={{
-                  flex: 0.4,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <View style={{position: 'relative'}}>
-                  {this.state.img_uri == '' ? (
-                    <Image
-                      style={{width: 200, height: 200, borderRadius: 200 / 2}}
-                      source={require('../images/profile-circle-picture-8.png')}></Image>
-                  ) : (
-                    <Image
-                      style={{width: 200, height: 200, borderRadius: 200 / 2}}
-                      source={{uri: this.state.img_uri}}></Image>
-                  )}
-                  <View style={styles.camera_icon}>
-                    <TouchableOpacity onPress={() => this.opencamera()}>
-                      <FontAwesomeIcon
-                        icon={faCamera}
-                        color={'black'}
-                        size={45}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            </View>
-            <View
-              style={{
-                marginTop: 20,
-                borderTopColor: 'lightgrey',
-                borderTopWidth: 1,
-              }}>
-              <TouchableOpacity
-                style={styles.create_btn}
-                onPress={() => this.setState({add_dish_dialog: false})}>
-                <Text style={{fontSize: width * 0.03, color: 'white'}}>
-                  Create
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </Dialog>
-
-          <Dialog
-            visible={this.state.card_dish_dialog}
-            dialogStyle={{
-              borderRadius: 20,
-              borderWidth: 3,
-              borderColor: '#efeff4',
-              width: '45%',
-              justifyContent: 'center',
-              alignSelf: 'center',
-              backgroundColor: '#efeff4',
-              marginBottom: 25,
-            }}
-            onTouchOutside={() => this.setState({card_dish_dialog: false})}>
-            <View style={{flexDirection: 'row-reverse'}}>
-              <View
-                style={{
-                  justifyContent: 'flex-start',
-                  marginBottom: 8,
-                  marginTop: 10,
-                }}>
-                <TouchableOpacity
-                  onPress={() => this.setState({card_dish_dialog: false})}>
-                  <FontAwesomeIcon
-                    icon={faWindowClose}
-                    color={'#ff9500'}
-                    size={35}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-            <ScrollView>
-              <FlatList
-                pagingEnabled={this.state.card_dish_dialog}
-                data={this.state.card_dataSource}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({item}) => (
-                  <View style={{flexDirection: 'column', paddingVertical: 10}}>
-                    <Card containerStyle={styles.cardview}>
-                      <Image
-                        style={{
-                          width: '100%',
-                          height: 230,
-                          borderTopLeftRadius: 15,
-                          borderTopRightRadius: 15,
-                        }}
-                        source={{
-                          uri: 'http://dev-fs.8d.ie/img/dish/' + item.cover,
-                        }}></Image>
-                      <View
-                        style={{
-                          flex: 1,
-                          flexDirection: 'row',
-                          justifyContent: 'space-around',
-                        }}>
-                        <View style={{flex: 0.8, flexDirection: 'column'}}>
-                          <Text
-                            style={{
-                              fontWeight: 'bold',
-                              fontSize: 20,
-                              paddingTop: 8,
-                            }}>
-                            {item.name}
-                          </Text>
-                          <ViewMoreText
-                            numberOfLines={3}
-                            renderViewMore={this.renderViewMore}
-                            renderViewLess={this.renderViewLess}
-                            textStyle={{
-                              fontSize: 15,
-                              color: 'grey',
-                              paddingBottom: 10,
-                            }}>
-                            <Text style={{marginTop: 10}}>
-                              {item.description}
-                            </Text>
-                          </ViewMoreText>
-                        </View>
-
-                        <View
-                          style={{
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                          }}>
-                          <Text
-                            style={{
-                              color: '#ff9500',
-                              fontWeight: 'bold',
-                              fontSize: 20,
-                              marginLeft: 8,
-                              marginTop: 8,
-                            }}>
-                            $ {item.rate}
-                          </Text>
-
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              marginTop: 5,
-                            }}>
-                            <TouchableOpacity
-                              onPress={() =>
-                                this.subDishQuantity(
-                                  item,
-                                  parseInt(item.qty) - 1,
-                                )
-                              }>
-                              <FontAwesomeIcon
-                                icon={faMinus}
-                                color={'orange'}
-                                size={20}
-                              />
-                            </TouchableOpacity>
-
-                            <Text
-                              style={{
-                                textAlign: 'center',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                fontSize: 20,
-                                paddingHorizontal: 10,
-                              }}>
-                              {item.qty}
-                            </Text>
-
-                            <TouchableOpacity
-                              onPress={() =>
-                                this.addDishQuantity(
-                                  item,
-                                  parseInt(item.qty) + 1,
-                                )
-                              }>
-                              <FontAwesomeIcon
-                                icon={faPlus}
-                                color={'orange'}
-                                size={20}
-                              />
-                            </TouchableOpacity>
-                          </View>
-
-                          <TouchableOpacity
-                            style={{
-                              backgroundColor: '#ff9500',
-                              height: 35,
-                              width: 60,
-                              borderRadius: 10,
-                              marginTop: 10,
-                            }}
-                            onPress={() => this.card_add_dish(item)}>
-                            <Text
-                              style={{
-                                fontSize: 20,
-                                fontWeight: 'bold',
-                                color: 'white',
-                                textAlign: 'center',
-                              }}>
-                              Add
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                    </Card>
-                  </View>
-                )}
-                keyExtractor={({id}, index) => id}
-              />
-            </ScrollView>
-          </Dialog>
-
-          <Dialog
-            visible={this.state.payment_dialog}
-            dialogStyle={{
-              borderRadius: 10,
-              borderWidth: 2,
-              borderColor: '#efeff4',
-              width: '80%',
-              justifyContent: 'center',
-              alignSelf: 'center',
-              backgroundColor: '#efeff4',
-            }}
-            onTouchOutside={() => this.setState({add_dish_dialog: false})}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 1}}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    borderBottomWidth: 1,
-                    borderBottomColor: 'lightgrey',
-                    paddingTop: 10,
-                    paddingBottom: 10,
-                    fontSize: 23,
-                  }}>
-                  Take Payment
-                </Text>
-              </View>
-              <View style={{justifyContent: 'center', marginLeft: 40}}>
-                <TouchableOpacity
-                  onPress={() => this.setState({payment_dialog: false})}>
-                  <FontAwesomeIcon
-                    icon={faWindowClose}
-                    color={'#ff9500'}
-                    size={35}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <View style={{flexDirection: 'row', height: 400}}>
-              <View
-                style={{
-                  flex: 0.5,
-                  borderRightWidth: 1,
-                  borderRightColor: 'lightgrey',
-                }}>
-                <View
-                  style={{
-                    borderBottomWidth: 1,
-                    borderBottomColor: 'lightgrey',
-                    paddingBottom: 37,
-                  }}>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      paddingTop: 10,
-                      marginTop: 20,
-                    }}>
-                    <Text style={{fontSize: 30, color: '#76726d'}}>Cash:</Text>
-                    <TextInput
-                      style={{
-                        borderColor: 'white',
-                        height: 40,
-                        width: '60%',
-                        paddingLeft: 15,
-                        marginLeft: 60,
-                        borderWidth: 1,
-                        textAlignVertical: 'top',
-                        backgroundColor: 'white',
-                        borderRadius: 50,
-                      }}
-                      placeholder=""
-                      defaultValue={this.state.cash.toString()}
-                      onChange={() => this._totalChange()}
-                      keyboardType={'numeric'}
-                      onChangeText={cash => this.setState({cash: cash})}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      paddingTop: 10,
-                      marginTop: 10,
-                    }}>
-                    <Text style={{fontSize: 30, color: '#76726d'}}>Card:</Text>
-                    <TextInput
-                      style={{
-                        borderColor: 'white',
-                        height: 40,
-                        width: '60%',
-                        paddingLeft: 15,
-                        marginLeft: 60,
-                        borderWidth: 1,
-                        textAlignVertical: 'top',
-                        backgroundColor: 'white',
-                        borderRadius: 50,
-                      }}
-                      placeholder=""
-                      onChangeText={card => this.setState({card: card})}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      paddingTop: 10,
-                      marginTop: 10,
-                    }}>
-                    <Text style={{fontSize: 30, color: '#76726d'}}>
-                      Voucher:
-                    </Text>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <View style={{width: 150}}>
+                      <Text style={{fontSize: width * 0.02, color: '#76726d'}}>
+                        Dish Name:
+                      </Text>
+                    </View>
                     <TextInput
                       style={{
                         borderColor: 'white',
@@ -1444,197 +1078,773 @@ export default class Employee extends Component {
                         textAlignVertical: 'top',
                         backgroundColor: 'white',
                         borderRadius: 50,
+                        flexWrap: 'wrap',
                       }}
-                      placeholder=""
-                      onChangeText={voucher =>
-                        this.setState({voucher: voucher})
-                      }
+                      placeholder="Type message here.."
+                      value={this.state.dishname}
+                      onChangeText={text => this.setState({dishname: text})}
                     />
-                  </View>
-                </View>
-
-                <View style={{height: 180}}>
-                  <ScrollView>
-                    <View style={{flexDirection: 'row'}}>
-                      <View style={{flex: 0.2, justifyContent: 'center'}}>
-                        <Text style={{fontSize: 20}}>Srno.</Text>
-                      </View>
-                      <View style={{flex: 0.4, justifyContent: 'center'}}>
-                        <Text style={{fontSize: 20}}>Name</Text>
-                      </View>
-                      <View style={{flex: 0.2, justifyContent: 'center'}}>
-                        <Text style={{fontSize: 20}}>Qty</Text>
-                      </View>
-                      <View style={{flex: 0.2, justifyContent: 'center'}}>
-                        <Text style={{fontSize: 20}}>Price</Text>
-                      </View>
-                    </View>
-                    {this.showDishPaymentBox()}
-                  </ScrollView>
-                </View>
-              </View>
-
-              <View
-                style={{
-                  flex: 0.5,
-                  height: '100%',
-                }}>
-                <View
-                  style={{
-                    borderBottomWidth: 1,
-                    borderBottomColor: 'lightgrey',
-                    paddingBottom: 20,
-                    flexDirection: 'column',
-                  }}>
-                  <View style={styles.touchable1}>
-                    <TouchableOpacity
-                      style={styles.touchablenumber1}
-                      onPress={() => {
-                        this.onDigitPresssum(7);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        7
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.touchablenumber1}
-                      onPress={() => {
-                        this.onDigitPresssum(8);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        8
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.touchablenumber1}
-                      onPress={() => {
-                        this.onDigitPresssum(9);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        9
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{
-                        backgroundColor: 'orange',
-                        height: 40,
-                        width: 40,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 10,
-                        marginHorizontal: 10,
-                      }}
-                      onPress={() => {
-                        this.onPercentCash('%');
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        %
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{
-                        backgroundColor: 'orange',
-                        height: 40,
-                        width: 40,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderRadius: 10,
-                        marginHorizontal: 10,
-                      }}
-                      onPress={() => {}}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        -
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  <View style={styles.touchable2}>
-                    <TouchableOpacity
-                      style={styles.touchablenumber1}
-                      onPress={() => {
-                        this.onDigitPresssum(4);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        4
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.touchablenumber1}
-                      onPress={() => {
-                        this.onDigitPresssum(5);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        5
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.touchablenumber1}
-                      onPress={() => {
-                        this.onDigitPresssum(6);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        6
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.print_btn}>
-                      <FontAwesomeIcon icon={faPrint} size={25} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.print_btn}>
-                      <FontAwesomeIcon icon={faReceipt} size={25} />
-                    </TouchableOpacity>
                   </View>
                   <View
                     style={{
                       flexDirection: 'row',
-                      height: 100,
-                      width: '70%',
-                      alignSelf: 'center',
-                      marginRight: 30,
+                      alignItems: 'center',
+                      marginTop: 15,
                     }}>
-                    <View style={{flex: 0.6}}>
-                      <View style={{flexDirection: 'row', margin: 10}}>
+                    <View style={{width: 150}}>
+                      <Text style={{fontSize: width * 0.02, color: '#76726d'}}>
+                        Dish Description:
+                      </Text>
+                    </View>
+                    <TextInput
+                      style={{
+                        borderColor: 'white',
+                        height: 40,
+                        width: '60%',
+                        paddingLeft: 15,
+                        marginLeft: 15,
+                        borderWidth: 1,
+                        textAlignVertical: 'top',
+                        backgroundColor: 'white',
+                        borderRadius: 50,
+                        flexWrap: 'wrap',
+                      }}
+                      placeholder="Type message here.."
+                      value={this.state.dishdescription}
+                      onChangeText={text =>
+                        this.setState({dishdescription: text})
+                      }
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginTop: 15,
+                    }}>
+                    <View style={{width: 150}}>
+                      <Text style={{fontSize: width * 0.02, color: '#76726d'}}>
+                        Popular:
+                      </Text>
+                    </View>
+                    {/* <CheckBox
+                                    style={{ flex: 1, marginLeft: 15, }}
+                                    tintColors={{ true: 'orange' }}
+                                    value={this.state.isPopular}
+                                    onValueChange={() => this.setState({ isPopular: !this.state.isPopular })}
+                                    leftText={"PopularCheck"}
+                                /> */}
+                  </View>
+                </View>
+                <View
+                  style={{
+                    flex: 0.4,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <View style={{position: 'relative'}}>
+                    {this.state.img_uri == '' ? (
+                      <Image
+                        style={{width: 200, height: 200, borderRadius: 200 / 2}}
+                        source={require('../images/profile-circle-picture-8.png')}></Image>
+                    ) : (
+                      <Image
+                        style={{width: 200, height: 200, borderRadius: 200 / 2}}
+                        source={{uri: this.state.img_uri}}></Image>
+                    )}
+                    <View style={styles.camera_icon}>
+                      <TouchableOpacity onPress={() => this.opencamera()}>
+                        <FontAwesomeIcon
+                          icon={faCamera}
+                          color={'black'}
+                          size={45}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              </View>
+              <View
+                style={{
+                  marginTop: 20,
+                  borderTopColor: 'lightgrey',
+                  borderTopWidth: 1,
+                }}>
+                <TouchableOpacity
+                  style={styles.create_btn}
+                  onPress={() => this.setState({add_dish_dialog: false})}>
+                  <Text style={{fontSize: width * 0.03, color: 'white'}}>
+                    Create
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </Dialog>
+
+            <Dialog
+              visible={this.state.card_dish_dialog}
+              dialogStyle={{
+                borderRadius: 20,
+                borderWidth: 3,
+                borderColor: '#efeff4',
+                width: '45%',
+                justifyContent: 'center',
+                alignSelf: 'center',
+                backgroundColor: '#efeff4',
+                marginBottom: 25,
+              }}
+              onTouchOutside={() => this.setState({card_dish_dialog: false})}>
+              <View style={{flexDirection: 'row-reverse'}}>
+                <View
+                  style={{
+                    justifyContent: 'flex-start',
+                    marginBottom: 8,
+                    marginTop: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => this.setState({card_dish_dialog: false})}>
+                    <FontAwesomeIcon
+                      icon={faWindowClose}
+                      color={'#ff9500'}
+                      size={35}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <ScrollView>
+                <FlatList
+                  pagingEnabled={this.state.card_dish_dialog}
+                  data={this.state.card_dataSource}
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={({item}) => (
+                    <View
+                      style={{flexDirection: 'column', paddingVertical: 10}}>
+                      <Card containerStyle={styles.cardview}>
+                        <Image
+                          style={{
+                            width: '100%',
+                            height: 230,
+                            borderTopLeftRadius: 15,
+                            borderTopRightRadius: 15,
+                          }}
+                          source={{
+                            uri: 'http://dev-fs.8d.ie/' + item.cover,
+                          }}></Image>
+                        <View
+                          style={{
+                            flex: 1,
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                          }}>
+                          <View style={{flex: 0.8, flexDirection: 'column'}}>
+                            <Text
+                              style={{
+                                fontWeight: 'bold',
+                                fontSize: 20,
+                                paddingTop: 8,
+                              }}>
+                              {item.name}
+                            </Text>
+                            <ViewMoreText
+                              numberOfLines={3}
+                              renderViewMore={this.renderViewMore}
+                              renderViewLess={this.renderViewLess}
+                              textStyle={{
+                                fontSize: 15,
+                                color: 'grey',
+                                paddingBottom: 10,
+                              }}>
+                              <Text style={{marginTop: 10}}>
+                                {item.description}
+                              </Text>
+                            </ViewMoreText>
+                          </View>
+
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                            }}>
+                            <Text
+                              style={{
+                                color: '#ff9500',
+                                fontWeight: 'bold',
+                                fontSize: 20,
+                                marginLeft: 8,
+                                marginTop: 8,
+                              }}>
+                              $ {item.rate}
+                            </Text>
+
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                marginTop: 5,
+                              }}>
+                              <TouchableOpacity
+                                onPress={() =>
+                                  this.subDishQuantity(
+                                    item,
+                                    parseInt(item.qty) - 1,
+                                  )
+                                }>
+                                <FontAwesomeIcon
+                                  icon={faMinus}
+                                  color={'orange'}
+                                  size={20}
+                                />
+                              </TouchableOpacity>
+
+                              <Text
+                                style={{
+                                  textAlign: 'center',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  fontSize: 20,
+                                  paddingHorizontal: 10,
+                                }}>
+                                {item.qty}
+                              </Text>
+
+                              <TouchableOpacity
+                                onPress={() =>
+                                  this.addDishQuantity(
+                                    item,
+                                    parseInt(item.qty) + 1,
+                                  )
+                                }>
+                                <FontAwesomeIcon
+                                  icon={faPlus}
+                                  color={'orange'}
+                                  size={20}
+                                />
+                              </TouchableOpacity>
+                            </View>
+
+                            <TouchableOpacity
+                              style={{
+                                backgroundColor: '#ff9500',
+                                height: 35,
+                                width: 60,
+                                borderRadius: 10,
+                                marginTop: 10,
+                              }}
+                              onPress={() => this.card_add_dish(item)}>
+                              <Text
+                                style={{
+                                  fontSize: 20,
+                                  fontWeight: 'bold',
+                                  color: 'white',
+                                  textAlign: 'center',
+                                }}>
+                                Add
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                      </Card>
+                    </View>
+                  )}
+                  keyExtractor={({id}, index) => id}
+                />
+              </ScrollView>
+            </Dialog>
+
+            <Dialog
+              visible={this.state.payment_dialog}
+              dialogStyle={{
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: '#efeff4',
+                width: '80%',
+                justifyContent: 'center',
+                alignSelf: 'center',
+                backgroundColor: '#efeff4',
+              }}
+              onTouchOutside={() => this.setState({add_dish_dialog: false})}>
+              <ScrollView>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 1}}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'lightgrey',
+                        paddingTop: 10,
+                        paddingBottom: 10,
+                        fontSize: 23,
+                      }}>
+                      Take Payment
+                    </Text>
+                  </View>
+                  <View style={{justifyContent: 'center', marginLeft: 40}}>
+                    <TouchableOpacity
+                      onPress={() => this.setState({payment_dialog: false})}>
+                      <FontAwesomeIcon
+                        icon={faWindowClose}
+                        color={'#ff9500'}
+                        size={35}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                <View style={{flexDirection: 'row', height: 400}}>
+                  <View
+                    style={{
+                      flex: 0.5,
+                      borderRightWidth: 1,
+                      borderRightColor: 'lightgrey',
+                    }}>
+                    <View
+                      style={{
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'lightgrey',
+                        paddingBottom: 37,
+                      }}>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          paddingTop: 10,
+                          marginTop: 20,
+                        }}>
+                        <Text style={{fontSize: 30, color: '#76726d'}}>
+                          Cash:
+                        </Text>
+                        <TextInput
+                          style={{
+                            borderColor: 'white',
+                            height: 40,
+                            width: '60%',
+                            paddingLeft: 15,
+                            marginLeft: 60,
+                            borderWidth: 1,
+                            textAlignVertical: 'top',
+                            backgroundColor: 'white',
+                            borderRadius: 50,
+                          }}
+                          placeholder=""
+                          defaultValue={this.state.cash.toString()}
+                          onChange={() => this._totalChange()}
+                          keyboardType={'numeric'}
+                          onChangeText={cash => this.setState({cash: cash})}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          paddingTop: 10,
+                          marginTop: 10,
+                        }}>
+                        <Text style={{fontSize: 30, color: '#76726d'}}>
+                          Card:
+                        </Text>
+                        <TextInput
+                          style={{
+                            borderColor: 'white',
+                            height: 40,
+                            width: '60%',
+                            paddingLeft: 15,
+                            marginLeft: 60,
+                            borderWidth: 1,
+                            textAlignVertical: 'top',
+                            backgroundColor: 'white',
+                            borderRadius: 50,
+                          }}
+                          placeholder=""
+                          onChangeText={card => this.setState({card: card})}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          paddingTop: 10,
+                          marginTop: 10,
+                        }}>
+                        <Text style={{fontSize: 30, color: '#76726d'}}>
+                          Voucher:
+                        </Text>
+                        <TextInput
+                          style={{
+                            borderColor: 'white',
+                            height: 40,
+                            width: '60%',
+                            paddingLeft: 15,
+                            marginLeft: 15,
+                            borderWidth: 1,
+                            textAlignVertical: 'top',
+                            backgroundColor: 'white',
+                            borderRadius: 50,
+                          }}
+                          placeholder=""
+                          onChangeText={voucher =>
+                            this.setState({voucher: voucher})
+                          }
+                        />
+                      </View>
+                    </View>
+
+                    <View style={{height: 180}}>
+                      <ScrollView>
+                        <View style={{flexDirection: 'row'}}>
+                          <View style={{flex: 0.2, justifyContent: 'center'}}>
+                            <Text style={{fontSize: 20}}>Srno.</Text>
+                          </View>
+                          <View style={{flex: 0.4, justifyContent: 'center'}}>
+                            <Text style={{fontSize: 20}}>Name</Text>
+                          </View>
+                          <View style={{flex: 0.2, justifyContent: 'center'}}>
+                            <Text style={{fontSize: 20}}>Qty</Text>
+                          </View>
+                          <View style={{flex: 0.2, justifyContent: 'center'}}>
+                            <Text style={{fontSize: 20}}>Price</Text>
+                          </View>
+                        </View>
+                        {this.showDishPaymentBox()}
+                      </ScrollView>
+                    </View>
+                  </View>
+
+                  <View
+                    style={{
+                      flex: 0.5,
+                      height: '100%',
+                    }}>
+                    <View
+                      style={{
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'lightgrey',
+                        paddingBottom: 20,
+                        flexDirection: 'column',
+                      }}>
+                      <View style={styles.touchable1}>
                         <TouchableOpacity
                           style={styles.touchablenumber1}
+                          onPress={() => {
+                            this.onDigitPresssum(7);
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            7
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.touchablenumber1}
+                          onPress={() => {
+                            this.onDigitPresssum(8);
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            8
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.touchablenumber1}
+                          onPress={() => {
+                            this.onDigitPresssum(9);
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            9
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={{
+                            backgroundColor: 'orange',
+                            height: 40,
+                            width: 40,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: 10,
+                            marginHorizontal: 10,
+                          }}
+                          onPress={() => {
+                            this.onPercentCash('%');
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            %
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={{
+                            backgroundColor: 'orange',
+                            height: 40,
+                            width: 40,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderRadius: 10,
+                            marginHorizontal: 10,
+                          }}
+                          onPress={() => {}}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            -
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+
+                      <View style={styles.touchable2}>
+                        <TouchableOpacity
+                          style={styles.touchablenumber1}
+                          onPress={() => {
+                            this.onDigitPresssum(4);
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            4
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.touchablenumber1}
+                          onPress={() => {
+                            this.onDigitPresssum(5);
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            5
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.touchablenumber1}
+                          onPress={() => {
+                            this.onDigitPresssum(6);
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            6
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.print_btn}>
+                          <FontAwesomeIcon icon={faPrint} size={25} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.print_btn}>
+                          <FontAwesomeIcon icon={faReceipt} size={25} />
+                        </TouchableOpacity>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          height: 100,
+                          width: '70%',
+                          alignSelf: 'center',
+                          marginRight: 30,
+                        }}>
+                        <View style={{flex: 0.6}}>
+                          <View style={{flexDirection: 'row', margin: 10}}>
+                            <TouchableOpacity
+                              style={styles.touchablenumber1}
+                              onPress={() => {
+                                this.onDigitPresssum(1);
+                              }}>
+                              <Text
+                                style={{
+                                  fontSize: 20,
+                                  fontWeight: 'bold',
+                                  color: 'grey',
+                                }}>
+                                1
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              style={styles.touchablenumber1}
+                              onPress={() => {
+                                this.onDigitPresssum(2);
+                              }}>
+                              <Text
+                                style={{
+                                  fontSize: 20,
+                                  fontWeight: 'bold',
+                                  color: 'grey',
+                                }}>
+                                2
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              style={styles.touchablenumber1}
+                              onPress={() => {
+                                this.onDigitPresssum(3);
+                              }}>
+                              <Text
+                                style={{
+                                  fontSize: 20,
+                                  fontWeight: 'bold',
+                                  color: 'grey',
+                                }}>
+                                3
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              marginHorizontal: 10,
+                            }}>
+                            <TouchableOpacity
+                              style={styles.touchablenumber1}
+                              onPress={() => {
+                                this.onZeroPress(0);
+                              }}>
+                              <Text
+                                style={{
+                                  fontSize: 20,
+                                  fontWeight: 'bold',
+                                  color: 'grey',
+                                }}>
+                                0
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              style={styles.touchablenumber1}
+                              onPress={() => {
+                                this.onDoubleZeroPress();
+                              }}>
+                              <Text
+                                style={{
+                                  fontSize: 20,
+                                  fontWeight: 'bold',
+                                  color: 'grey',
+                                }}>
+                                00
+                              </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              style={styles.touchablenumber1}
+                              onPress={() => {
+                                this.onDigitPresssum('.');
+                              }}>
+                              <Text
+                                style={{
+                                  fontSize: 20,
+                                  fontWeight: 'bold',
+                                  color: 'grey',
+                                }}>
+                                .
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
+                        <View style={{flex: 0.4, margin: 10}}>
+                          <TouchableOpacity
+                            style={{
+                              height: 90,
+                              width: 100,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              borderRadius: 10,
+                              backgroundColor: 'white',
+                              marginStart: 8,
+                            }}
+                            onPress={() => {
+                              this.onClearPress('');
+                            }}>
+                            <Text
+                              style={{
+                                fontSize: 30,
+                                fontWeight: 'bold',
+                                color: 'grey',
+                              }}>
+                              CE
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+
+                    <View>
+                      <View style={styles.touchable1}>
+                        <TouchableOpacity
+                          style={styles.touchablenumber2}
+                          onPress={() => {
+                            this.onDigitPresssum(50);
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            50
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.touchablenumber2}
+                          onPress={() => {
+                            this.onDigitPresssum(20);
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            20
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.touchablenumber2}
+                          onPress={() => {
+                            this.onDigitPresssum(10);
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            10
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={styles.touchablenumber2}
+                          onPress={() => {
+                            this.onDigitPresssum(2);
+                          }}>
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: 'grey',
+                            }}>
+                            2
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      <View style={styles.touchable1}>
+                        <TouchableOpacity
+                          style={styles.touchablenumber2}
                           onPress={() => {
                             this.onDigitPresssum(1);
                           }}>
@@ -1648,9 +1858,9 @@ export default class Employee extends Component {
                           </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                          style={styles.touchablenumber1}
+                          style={styles.touchablenumber2}
                           onPress={() => {
-                            this.onDigitPresssum(2);
+                            this.onDecimalPointPresssum(0.5);
                           }}>
                           <Text
                             style={{
@@ -1658,13 +1868,13 @@ export default class Employee extends Component {
                               fontWeight: 'bold',
                               color: 'grey',
                             }}>
-                            2
+                            0.5
                           </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                          style={styles.touchablenumber1}
+                          style={styles.touchablenumber2}
                           onPress={() => {
-                            this.onDigitPresssum(3);
+                            this.onDecimalPointPresssum(0.2);
                           }}>
                           <Text
                             style={{
@@ -1672,33 +1882,13 @@ export default class Employee extends Component {
                               fontWeight: 'bold',
                               color: 'grey',
                             }}>
-                            3
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          marginHorizontal: 10,
-                        }}>
-                        <TouchableOpacity
-                          style={styles.touchablenumber1}
-                          onPress={() => {
-                            this.onZeroPress(0);
-                          }}>
-                          <Text
-                            style={{
-                              fontSize: 20,
-                              fontWeight: 'bold',
-                              color: 'grey',
-                            }}>
-                            0
+                            0.2
                           </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                          style={styles.touchablenumber1}
+                          style={styles.touchablenumber2}
                           onPress={() => {
-                            this.onDoubleZeroPress();
+                            this.onDecimalPointPresssum(0.1);
                           }}>
                           <Text
                             style={{
@@ -1706,229 +1896,81 @@ export default class Employee extends Component {
                               fontWeight: 'bold',
                               color: 'grey',
                             }}>
-                            00
-                          </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={styles.touchablenumber1}
-                          onPress={() => {
-                            this.onDigitPresssum('.');
-                          }}>
-                          <Text
-                            style={{
-                              fontSize: 20,
-                              fontWeight: 'bold',
-                              color: 'grey',
-                            }}>
-                            .
+                            0.1
                           </Text>
                         </TouchableOpacity>
                       </View>
                     </View>
-                    <View style={{flex: 0.4, margin: 10}}>
-                      <TouchableOpacity
-                        style={{
-                          height: 90,
-                          width: 100,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          borderRadius: 10,
-                          backgroundColor: 'white',
-                          marginStart: 8,
-                        }}
-                        onPress={() => {
-                          this.onClearPress('');
-                        }}>
-                        <Text
-                          style={{
-                            fontSize: 30,
-                            fontWeight: 'bold',
-                            color: 'grey',
-                          }}>
-                          CE
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
                   </View>
                 </View>
 
-                <View>
-                  <View style={styles.touchable1}>
-                    <TouchableOpacity
-                      style={styles.touchablenumber2}
-                      onPress={() => {
-                        this.onDigitPresssum(50);
+                <View
+                  style={{
+                    marginTop: 20,
+                    borderTopColor: 'lightgrey',
+                    borderTopWidth: 1,
+                    flexDirection: 'row',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: width * 0.03,
+                      alignSelf: 'flex-start',
+                      marginLeft: 10,
+                      flex: 30,
+                      textAlign: 'left',
+                      marginTop: 10,
+                      paddingVertical: 10,
+                      color: 'grey',
+                    }}>
+                    Total :{' '}
+                    {this.state.qty * this.state.totalPriceCustom +
+                      this.state.takeTotal}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: width * 0.03,
+                      alignSelf: 'center',
+                      flex: 30,
+                      marginLeft: 20,
+                      marginTop: 10,
+                      paddingVertical: 10,
+                      color: 'grey',
+                    }}>
+                    Return :{' '}
+                    {this.state.cash == 0
+                      ? 0
+                      : (
+                          parseFloat(this.state.cash) -
+                          (this.state.qty * this.state.totalPriceCustom +
+                            this.state.takeTotal)
+                        ).toFixed(2)}
+                  </Text>
+
+                  <Switch
+                    trackColor={{true: 'white', false: 'white'}}
+                    value={isSwitchOn}
+                    style={styles.btnswitch}
+                    color="white"
+                    thumbColor="orange"
+                    onValueChange={() => {
+                      this.setState({isSwitchOn: !isSwitchOn});
+                    }}
+                  />
+
+                  <TouchableOpacity style={styles.add_btn}>
+                    <Text
+                      style={{
+                        fontSize: 30,
+                        color: 'white',
+                        textAlign: 'center',
                       }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        50
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.touchablenumber2}
-                      onPress={() => {
-                        this.onDigitPresssum(20);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        20
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.touchablenumber2}
-                      onPress={() => {
-                        this.onDigitPresssum(10);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        10
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.touchablenumber2}
-                      onPress={() => {
-                        this.onDigitPresssum(2);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        2
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.touchable1}>
-                    <TouchableOpacity
-                      style={styles.touchablenumber2}
-                      onPress={() => {
-                        this.onDigitPresssum(1);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        1
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.touchablenumber2}
-                      onPress={() => {
-                        this.onDecimalPointPresssum(0.5);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        0.5
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.touchablenumber2}
-                      onPress={() => {
-                        this.onDecimalPointPresssum(0.2);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        0.2
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.touchablenumber2}
-                      onPress={() => {
-                        this.onDecimalPointPresssum(0.1);
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                          color: 'grey',
-                        }}>
-                        0.1
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
+                      Pay
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-              </View>
-            </View>
-
-            <View
-              style={{
-                marginTop: 20,
-                borderTopColor: 'lightgrey',
-                borderTopWidth: 1,
-                flexDirection: 'row',
-              }}>
-              <Text
-                style={{
-                  fontSize: width * 0.03,
-                  alignSelf: 'flex-start',
-                  marginLeft: 10,
-                  flex: 30,
-                  textAlign: 'left',
-                  marginTop: 10,
-                  paddingVertical: 10,
-                  color: 'grey',
-                }}>
-                Total :{' '}
-                {parseFloat(this.state.cash) +
-                  this.state.qty * this.state.totalPriceCustom +
-                  this.state.takeTotal}
-              </Text>
-              <Text
-                style={{
-                  fontSize: width * 0.03,
-                  alignSelf: 'center',
-                  flex: 30,
-                  marginLeft: 20,
-                  marginTop: 10,
-                  paddingVertical: 10,
-                  color: 'grey',
-                }}>
-                Return :{' '}
-              </Text>
-
-              <Switch
-                trackColor={{true: 'white', false: 'white'}}
-                value={isSwitchOn}
-                style={styles.btnswitch}
-                color="white"
-                thumbColor="orange"
-                onValueChange={() => {
-                  this.setState({isSwitchOn: !isSwitchOn});
-                }}
-              />
-
-              <TouchableOpacity style={styles.add_btn}>
-                <Text
-                  style={{fontSize: 30, color: 'white', textAlign: 'center'}}>
-                  Pay
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </Dialog>
-
+              </ScrollView>
+            </Dialog>
+          </KeyboardAvoidingView>
           <Navbar left={left} right={right} title="Payment" />
 
           <View style={{flex: 0.9, flexDirection: 'row'}}>
@@ -1937,16 +1979,93 @@ export default class Employee extends Component {
               keyExtractor={({id}, index) => id}
               numColumns={8}
               renderItem={({item}) => (
-                <View style={{padding: 5, flexDirection: 'row'}}>
+                <View>
                   <TouchableOpacity onPress={() => this.ingredients_data(item)}>
-                    <Image
-                      style={{height: 150, width: 150}}
-                      source={{
-                        uri: 'http://dev-fs.8d.ie/storage/' + item.cover,
-                      }}
-                    />
-                    {/* <Text>{item.id}-{item.name}</Text> */}
+                    {item.isgroup == true ? (
+                      <View
+                        style={{
+                          flex: 1,
+                          padding: 2,
+                          flexDirection: 'row',
+                          backgroundColor: '#ff9500',
+                          height: 150,
+                          width: 150,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          textAlign: 'center',
+                          position: 'relative',
+                        }}>
+                        <Image
+                          style={{
+                            height: 130,
+                            width: 130,
+                            backgroundColor: '#ff9500',
+                          }}
+                          source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
+                        />
+                        <Text
+                          style={{
+                            position: 'absolute',
+                            fontSize: 40,
+                            color: 'white',
+                            top: 23,
+                            textDecorationLine: 'line-through',
+                            textDecorationStyle: 'solid',
+                          }}>
+                          {item.name}
+                        </Text>
+
+                        <Text
+                          style={{
+                            position: 'absolute',
+                            fontSize: 18,
+                            color: 'white',
+                            bottom: 40,
+                          }}>
+                          MAX{' '}
+                          <Text
+                            style={{
+                              position: 'absolute',
+                              fontSize: 15,
+                              color: 'white',
+                              bottom: 40,
+                            }}>
+                            {item.max}
+                          </Text>{' '}
+                          SEL.
+                        </Text>
+                      </View>
+                    ) : (
+                      <View
+                        style={{
+                          flex: 1,
+                          padding: 5,
+                          flexDirection: 'row',
+                          position: 'relative',
+                          marginLeft: 8,
+                          height: 150,
+                          width: 150,
+                        }}>
+                        <Image
+                          style={{
+                            height: 150,
+                            width: 150,
+                          }}
+                          source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
+                        />
+                        <Text
+                          style={{
+                            position: 'absolute',
+                            fontSize: 15,
+                            top: 5,
+                            marginLeft: 8,
+                          }}>
+                          {item.sequence}
+                        </Text>
+                      </View>
+                    )}
                   </TouchableOpacity>
+
                   {this.getindiexistingqty(item)}
                 </View>
               )}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Dimensions,
   Platform,
@@ -9,15 +9,15 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import { Button, Left, Right, Icon } from 'native-base';
+import {Button, Left, Right, Icon} from 'native-base';
 import Navbar from '../components/Navbar';
 import {
   faBars,
   faArrowUp,
   faArrowDown,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { Card } from 'react-native-elements';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {Card} from 'react-native-elements';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -31,7 +31,7 @@ export default class Home extends Component {
       dataSource: [],
       dataSource_inside: {},
       count: 0,
-      userDetail: ""
+      userDetail: '',
     };
     this._retrieveData();
   }
@@ -40,7 +40,7 @@ export default class Home extends Component {
     try {
       const value = await AsyncStorage.getItem('visited_onces');
       if (value !== null) {
-        this.setState({ userDetail: JSON.parse(value), count: 1 });
+        this.setState({userDetail: JSON.parse(value), count: 1});
         this.componentDidMount();
       }
     } catch (error) {
@@ -63,7 +63,6 @@ export default class Home extends Component {
       })
         .then(response => response.json())
         .then(responseJson => {
-          console.log(responseJson);
           if (responseJson) {
             //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
 
@@ -81,8 +80,10 @@ export default class Home extends Component {
                 responseJson.ingredientGroups[i].ingredients[
                   j
                 ].isexisting = false;
-                responseJson.ingredientGroups[i].ingredients[j].iscreate = false;
-                responseJson.ingredientGroups[i].ingredients[j].isgroup = true;
+                responseJson.ingredientGroups[i].ingredients[
+                  j
+                ].iscreate = false;
+                responseJson.ingredientGroups[i].ingredients[j].isgroup = false;
                 responseJson.ingredientGroups[i].ingredients[
                   j
                 ].priceupdateparent = this.priceupdate;
@@ -91,11 +92,12 @@ export default class Home extends Component {
                 );
               }
             }
-            console.log(responseJson.ingredientGroups);
+
             this.setState({
               dataSource: ingredientGroups,
-              dataSource_inside: responseJson.ingredientGroups.ingredients,
+              //dataSource_inside: responseJson.ingredientGroups.ingredients,
             });
+            //alert(JSON.stringify(this.state.dataSource));
           }
         })
         .catch(error => {
@@ -106,12 +108,12 @@ export default class Home extends Component {
   renderGroupMembers = group => {
     if (group.ingredients) {
       return (
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{flexDirection: 'row'}}>
           {group.ingredients.map((prop, key) => {
             return (
               <Image
-                style={{ height: 90, width: 90 }}
-                source={{ uri: 'http://dev-fs.8d.ie/storage/' + prop.cover }}
+                style={{height: 90, width: 90}}
+                source={{uri: 'http://dev-fs.8d.ie/storage/' + prop.cover}}
               />
             );
           })}
@@ -121,42 +123,125 @@ export default class Home extends Component {
     return null;
   };
   render() {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     console.log(width);
     var left = (
-      <Left style={{ flex: 1 }}>
+      <Left style={{flex: 1}}>
         <Button onPress={() => this._sideMenuDrawer.open()} transparent>
           <FontAwesomeIcon icon={faBars} color={'white'} size={25} />
         </Button>
       </Left>
     );
     var right = (
-      <Right style={{ flex: 1 }}>
+      <Right style={{flex: 1}}>
         <FontAwesomeIcon icon={faBars} color={'white'} />
         <FontAwesomeIcon icon={faBars} color={'white'} />
         <FontAwesomeIcon icon={faBars} color={'white'} />
       </Right>
     );
     return (
-      <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} style={{ zIndex: 1 }} navigation={this.props}>
+      <SideMenuDrawer
+        ref={ref => (this._sideMenuDrawer = ref)}
+        style={{zIndex: 1}}
+        navigation={this.props}>
         <View style={styles.container}>
           <Navbar left={left} right={right} title="Kitchen" />
-          <View style={{ flex: 0.9, flexDirection: 'row' }}>
+          <View style={{flex: 0.9, flexDirection: 'row', marginLeft: 10}}>
             <FlatList
               data={this.state.dataSource}
-              keyExtractor={({ id }, index) => id}
+              keyExtractor={({id}, index) => id}
               numColumns={8}
-              renderItem={({ item }) => (
-                <View style={{ padding: 5, flexDirection: 'row' }}>
-                  <Image
-                    style={{ height: 150, width: 150 }}
-                    source={{ uri: 'http://dev-fs.8d.ie/storage/' + item.cover }}
-                  />
+              renderItem={({item}) => (
+                <View>
+                  <Text>{item.isgroup}</Text>
+                  {item.isgroup == true ? (
+                    <View
+                      style={{
+                        flex: 1,
+                        padding: 2,
+                        flexDirection: 'row',
+                        backgroundColor: '#ff9500',
+                        height: 150,
+                        width: 150,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                        position: 'relative',
+                      }}>
+                      <Image
+                        style={{
+                          height: 130,
+                          width: 130,
+                          backgroundColor: '#ff9500',
+                        }}
+                        source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
+                      />
+                      <Text
+                        style={{
+                          position: 'absolute',
+                          fontSize: 40,
+                          color: 'white',
+                          top: 23,
+                          textDecorationLine: 'line-through',
+                          textDecorationStyle: 'solid',
+                        }}>
+                        {item.name}
+                      </Text>
+
+                      <Text
+                        style={{
+                          position: 'absolute',
+                          fontSize: 18,
+                          color: 'white',
+                          bottom: 40,
+                        }}>
+                        MAX{' '}
+                        <Text
+                          style={{
+                            position: 'absolute',
+                            fontSize: 15,
+                            color: 'white',
+                            bottom: 40,
+                          }}>
+                          {item.max}
+                        </Text>{' '}
+                        SEL.
+                      </Text>
+                    </View>
+                  ) : (
+                    <View
+                      style={{
+                        flex: 1,
+                        padding: 5,
+                        flexDirection: 'row',
+                        position: 'relative',
+                        marginLeft: 8,
+                        height: 150,
+                        width: 150,
+                      }}>
+                      <Image
+                        style={{
+                          height: 150,
+                          width: 150,
+                        }}
+                        source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
+                      />
+                      <Text
+                        style={{
+                          position: 'absolute',
+                          fontSize: 15,
+                          top: 5,
+                          marginLeft: 8,
+                        }}>
+                        {item.sequence}
+                      </Text>
+                    </View>
+                  )}
                 </View>
               )}
             />
           </View>
-          <View style={{ flex: 0.1, backgroundColor: '#ff9500' }}></View>
+          <View style={{flex: 0.1, backgroundColor: '#ff9500'}}></View>
         </View>
       </SideMenuDrawer>
     );
