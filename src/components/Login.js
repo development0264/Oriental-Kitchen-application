@@ -80,8 +80,10 @@ export default class Login extends Component {
                         }
                         this.storeData();
                         // this.props.navigation.navigate('Employee');
+                    } else if (responseJson.status == "fail") {
+                        alert("Unauthorized user");
                     } else {
-                        alert("Something is wrong");
+                        alert("Something went wrong");
                     }
                 }).catch((error) => {
                     this.setState({ hasError: true, errorText: error });
