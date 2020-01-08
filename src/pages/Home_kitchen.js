@@ -24,6 +24,7 @@ import moment from 'moment';
 import {Card} from 'react-native-elements';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import AsyncStorage from '@react-native-community/async-storage';
+import SocketIOClient from 'socket.io-client';
 
 export default class Home extends Component {
   constructor(props) {
@@ -44,6 +45,25 @@ export default class Home extends Component {
       userDetail: '',
     };
     this._retrieveData();
+    this.socket = SocketIOClient('http://dev-fs.8d.ie:6001');
+    this.socket.emit('kitchenJoined', 1);
+    this.socket.on('kitchenJoined', userId => {
+      // if (userId != null) {
+      //   var obj = {
+      //     id: responseJsonOrder["data"].order_id,
+      //     vender_id: 1,
+      //     reference: data.reference,
+      //     status: type
+      //   }
+      //   this.socket.emit('order_placed', obj);
+      //   setTimeout(() => {
+      //     Actions.ordersuccess({ status: "Success", id: responseJsonOrder["data"].payment_id });
+      //   }, 1000);
+      // }
+    });
+    this.socket.on('order_receive', message => {
+      console.log(message);
+    });
   }
 
   _retrieveData = async () => {
