@@ -139,7 +139,7 @@ export default class History extends React.Component {
             <View style={{flex: 0.1, alignItems: 'center'}}>
               <Text
                 style={{
-                  fontSize: width * 0.02,
+                  fontSize: width * 0.016,
                   marginRight: 20,
                   color: '#808080',
                 }}>
@@ -147,7 +147,7 @@ export default class History extends React.Component {
               </Text>
             </View>
             <View style={{flex: 0.4, alignItems: 'center', marginRight: 50}}>
-              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
+              <Text style={{fontSize: width * 0.016, color: '#808080'}}>
                 Custom({item.dish_name})
               </Text>
             </View>
@@ -155,18 +155,18 @@ export default class History extends React.Component {
               style={{flex: 0.4, alignItems: 'center', flexDirection: 'row'}}>
               <Text
                 style={{
-                  fontSize: width * 0.02,
+                  fontSize: width * 0.016,
                   color: '#808080',
                   paddingLeft: 30,
                 }}>
                 ${item.dish_price} x {}
               </Text>
-              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
+              <Text style={{fontSize: width * 0.016, color: '#808080'}}>
                 {item.qty}
               </Text>
             </View>
             <View style={{flex: 0.4, alignItems: 'center'}}>
-              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
+              <Text style={{fontSize: width * 0.016, color: '#808080'}}>
                 ${item.dish_price * item.qty}
               </Text>
             </View>
@@ -284,7 +284,7 @@ export default class History extends React.Component {
                     borderBottomWidth: 1,
                     borderBottomColor: 'lightgrey',
                     paddingBottom: 5,
-                    fontSize: width * 0.02,
+                    fontSize: width * 0.016,
                   }}>
                   Order
                 </Text>
@@ -320,13 +320,13 @@ export default class History extends React.Component {
                 <View style={{flexDirection: 'row', alignSelf: 'center'}}>
                   <TouchableOpacity
                     style={[styles.add_btn, {paddingHorizontal: 25}]}>
-                    <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                    <Text style={{fontSize: width * 0.0165, color: 'white'}}>
                       -
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[styles.add_btn, {paddingHorizontal: 20}]}>
-                    <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                    <Text style={{fontSize: width * 0.0165, color: 'white'}}>
                       +
                     </Text>
                   </TouchableOpacity>
@@ -340,8 +340,8 @@ export default class History extends React.Component {
                     borderRadius: 25,
                     marginRight: 10,
                   }}>
-                  <Text style={{fontSize: width * 0.02}}>STATUS</Text>
-                  <Text style={{fontSize: width * 0.02, color: 'orange'}}>
+                  <Text style={{fontSize: width * 0.016}}>STATUS</Text>
+                  <Text style={{fontSize: width * 0.016, color: 'orange'}}>
                     {orderStatus}
                   </Text>
                 </View>
@@ -352,7 +352,7 @@ export default class History extends React.Component {
                   ]}>
                   <Text
                     style={{
-                      fontSize: width * 0.025,
+                      fontSize: width * 0.0165,
                       color: 'white',
                       textAlign: 'center',
                     }}>
@@ -364,7 +364,7 @@ export default class History extends React.Component {
                     styles.add_btn,
                     {justifyContent: 'center', alignSelf: 'center'},
                   ]}>
-                  <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                  <Text style={{fontSize: width * 0.0165, color: 'white'}}>
                     REFUND
                   </Text>
                 </TouchableOpacity>
@@ -428,7 +428,7 @@ export default class History extends React.Component {
                 />
               </View>
               <TouchableOpacity style={styles.add_btn}>
-                <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                <Text style={{fontSize: width * 0.0165, color: 'white'}}>
                   UPDATE
                 </Text>
               </TouchableOpacity>
@@ -569,7 +569,7 @@ export default class History extends React.Component {
                 }}>
                 <Text
                   style={{
-                    fontSize: width * 0.02,
+                    fontSize: width * 0.016,
                     backgroundColor: '#ff9500',
                     color: 'white',
                     borderRadius: 80,
@@ -588,7 +588,7 @@ export default class History extends React.Component {
                 }}>
                 <Text
                   style={{
-                    fontSize: width * 0.02,
+                    fontSize: width * 0.016,
                     backgroundColor: '#ff9500',
                     color: 'white',
                     borderRadius: 80,
@@ -607,7 +607,7 @@ export default class History extends React.Component {
                 }}>
                 <Text
                   style={{
-                    fontSize: width * 0.02,
+                    fontSize: width * 0.016,
                     backgroundColor: '#ff9500',
                     color: 'white',
                     borderRadius: 80,
@@ -626,7 +626,7 @@ export default class History extends React.Component {
                 }}>
                 <Text
                   style={{
-                    fontSize: width * 0.02,
+                    fontSize: width * 0.016,
                     backgroundColor: '#ff9500',
                     color: 'white',
                     borderRadius: 80,
@@ -645,7 +645,7 @@ export default class History extends React.Component {
                 }}>
                 <Text
                   style={{
-                    fontSize: width * 0.02,
+                    fontSize: width * 0.016,
                     backgroundColor: '#ff9500',
                     color: 'white',
                     borderRadius: 80,
@@ -669,27 +669,28 @@ export default class History extends React.Component {
                     onPress={() => this.getOrder(item.order_id)}>
                     <View style={styles.dynamic_list_view}>
                       <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.02, marginRight: 20}}>
+                        <Text
+                          style={{fontSize: width * 0.016, marginRight: 20}}>
                           {item.order_date}
                         </Text>
                       </View>
                       <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.02}}>
+                        <Text style={{fontSize: width * 0.016}}>
                           {item.order_id}
                         </Text>
                       </View>
                       <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.02}}>
+                        <Text style={{fontSize: width * 0.016}}>
                           ${item.total_paid}
                         </Text>
                       </View>
                       <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.02}}>
+                        <Text style={{fontSize: width * 0.016}}>
                           {item.type}
                         </Text>
                       </View>
                       <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.02, marginLeft: 20}}>
+                        <Text style={{fontSize: width * 0.016, marginLeft: 20}}>
                           {item.employee_name}
                         </Text>
                       </View>
@@ -710,27 +711,28 @@ export default class History extends React.Component {
                     onPress={() => this.getOrder(item.order_id)}>
                     <View style={styles.dynamic_list_view}>
                       <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.02, marginRight: 20}}>
+                        <Text
+                          style={{fontSize: width * 0.016, marginRight: 20}}>
                           {item.order_date}
                         </Text>
                       </View>
                       <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.02}}>
+                        <Text style={{fontSize: width * 0.016}}>
                           {item.order_id}
                         </Text>
                       </View>
                       <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.02}}>
+                        <Text style={{fontSize: width * 0.016}}>
                           ${item.total_paid}
                         </Text>
                       </View>
                       <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.02}}>
+                        <Text style={{fontSize: width * 0.016}}>
                           {item.type}
                         </Text>
                       </View>
                       <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.02, marginLeft: 20}}>
+                        <Text style={{fontSize: width * 0.016, marginLeft: 20}}>
                           {item.employee_name}
                         </Text>
                       </View>

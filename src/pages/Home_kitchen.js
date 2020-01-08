@@ -304,7 +304,7 @@ export default class Home extends Component {
               {item.reference}
               {'\n'}
             </Text>
-            <Text style={{fontSize: width * 0.02, fontWeight: 'normal'}}>
+            <Text style={{fontSize: width * 0.016, fontWeight: 'normal'}}>
               {item.delivery_name}
             </Text>
           </Text>
@@ -344,7 +344,7 @@ export default class Home extends Component {
                     paddingVertical: 10,
                   }}>
                   <View style={{alignItems: 'flex-end', flex: 0.5}}>
-                    <Text style={{fontSize: width * 0.02, color: 'white'}}>
+                    <Text style={{fontSize: width * 0.016, color: 'white'}}>
                       {item.updated_at.split(' ')[1].substring(0, 5)}
                     </Text>
                   </View>
@@ -388,7 +388,7 @@ export default class Home extends Component {
                       justifyContent: 'flex-end',
                       alignItems: 'center',
                     }}>
-                    <Text style={{fontSize: width * 0.02}}>
+                    <Text style={{fontSize: width * 0.016}}>
                       {this.getMinutes()}:{this.getSeconds()}
                     </Text>
                   </View>
@@ -620,7 +620,7 @@ export default class Home extends Component {
             </View>
             <Text
               style={{
-                fontSize: width * 0.02,
+                fontSize: width * 0.016,
                 textAlign: 'center',
                 marginTop: 10,
               }}>
@@ -696,7 +696,7 @@ export default class Home extends Component {
             </View>
             <Text
               style={{
-                fontSize: width * 0.02,
+                fontSize: width * 0.016,
                 textAlign: 'center',
                 marginTop: 10,
               }}>

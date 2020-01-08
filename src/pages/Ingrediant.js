@@ -145,98 +145,98 @@ export default class Home extends Component {
         style={{zIndex: 1}}
         navigation={this.props}>
         <View style={styles.container}>
-          <Navbar left={left} right={right} title="Kitchen" />
-          <View style={{flex: 0.9, flexDirection: 'row', marginLeft: 10}}>
+          <Navbar left={left} right={right} title="Ingredient" />
+          <View style={{flex: 0.9, flexDirection: 'row', padding: 5}}>
             <FlatList
               data={this.state.dataSource}
               keyExtractor={({id}, index) => id}
-              numColumns={8}
+              numColumns={width < height ? 5 : 8}
               renderItem={({item}) => (
                 <View>
-                  <Text>{item.isgroup}</Text>
-                  {item.isgroup == true ? (
-                    <View
-                      style={{
-                        flex: 1,
-                        padding: 2,
-                        flexDirection: 'row',
-                        backgroundColor: '#ff9500',
-                        height: 150,
-                        width: 150,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        textAlign: 'center',
-                        position: 'relative',
-                      }}>
-                      <Image
+                  <TouchableOpacity onPress={() => this.ingredients_data(item)}>
+                    {item.isgroup == true ? (
+                      <View
                         style={{
-                          height: 130,
-                          width: 130,
+                          flex: 1,
+                          flexDirection: 'row',
                           backgroundColor: '#ff9500',
-                        }}
-                        source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
-                      />
-                      <Text
-                        style={{
-                          position: 'absolute',
-                          fontSize: 40,
-                          color: 'white',
-                          top: 23,
-                          textDecorationLine: 'line-through',
-                          textDecorationStyle: 'solid',
+                          height: 150,
+                          width: 150,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          textAlign: 'center',
+                          marginLeft: 8,
+                          marginTop: 8,
                         }}>
-                        {item.name}
-                      </Text>
+                        <Image
+                          style={{
+                            height: 130,
+                            width: 130,
+                            backgroundColor: '#ff9500',
+                          }}
+                          source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
+                        />
+                        <Text
+                          style={{
+                            position: 'absolute',
+                            fontSize: 40,
+                            color: 'white',
+                            top: 23,
+                            textDecorationLine: 'line-through',
+                            textDecorationStyle: 'solid',
+                          }}>
+                          {item.name}
+                        </Text>
 
-                      <Text
+                        <Text
+                          style={{
+                            position: 'absolute',
+                            fontSize: 18,
+                            color: 'white',
+                            bottom: 40,
+                          }}>
+                          MAX{' '}
+                          <Text
+                            style={{
+                              position: 'absolute',
+                              fontSize: 15,
+                              color: 'white',
+                              bottom: 40,
+                            }}>
+                            {item.max}
+                          </Text>{' '}
+                          SEL.
+                        </Text>
+                      </View>
+                    ) : (
+                      <View
                         style={{
-                          position: 'absolute',
-                          fontSize: 18,
-                          color: 'white',
-                          bottom: 40,
+                          flex: 1,
+                          flexDirection: 'row',
+                          justifyContent: 'flex-start',
+                          marginLeft: 8,
+                          marginTop: 8,
                         }}>
-                        MAX{' '}
+                        <Image
+                          style={{
+                            height: 150,
+                            width: 150,
+                            backgroundColor: '#ffffff',
+                          }}
+                          source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
+                        />
                         <Text
                           style={{
                             position: 'absolute',
                             fontSize: 15,
-                            color: 'white',
-                            bottom: 40,
+                            top: 5,
+                            marginLeft: 8,
                           }}>
-                          {item.max}
-                        </Text>{' '}
-                        SEL.
-                      </Text>
-                    </View>
-                  ) : (
-                    <View
-                      style={{
-                        flex: 1,
-                        padding: 5,
-                        flexDirection: 'row',
-                        position: 'relative',
-                        marginLeft: 8,
-                        height: 150,
-                        width: 150,
-                      }}>
-                      <Image
-                        style={{
-                          height: 150,
-                          width: 150,
-                        }}
-                        source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
-                      />
-                      <Text
-                        style={{
-                          position: 'absolute',
-                          fontSize: 15,
-                          top: 5,
-                          marginLeft: 8,
-                        }}>
-                        {item.sequence}
-                      </Text>
-                    </View>
-                  )}
+                          {item.sequence}
+                        </Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
                 </View>
               )}
             />
@@ -252,15 +252,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
   },
 });

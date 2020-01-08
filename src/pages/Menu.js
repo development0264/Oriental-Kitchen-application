@@ -270,6 +270,7 @@ export default class Employee extends Component {
         return (
             <SideMenuDrawer ref={(ref) => this._sideMenuDrawer = ref} style={{ zIndex: 1 }} navigation={this.props}>
                 <View style={styles.container}>
+                <Navbar left={left} right={right} title="Menu" />
                     <ScrollView>
 
                         {/* Add Menu Dialog  */}
@@ -324,7 +325,7 @@ export default class Employee extends Component {
                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                 <View style={{ width: 150 }}>
                                                     <Text
-                                                        style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                                                        style={{ fontSize: width * 0.016, color: '#76726d' }}>
                                                         Name:
                                                     </Text>
                                                 </View>
@@ -356,7 +357,7 @@ export default class Employee extends Component {
                                                 }}>
                                                 <View style={{ width: 150 }}>
                                                     <Text
-                                                        style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                                                        style={{ fontSize: width * 0.016, color: '#76726d' }}>
                                                         Description:
                                                     </Text>
                                                 </View>
@@ -389,7 +390,7 @@ export default class Employee extends Component {
                                                 }}>
                                                 <View style={{ width: 150 }}>
                                                     <Text
-                                                        style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                                                        style={{ fontSize: width * 0.016, color: '#76726d' }}>
                                                         Is Status:
                                                     </Text>
                                                 </View>
@@ -475,7 +476,7 @@ export default class Employee extends Component {
                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                 <View style={{ width: 150 }}>
                                                     <Text
-                                                        style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                                                        style={{ fontSize: width * 0.016, color: '#76726d' }}>
                                                         Name :
                                                     </Text>
                                                 </View>
@@ -507,7 +508,7 @@ export default class Employee extends Component {
                                                 }}>
                                                 <View style={{ width: 150 }}>
                                                     <Text
-                                                        style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                                                        style={{ fontSize: width * 0.016, color: '#76726d' }}>
                                                         Description:
                                                     </Text>
                                                 </View>
@@ -539,7 +540,7 @@ export default class Employee extends Component {
                                                 }}>
                                                 <View style={{ width: 150 }}>
                                                     <Text
-                                                        style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                                                        style={{ fontSize: width * 0.016, color: '#76726d' }}>
                                                         Is Status:
                                                     </Text>
                                                 </View>
@@ -566,7 +567,7 @@ export default class Employee extends Component {
                                             <TouchableOpacity
                                                 style={styles.delete_btn}
                                                 onPress={() => this.deletePress(this.state.id)}>
-                                                <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                                                <Text style={{ fontSize: width * 0.0165, color: 'white' }}>
                                                     Delete
                                                 </Text>
                                             </TouchableOpacity>
@@ -575,7 +576,7 @@ export default class Employee extends Component {
                                             <TouchableOpacity
                                                 style={styles.add_btn}
                                                 onPress={() => this.updatePress(this.state.id)}>
-                                                <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                                                <Text style={{ fontSize: width * 0.0165, color: 'white' }}>
                                                     Update
                                                 </Text>
                                             </TouchableOpacity>
@@ -584,7 +585,6 @@ export default class Employee extends Component {
                                 </ScrollView>
                             </Dialog>
                         </KeyboardAvoidingView>
-                        <Navbar left={left} right={right} title="Menu" />
 
                         {/* data Search  */}
 
@@ -606,7 +606,7 @@ export default class Employee extends Component {
                                     style={{
                                         borderColor: 'gray',
                                         height: '70%',
-                                        width: '60%',
+                                        width: '50%',
                                         paddingLeft: 15,
                                         marginLeft: 15,
                                         borderWidth: 1,
@@ -682,7 +682,7 @@ export default class Employee extends Component {
                                     }}>
                                     <Text
                                         style={{
-                                            fontSize: width * 0.02,
+                                            fontSize: width * 0.016,
                                             backgroundColor: '#ff9500',
                                             color: 'white',
                                             borderRadius: 80,
@@ -702,7 +702,7 @@ export default class Employee extends Component {
                                     }}>
                                     <Text
                                         style={{
-                                            fontSize: width * 0.02,
+                                            fontSize: width * 0.016,
                                             backgroundColor: '#ff9500',
                                             color: 'white',
                                             borderRadius: 80,
@@ -722,7 +722,7 @@ export default class Employee extends Component {
                                     }}>
                                     <Text
                                         style={{
-                                            fontSize: width * 0.02,
+                                            fontSize: width * 0.016,
                                             backgroundColor: '#ff9500',
                                             color: 'white',
                                             borderRadius: 80,
@@ -742,7 +742,7 @@ export default class Employee extends Component {
                                     }}>
                                     <Text
                                         style={{
-                                            fontSize: width * 0.02,
+                                            fontSize: width * 0.016,
                                             backgroundColor: '#ff9500',
                                             color: 'white',
                                             borderRadius: 80,
@@ -762,20 +762,20 @@ export default class Employee extends Component {
                                 renderItem={({ item }) => (
                                     <View style={styles.dynamic_list_view}>
                                         <View style={{ flex: 0.5, alignItems: 'center' }}>
-                                            <Text style={{ fontSize: width * 0.025 }}>
+                                            <Text style={{ fontSize: width * 0.0165 }}>
                                                 {item.name}
                                             </Text>
                                         </View>
                                         <View style={{ flex: 0.5, alignItems: 'center' }}>
-                                            <Text style={{ fontSize: width * 0.025 }}>
+                                            <Text style={{ fontSize: width * 0.0165 }}>
                                                 {item.description}
                                             </Text>
                                         </View>
                                         <View style={{ flex: 0.5, alignItems: 'center' }}>
                                             {item.status == 1 ? (
-                                                <Text style={{ fontSize: width * 0.025 }}>Yes</Text>
+                                                <Text style={{ fontSize: width * 0.0165 }}>Yes</Text>
                                             ) : (
-                                                    <Text style={{ fontSize: width * 0.025 }}>No</Text>
+                                                    <Text style={{ fontSize: width * 0.0165 }}>No</Text>
                                                 )}
                                         </View>
                                         <View style={{ flex: 0.5, alignItems: 'center' }}>
@@ -785,7 +785,7 @@ export default class Employee extends Component {
                                             <Row>
                                                 <Col style={{ width: 80 }}>
                                                     <Button onPress={() => this.selectmenu(item.id)} style={{
-                                                        fontSize: width * 0.02,
+                                                        fontSize: width * 0.016,
                                                         backgroundColor: '#ff9500',
                                                         color: 'white',
                                                         borderRadius: 80,
@@ -798,7 +798,7 @@ export default class Employee extends Component {
                                                 </Col>
                                                 <Col style={{ marginLeft: 10, width: 110 }}>
                                                     <Button onPress={() => this.goto_add_dish(item.id)} style={{
-                                                        fontSize: width * 0.02,
+                                                        fontSize: width * 0.016,
                                                         backgroundColor: '#ff9500',
                                                         color: 'white',
                                                         borderRadius: 80,
@@ -830,16 +830,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
     },
     add_btn: {
         marginTop: 10,
