@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Dimensions,
   Image,
@@ -12,7 +12,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from 'react-native';
-import {Button, Left, Right, Grid, Col, Row, Picker} from 'native-base';
+import { Button, Left, Right, Grid, Col, Row, Picker } from 'native-base';
 import Navbar from '../components/Navbar';
 import {
   faBars,
@@ -22,9 +22,9 @@ import {
   faEye,
   faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {Card} from 'react-native-elements';
-import {Dialog} from 'react-native-simple-dialogs';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { Card } from 'react-native-elements';
+import { Dialog } from 'react-native-simple-dialogs';
 import RNImagePicker from 'react-native-image-picker';
 import SideMenu from '../components/SideMenu';
 import SideMenuDrawer from '../components/SideMenuDrawer';
@@ -78,7 +78,7 @@ export default class Employee extends Component {
     try {
       const value = await AsyncStorage.getItem('visited_onces');
       if (value !== null) {
-        this.setState({userDetail: JSON.parse(value), count: 1});
+        this.setState({ userDetail: JSON.parse(value), count: 1 });
         this.componentDidMount();
       }
     } catch (error) {
@@ -92,7 +92,7 @@ export default class Employee extends Component {
     });
   }
   add_employee = () => {
-    this.setState({add_dialog: true});
+    this.setState({ add_dialog: true });
   };
   selectEmployee = id => {
     var data = new FormData();
@@ -113,7 +113,7 @@ export default class Employee extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({edit_dialog: true});
+          this.setState({ edit_dialog: true });
           this.setState({
             Employeeid: responseJson.Employee.id,
             Editusername: responseJson.Employee.user_name,
@@ -139,10 +139,10 @@ export default class Employee extends Component {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (reg.test(text) === false) {
       console.log('Email is Not Correct');
-      this.setState({email: text});
+      this.setState({ email: text });
       return false;
     } else {
-      this.setState({email: text});
+      this.setState({ email: text });
       console.log('Email is Correct');
     }
   };
@@ -186,7 +186,11 @@ export default class Employee extends Component {
         console.log(responseJson);
         if (responseJson.status == 'success') {
           console.log(responseJson);
+<<<<<<< Updated upstream
           this.setState({edit_dialog: false, img_uri: '', hidePassword: true});
+=======
+          this.setState({ edit_dialog: false, img_uri: '' });
+>>>>>>> Stashed changes
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -217,7 +221,7 @@ export default class Employee extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({Search_result: responseJson.Employee});
+          this.setState({ Search_result: responseJson.Employee });
         } else {
           alert('Something wrong happened');
         }
@@ -227,7 +231,7 @@ export default class Employee extends Component {
       });
   };
   clear = () => {
-    this.setState({Search_result: '', Searchtext: ''});
+    this.setState({ Search_result: '', Searchtext: '' });
   };
   deletePress = () => {
     Alert.alert(
@@ -246,7 +250,7 @@ export default class Employee extends Component {
           },
         },
       ],
-      {cancelable: false},
+      { cancelable: false },
     );
   };
   deleteYesPress = id => {
@@ -269,7 +273,7 @@ export default class Employee extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({edit_dialog: false, img_uri: ''});
+          this.setState({ edit_dialog: false, img_uri: '' });
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -346,6 +350,7 @@ export default class Employee extends Component {
               //       : this.state.avatar.uri.replace('file://', ''),
               // });
               console.log(responseJson);
+<<<<<<< Updated upstream
               this.setState({
                 add_dialog: false,
                 img_uri: '',
@@ -353,6 +358,9 @@ export default class Employee extends Component {
                 email: '',
                 role: '',
               });
+=======
+              this.setState({ add_dialog: false });
+>>>>>>> Stashed changes
               this.componentDidMount();
             } else {
               alert('Something wrong happened');
@@ -409,7 +417,7 @@ export default class Employee extends Component {
           if (responseJson) {
             const dataSource = [];
             console.log(responseJson);
-            this.setState({dataSource: responseJson.employees});
+            this.setState({ dataSource: responseJson.employees });
             //this.props.navigation.navigate('AfterLogin',{Json_value:responseJson.data});
           } else {
             alert('Something wrong happened');
@@ -458,20 +466,20 @@ export default class Employee extends Component {
   }
 
   render() {
-    var {height, width} = Dimensions.get('window');
+    var { height, width } = Dimensions.get('window');
     console.log(width);
     var left = (
-      <Left style={{flex: 1}}>
+      <Left style={{ flex: 1 }}>
         <Button onPress={() => this._sideMenuDrawer.open()} transparent>
           <FontAwesomeIcon icon={faBars} color={'white'} size={25} />
         </Button>
       </Left>
     );
     var right = (
-      <Right style={{flex: 1}}>
+      <Right style={{ flex: 1 }}>
         <TouchableOpacity onPress={() => this.add_employee()}>
           <Image
-            style={{width: 45, height: 45}}
+            style={{ width: 45, height: 45 }}
             source={require('../images/add_employee.png')}
           />
         </TouchableOpacity>
@@ -480,9 +488,10 @@ export default class Employee extends Component {
     return (
       <SideMenuDrawer
         ref={ref => (this._sideMenuDrawer = ref)}
-        style={{zIndex: 1}}
+        style={{ zIndex: 1 }}
         navigation={this.props}>
         <View style={styles.container}>
+<<<<<<< Updated upstream
           <Navbar left={left} right={right} title="Employee" />
           <ScrollView>
             <KeyboardAvoidingView behavior="padding" enabled>
@@ -514,6 +523,78 @@ export default class Employee extends Component {
                         }}>
                         Add Employee
                       </Text>
+=======
+          <KeyboardAvoidingView behavior="padding" enabled>
+            <Dialog
+              visible={this.state.add_dialog}
+              dialogStyle={{
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: '#efeff4',
+                width: '80%',
+                justifyContent: 'center',
+                alignSelf: 'center',
+                backgroundColor: '#efeff4',
+              }}
+              onTouchOutside={() => this.setState({ add_dialog: false })}>
+              <ScrollView>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flex: 0.95 }}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'lightgrey',
+                        paddingBottom: 15,
+                        marginTop: 0,
+                        fontSize: 23,
+                      }}>
+                      Add Employee
+                    </Text>
+                  </View>
+                  <View style={{ justifyContent: 'center' }}>
+                    <TouchableOpacity
+                      onPress={() => this.setState({ add_dialog: false })}>
+                      <FontAwesomeIcon
+                        icon={faWindowClose}
+                        color={'#ff9500'}
+                        size={25}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                  <View
+                    style={{
+                      flex: 0.6,
+                      borderRightWidth: 1,
+                      borderRightColor: 'lightgrey',
+                      padding: 10,
+                    }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          User Name:
+                        </Text>
+                      </View>
+                      <TextInput
+                        style={{
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={username => this.setState({ username })}
+                      />
+>>>>>>> Stashed changes
                     </View>
                     <View style={{justifyContent: 'center'}}>
                       <TouchableOpacity
@@ -542,6 +623,7 @@ export default class Employee extends Component {
                         borderRightColor: 'lightgrey',
                         padding: 10,
                       }}>
+<<<<<<< Updated upstream
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{width: 150}}>
@@ -566,9 +648,17 @@ export default class Employee extends Component {
                           placeholder="Type message here.."
                           onChangeText={username => this.setState({username})}
                         />
+=======
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          First Name:
+                        </Text>
+>>>>>>> Stashed changes
                       </View>
                       <View
                         style={{
+<<<<<<< Updated upstream
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
@@ -595,9 +685,38 @@ export default class Employee extends Component {
                           placeholder="Type message here.."
                           onChangeText={firstName => this.setState({firstName})}
                         />
+=======
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={firstName => this.setState({ firstName })}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 15,
+                      }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          Last Name:
+                        </Text>
+>>>>>>> Stashed changes
                       </View>
                       <View
                         style={{
+<<<<<<< Updated upstream
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
@@ -624,9 +743,38 @@ export default class Employee extends Component {
                           placeholder="Type message here.."
                           onChangeText={lastName => this.setState({lastName})}
                         />
+=======
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={lastName => this.setState({ lastName })}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 15,
+                      }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          Email:
+                        </Text>
+>>>>>>> Stashed changes
                       </View>
                       <View
                         style={{
+<<<<<<< Updated upstream
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
@@ -655,9 +803,39 @@ export default class Employee extends Component {
                           onChangeText={text => this.validate(text)}
                           value={this.state.email}
                         />
+=======
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={text => this.validate(text)}
+                        value={this.state.email}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 15,
+                      }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          Phone:
+                        </Text>
+>>>>>>> Stashed changes
                       </View>
                       <View
                         style={{
+<<<<<<< Updated upstream
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
@@ -684,9 +862,38 @@ export default class Employee extends Component {
                           placeholder="Type message here.."
                           onChangeText={phone => this.setState({phone})}
                         />
+=======
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={phone => this.setState({ phone })}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 15,
+                      }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          Password:
+                        </Text>
+>>>>>>> Stashed changes
                       </View>
                       <View
                         style={{
+<<<<<<< Updated upstream
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
@@ -715,6 +922,23 @@ export default class Employee extends Component {
                           secureTextEntry={this.state.hidePassword}
                           onChangeText={password => this.setState({password})}
                         />
+=======
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        secureTextEntry={this.state.hidePassword}
+                        onChangeText={password => this.setState({ password })}
+                      />
+>>>>>>> Stashed changes
 
                         <View
                           style={{
@@ -754,6 +978,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
+<<<<<<< Updated upstream
                         <View style={{width: 150}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
@@ -781,9 +1006,48 @@ export default class Employee extends Component {
                           }
                           secureTextEntry={true}
                         />
+=======
+                        {this.state.hidePassword == true ? (
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.setState({ hidePassword: false });
+                            }}>
+                            <FontAwesomeIcon
+                              icon={faEyeSlash}
+                              color={'#76726d'}
+                              size={25}
+                            />
+                          </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity
+                              onPress={() => {
+                                this.setState({ hidePassword: true });
+                              }}>
+                              <FontAwesomeIcon
+                                icon={faEye}
+                                color={'#76726d'}
+                                size={25}
+                              />
+                            </TouchableOpacity>
+                          )}
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 15,
+                      }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          Re-type:
+                        </Text>
+>>>>>>> Stashed changes
                       </View>
                       <View
                         style={{
+<<<<<<< Updated upstream
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
@@ -803,6 +1067,25 @@ export default class Employee extends Component {
                           {this.roleList()}
                         </Picker>
                       </View>
+=======
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                          alignSelf: 'flex-end',
+                          marginRight: 15,
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={repassword => this.setState({ repassword })}
+                        secureTextEntry={true}
+                      />
+>>>>>>> Stashed changes
                     </View>
                     <View
                       style={{
@@ -810,6 +1093,7 @@ export default class Employee extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}>
+<<<<<<< Updated upstream
                       <View style={{position: 'relative'}}>
                         {this.state.img_uri == '' ? (
                           <Image
@@ -838,6 +1122,22 @@ export default class Employee extends Component {
                           </TouchableOpacity>
                         </View>
                       </View>
+=======
+                      <View style={{ width: 160 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          Role:
+                        </Text>
+                      </View>
+                      <Picker
+                        note
+                        mode="dropdown"
+                        style={{ width: '40%' }}
+                        selectedValue={this.state.role}
+                        onValueChange={value => this.setState({ role: value })}>
+                        {this.roleList()}
+                      </Picker>
+>>>>>>> Stashed changes
                     </View>
                   </View>
                   <View
@@ -846,6 +1146,7 @@ export default class Employee extends Component {
                       borderTopColor: 'lightgrey',
                       borderTopWidth: 1,
                     }}>
+<<<<<<< Updated upstream
                     <TouchableOpacity
                       style={styles.add_btn}
                       onPress={() => {
@@ -902,6 +1203,164 @@ export default class Employee extends Component {
                           size={25}
                         />
                       </TouchableOpacity>
+=======
+                    <View style={{ position: 'relative' }}>
+                      {this.state.img_uri == '' ? (
+                        <Image
+                          style={{
+                            width: 200,
+                            height: 200,
+                            borderRadius: 200 / 2,
+                          }}
+                          source={require('../images/profile-circle-picture-8.png')}></Image>
+                      ) : (
+                          <Image
+                            style={{
+                              width: 200,
+                              height: 200,
+                              borderRadius: 200 / 2,
+                            }}
+                            source={{ uri: this.state.img_uri }}></Image>
+                        )}
+                      <View style={styles.camera_icon}>
+                        <TouchableOpacity onPress={() => this.opencamera()}>
+                          <FontAwesomeIcon
+                            icon={faCamera}
+                            color={'black'}
+                            size={45}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    marginTop: 20,
+                    borderTopColor: 'lightgrey',
+                    borderTopWidth: 1,
+                  }}>
+                  <TouchableOpacity
+                    style={styles.add_btn}
+                    onPress={() => {
+                      this.showDetail();
+                    }}>
+                    <Text style={{ fontSize: width * 0.03, color: 'white' }}>
+                      Add
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            </Dialog>
+            <Dialog
+              visible={this.state.edit_dialog}
+              dialogStyle={{
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: '#efeff4',
+                width: '80%',
+                justifyContent: 'center',
+                alignSelf: 'center',
+                backgroundColor: '#efeff4',
+              }}
+              onTouchOutside={() =>
+                this.setState({ edit_dialog: false, img_uri: '' })
+              }>
+              <ScrollView>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ flex: 0.95 }}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'lightgrey',
+                        paddingBottom: 15,
+                        marginTop: 0,
+                        fontSize: 23,
+                      }}>
+                      Edit Employee
+                    </Text>
+                  </View>
+                  <View style={{ justifyContent: 'center' }}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this.setState({ edit_dialog: false, img_uri: '' })
+                      }>
+                      <FontAwesomeIcon
+                        icon={faWindowClose}
+                        color={'#ff9500'}
+                        size={25}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                  <View
+                    style={{
+                      flex: 0.6,
+                      borderRightWidth: 1,
+                      borderRightColor: 'lightgrey',
+                      padding: 10,
+                    }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          User Name:
+                        </Text>
+                      </View>
+                      <TextInput
+                        style={{
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={Editusername =>
+                          this.setState({ Editusername })
+                        }
+                        defaultValue={this.state.Editusername}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 15,
+                      }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          First Name:
+                        </Text>
+                      </View>
+                      <TextInput
+                        style={{
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={Editfirstname =>
+                          this.setState({ Editfirstname })
+                        }
+                        defaultValue={this.state.Editfirstname}
+                      />
+>>>>>>> Stashed changes
                     </View>
                   </View>
                   <View style={{flexDirection: 'row'}}>
@@ -912,6 +1371,7 @@ export default class Employee extends Component {
                         borderRightColor: 'lightgrey',
                         padding: 10,
                       }}>
+<<<<<<< Updated upstream
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{width: 150}}>
@@ -939,9 +1399,17 @@ export default class Employee extends Component {
                           }
                           defaultValue={this.state.Editusername}
                         />
+=======
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          Last Name:
+                        </Text>
+>>>>>>> Stashed changes
                       </View>
                       <View
                         style={{
+<<<<<<< Updated upstream
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
@@ -971,9 +1439,41 @@ export default class Employee extends Component {
                           }
                           defaultValue={this.state.Editfirstname}
                         />
+=======
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={Editlastname =>
+                          this.setState({ Editlastname })
+                        }
+                        defaultValue={this.state.Editlastname}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 15,
+                      }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          Email:
+                        </Text>
+>>>>>>> Stashed changes
                       </View>
                       <View
                         style={{
+<<<<<<< Updated upstream
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
@@ -1003,9 +1503,39 @@ export default class Employee extends Component {
                           }
                           defaultValue={this.state.Editlastname}
                         />
+=======
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={Editemail => this.setState({ Editemail })}
+                        defaultValue={this.state.Editemail}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 15,
+                      }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          Phone:
+                        </Text>
+>>>>>>> Stashed changes
                       </View>
                       <View
                         style={{
+<<<<<<< Updated upstream
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
@@ -1034,9 +1564,39 @@ export default class Employee extends Component {
                           onChangeText={Editemail => this.setState({Editemail})}
                           defaultValue={this.state.Editemail}
                         />
+=======
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={Editphone => this.setState({ Editphone })}
+                        defaultValue={this.state.Editphone}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 15,
+                      }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          Password:
+                        </Text>
+>>>>>>> Stashed changes
                       </View>
                       <View
                         style={{
+<<<<<<< Updated upstream
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
@@ -1065,12 +1625,33 @@ export default class Employee extends Component {
                           defaultValue={this.state.Editphone}
                         />
                       </View>
+=======
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={Editpassword =>
+                          this.setState({ Editpassword })
+                        }
+                        defaultValue={this.state.Editpassword}
+                        secureTextEntry={this.state.hidePassword}
+                      />
+>>>>>>> Stashed changes
                       <View
                         style={{
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
+<<<<<<< Updated upstream
                         <View style={{width: 150}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
@@ -1119,6 +1700,23 @@ export default class Employee extends Component {
                             <TouchableOpacity
                               onPress={() => {
                                 this.setState({hidePassword: true});
+=======
+                        {this.state.hidePassword ? (
+                          <TouchableOpacity
+                            onPress={() => {
+                              this.setState({ hidePassword: false });
+                            }}>
+                            <FontAwesomeIcon
+                              icon={faEyeSlash}
+                              color={'#76726d'}
+                              size={25}
+                            />
+                          </TouchableOpacity>
+                        ) : (
+                            <TouchableOpacity
+                              onPress={() => {
+                                this.setState({ hidePassword: true });
+>>>>>>> Stashed changes
                               }}>
                               <FontAwesomeIcon
                                 icon={faEye}
@@ -1127,6 +1725,7 @@ export default class Employee extends Component {
                               />
                             </TouchableOpacity>
                           )}
+<<<<<<< Updated upstream
                         </View>
                       </View>
                       <View
@@ -1162,9 +1761,25 @@ export default class Employee extends Component {
                           defaultValue={this.state.Editpassword}
                           secureTextEntry={true}
                         />
+=======
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 15,
+                      }}>
+                      <View style={{ width: 150 }}>
+                        <Text
+                          style={{ fontSize: width * 0.02, color: '#76726d' }}>
+                          Re-type:
+                        </Text>
+>>>>>>> Stashed changes
                       </View>
                       <View
                         style={{
+<<<<<<< Updated upstream
                           flexDirection: 'row',
                           alignItems: 'center',
                           marginTop: 15,
@@ -1186,6 +1801,27 @@ export default class Employee extends Component {
                           {this.roleList()}
                         </Picker>
                       </View>
+=======
+                          borderColor: 'white',
+                          height: 40,
+                          width: '60%',
+                          paddingLeft: 15,
+                          marginLeft: 15,
+                          borderWidth: 1,
+                          textAlignVertical: 'top',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                          alignSelf: 'flex-end',
+                        }}
+                        placeholder="Type message here.."
+                        onChangeText={Editpassword =>
+                          this.setState({ Editpassword })
+                        }
+                        defaultValue={this.state.Editpassword}
+                        secureTextEntry={true}
+                      />
+>>>>>>> Stashed changes
                     </View>
                     <View
                       style={{
@@ -1193,6 +1829,7 @@ export default class Employee extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
                       }}>
+<<<<<<< Updated upstream
                       <View style={{position: 'relative'}}>
                         {this.state.img_uri == '' ? (
                           <Image
@@ -1225,6 +1862,23 @@ export default class Employee extends Component {
                           </TouchableOpacity>
                         </View>
                       </View>
+=======
+                      <View style={{ width: 160 }}>
+                        <Text style={{ fontSize: width * 0.02, color: 'grey' }}>
+                          Role:
+                        </Text>
+                      </View>
+                      <Picker
+                        note
+                        mode="dropdown"
+                        style={{ width: '40%' }}
+                        selectedValue={this.state.Editrole}
+                        onValueChange={Editrole =>
+                          this.setState({ Editrole: Editrole })
+                        }>
+                        {this.roleList()}
+                      </Picker>
+>>>>>>> Stashed changes
                     </View>
                   </View>
                   <View
@@ -1234,6 +1888,7 @@ export default class Employee extends Component {
                       borderTopWidth: 1,
                       flexDirection: 'row',
                     }}>
+<<<<<<< Updated upstream
                     <View style={{flex: 0.9}}>
                       <TouchableOpacity
                         style={styles.delete_btn}
@@ -1260,12 +1915,85 @@ export default class Employee extends Component {
                 </ScrollView>
               </Dialog>
             </KeyboardAvoidingView>
+=======
+                    <View style={{ position: 'relative' }}>
+                      {this.state.img_uri == '' ? (
+                        <Image
+                          style={{
+                            width: 200,
+                            height: 200,
+                            borderRadius: 200 / 2,
+                          }}
+                          source={{
+                            uri:
+                              'http://dev-fs.8d.ie/employee-photos/' +
+                              this.state.EditImage,
+                          }}></Image>
+                      ) : (
+                          <Image
+                            style={{
+                              width: 200,
+                              height: 200,
+                              borderRadius: 200 / 2,
+                            }}
+                            source={{ uri: this.state.img_uri }}></Image>
+                        )}
+                      <View style={styles.camera_icon}>
+                        <TouchableOpacity onPress={() => this.opencamera()}>
+                          <FontAwesomeIcon
+                            icon={faCamera}
+                            color={'black'}
+                            size={45}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  style={{
+                    marginTop: 20,
+                    borderTopColor: 'lightgrey',
+                    borderTopWidth: 1,
+                    flexDirection: 'row',
+                  }}>
+                  <View style={{ flex: 0.9 }}>
+                    <TouchableOpacity
+                      style={styles.delete_btn}
+                      onPress={() => this.deletePress()}>
+                      <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                        Delete
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View>
+                    <TouchableOpacity
+                      style={styles.add_btn}
+                      onPress={() => this.updatePress(this.state.Employeeid)}>
+                      <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                        Update
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </ScrollView>
+            </Dialog>
+          </KeyboardAvoidingView>
+          <Navbar left={left} right={right} title="Employee" />
+          <View
+            style={{
+              flex: 0.12,
+              backgroundColor: '#efeff4',
+              flexDirection: 'row',
+            }}>
+>>>>>>> Stashed changes
             <View
               style={{
                 flex: 0.12,
                 backgroundColor: '#efeff4',
                 flexDirection: 'row',
               }}>
+<<<<<<< Updated upstream
               <View
                 style={{
                   flexDirection: 'row',
@@ -1322,6 +2050,40 @@ export default class Employee extends Component {
                   </TouchableOpacity>
                 ) : null}
                 <TouchableOpacity
+=======
+              <Text style={{ fontSize: width * 0.03 }}>Name:</Text>
+              <TextInput
+                style={{
+                  borderColor: 'gray',
+                  height: '70%',
+                  width: '60%',
+                  paddingLeft: 15,
+                  marginLeft: 15,
+                  borderWidth: 1,
+                  textAlignVertical: 'top',
+                  backgroundColor: 'white',
+                  borderRadius: 50,
+                  flexWrap: 'wrap',
+                  alignSelf: 'center',
+                }}
+                placeholder=" "
+                numberOfLines={1}
+                onChangeText={Searchtext =>
+                  this.setState({ Searchtext: Searchtext })
+                }
+                defaultValue={this.state.Searchtext}
+              />
+            </View>
+            <View
+              style={{
+                margin: 10,
+                justifyContent: 'center',
+                flexDirection: 'row',
+              }}>
+              {this.state.Search_result != '' ? (
+                <TouchableOpacity
+                  style={{ marginHorizontal: 30 }}
+>>>>>>> Stashed changes
                   onPress={() => {
                     this.searchResult();
                   }}>
@@ -1338,7 +2100,19 @@ export default class Employee extends Component {
                 </TouchableOpacity>
               </View>
             </View>
+<<<<<<< Updated upstream
             <View style={{flex: 0.8}}>
+=======
+          </View>
+          <View style={{ flex: 0.8 }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                borderBottomColor: 'lightgrey',
+                paddingBottom: 8,
+                borderBottomWidth: 1,
+              }}>
+>>>>>>> Stashed changes
               <View
                 style={{
                   flexDirection: 'row',
@@ -1393,6 +2167,7 @@ export default class Employee extends Component {
                     marginTop: 10,
                     marginLeft: 10,
                   }}>
+<<<<<<< Updated upstream
                   <Text
                     style={{
                       fontSize: width * 0.016,
@@ -1441,16 +2216,61 @@ export default class Employee extends Component {
                   keyExtractor={({id}, index) => id}
                 />
               ) : (
+=======
+                  Enable
+                </Text>
+              </View>
+            </View>
+            {this.state.Search_result == '' ? (
+              <FlatList
+                pagingEnabled={true}
+                data={this.state.dataSource}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.selectEmployee(item.id);
+                    }}>
+                    <View style={styles.dynamic_list_view}>
+                      <View style={{ flex: 0.5, alignItems: 'center' }}>
+                        <Text style={{ fontSize: width * 0.025 }}>
+                          {item.name}
+                        </Text>
+                      </View>
+                      <View style={{ flex: 0.5, alignItems: 'center' }}>
+                        <Text style={{ fontSize: width * 0.025 }}>
+                          {item.display_name}
+                        </Text>
+                      </View>
+                      <View style={{ flex: 0.5, alignItems: 'center' }}>
+                        {item.status == 1 ? (
+                          <Text style={{ fontSize: width * 0.025 }}>Yes</Text>
+                        ) : (
+                            <Text style={{ fontSize: width * 0.025 }}>No</Text>
+                          )}
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                )}
+                keyExtractor={({ id }, index) => id}
+              />
+            ) : (
+>>>>>>> Stashed changes
                 <FlatList
                   pagingEnabled={true}
                   data={this.state.Search_result}
                   showsHorizontalScrollIndicator={false}
+<<<<<<< Updated upstream
                   renderItem={({item}) => (
+=======
+                  renderItem={({ item }) => (
+>>>>>>> Stashed changes
                     <TouchableOpacity
                       onPress={() => {
                         this.selectEmployee(item.id);
                       }}>
                       <View style={styles.dynamic_list_view}>
+<<<<<<< Updated upstream
                         <View style={{flex: 0.5, alignItems: 'center'}}>
                           <Text style={{fontSize: width * 0.0165}}>
                             {item.name}
@@ -1467,16 +2287,42 @@ export default class Employee extends Component {
                           ) : (
                             <Text style={{fontSize: width * 0.0165}}>No</Text>
                           )}
+=======
+                        <View style={{ flex: 0.5, alignItems: 'center' }}>
+                          <Text style={{ fontSize: width * 0.025 }}>
+                            {item.name}
+                          </Text>
+                        </View>
+                        <View style={{ flex: 0.5, alignItems: 'center' }}>
+                          <Text style={{ fontSize: width * 0.025 }}>
+                            {item.display_name}
+                          </Text>
+                        </View>
+                        <View style={{ flex: 0.5, alignItems: 'center' }}>
+                          {item.status == 1 ? (
+                            <Text style={{ fontSize: width * 0.025 }}>Yes</Text>
+                          ) : (
+                              <Text style={{ fontSize: width * 0.025 }}>No</Text>
+                            )}
+>>>>>>> Stashed changes
                         </View>
                       </View>
                     </TouchableOpacity>
                   )}
+<<<<<<< Updated upstream
                   keyExtractor={({id}, index) => id}
                 />
               )}
             </View>
           </ScrollView>
           <View style={{flex: 0.08, backgroundColor: '#ff9500'}}></View>
+=======
+                  keyExtractor={({ id }, index) => id}
+                />
+              )}
+          </View>
+          <View style={{ flex: 0.08, backgroundColor: '#ff9500' }}></View>
+>>>>>>> Stashed changes
         </View>
       </SideMenuDrawer>
     );

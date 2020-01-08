@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Dimensions,
   Platform,
@@ -10,8 +10,8 @@ import {
   TouchableOpacity,
   TouchableHighlight,
 } from 'react-native';
-import {Button, Left, Right, Icon} from 'native-base';
-import {Dialog} from 'react-native-simple-dialogs';
+import { Button, Left, Right, Icon } from 'native-base';
+import { Dialog } from 'react-native-simple-dialogs';
 import Navbar from '../components/Navbar';
 import {
   faBars,
@@ -19,9 +19,9 @@ import {
   faArrowDown,
   faCamera,
 } from '@fortawesome/free-solid-svg-icons';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import moment from 'moment';
-import {Card} from 'react-native-elements';
+import { Card } from 'react-native-elements';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import AsyncStorage from '@react-native-community/async-storage';
 import SocketIOClient from 'socket.io-client';
@@ -45,24 +45,18 @@ export default class Home extends Component {
       userDetail: '',
     };
     this._retrieveData();
+
     this.socket = SocketIOClient('http://dev-fs.8d.ie:6001');
     this.socket.emit('kitchenJoined', 1);
     this.socket.on('kitchenJoined', userId => {
-      // if (userId != null) {
-      //   var obj = {
-      //     id: responseJsonOrder["data"].order_id,
-      //     vender_id: 1,
-      //     reference: data.reference,
-      //     status: type
-      //   }
-      //   this.socket.emit('order_placed', obj);
-      //   setTimeout(() => {
-      //     Actions.ordersuccess({ status: "Success", id: responseJsonOrder["data"].payment_id });
-      //   }, 1000);
-      // }
+      this.locad_socket();
     });
+
+  }
+
+  locad_socket() {
     this.socket.on('order_receive', message => {
-      console.log(message);
+      alert(JSON.stringify(message));
     });
   }
 
@@ -70,7 +64,7 @@ export default class Home extends Component {
     try {
       const value = await AsyncStorage.getItem('visited_onces');
       if (value !== null) {
-        this.setState({userDetail: JSON.parse(value), count: 1});
+        this.setState({ userDetail: JSON.parse(value), count: 1 });
         this.componentDidMount();
       }
     } catch (error) {
@@ -89,10 +83,10 @@ export default class Home extends Component {
   }
 
   startTime = () => {
-    this.setState({isActive: true});
+    this.setState({ isActive: true });
 
     this.countdown = setInterval(() => {
-      this.setState(({secondsElapsed}) => ({
+      this.setState(({ secondsElapsed }) => ({
         secondsElapsed: secondsElapsed - 1,
       }));
     }, 1000);
@@ -119,7 +113,7 @@ export default class Home extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({pause_dialog: false});
+          this.setState({ pause_dialog: false });
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -151,7 +145,7 @@ export default class Home extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({pause_dialog: false});
+          this.setState({ pause_dialog: false });
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -183,7 +177,7 @@ export default class Home extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({cancel_dialog: false});
+          this.setState({ cancel_dialog: false });
           this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -199,6 +193,7 @@ export default class Home extends Component {
       const user_details = this.state.userDetail;
       var headers = new Headers();
       let auth = 'Bearer ' + user_details.userToken;
+      console.log(auth)
       headers.append('Authorization', auth);
       headers.append('Accept', 'application/json');
       console.log(headers);
@@ -262,7 +257,7 @@ export default class Home extends Component {
   }
 
   getOrderId = () => {
-    var {height, width} = Dimensions.get('window');
+    var { height, width } = Dimensions.get('window');
     var items = [];
     this.state.dataSource.map((item, i) => {
       items.push(
@@ -285,52 +280,50 @@ export default class Home extends Component {
   };
 
   order = () => {
-    var {height, width} = Dimensions.get('window');
+    var { height, width } = Dimensions.get('window');
     var items = [];
     this.state.dataIni.map((item, i) => {
       items.push(
-        <TouchableOpacity onPress={() => {}}>
-          <Text
-            style={{
-              fontSize: width * 0.03,
-              color: 'black',
-              fontWeight: 'bold',
-              padding: 10,
-              borderBottomWidth: 1,
-              borderBottomColor: 'white',
-              textAlign: 'center',
-            }}>
-            <Text>
+        <TouchableOpacity onPress={() => this.get_selectedorder(item)}>
+          <View
+            style={
+              (item.is_selected == null || item.is_selected == undefined || item.is_selected == false)
+                ? styles.defultpress
+                : styles.selected_order
+            }>
+            <Text
+              style={
+                (item.is_selected == null || item.is_selected == undefined || item.is_selected == false)
+                  ? styles.defulttext
+                  : styles.selected_order_text
+              }>
               {item.reference}
               {'\n'}
             </Text>
             <Text style={{fontSize: width * 0.016, fontWeight: 'normal'}}>
               {item.delivery_name}
             </Text>
-          </Text>
-        </TouchableOpacity>,
+          </View>
+        </TouchableOpacity >,
       );
     });
     return items;
   };
 
   fillOrder = () => {
-    var {height, width} = Dimensions.get('window');
+    var { height, width } = Dimensions.get('window');
     var items = [];
     this.state.dataSource.map((item, i) => {
       items.push(
         <View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <View
               style={{
-                flex: 0.11,
-                // paddingVertical: 10,
-                flexDirection: 'column',
-                backgroundColor: 'lightgrey',
+                flex: 0.20,
               }}>
               <ScrollView>{this.order()}</ScrollView>
             </View>
-            <View style={{flex: 0.89}}>
+            <View style={{ flex: 0.89 }}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -340,7 +333,7 @@ export default class Home extends Component {
                     flex: 1,
                     flexDirection: 'row',
                     alignItems: 'center',
-                    backgroundColor: 'black',
+                    backgroundColor: '#383330',
                     paddingVertical: 10,
                   }}>
                   <View style={{alignItems: 'flex-end', flex: 0.5}}>
@@ -366,17 +359,17 @@ export default class Home extends Component {
                   </View>
                 </View>
               </View>
-              <View style={{flexDirection: 'row'}}>
+              <View style={{ flexDirection: 'row' }}>
                 <View
                   style={{
                     flex: 0.3,
                     flexDirection: 'row',
                     justifyContent: 'flex-start',
                   }}>
-                  <TouchableOpacity style={{marginLeft: 30, marginTop: 10}}>
+                  <TouchableOpacity style={{ marginLeft: 30, marginTop: 10 }}>
                     <Image source={require('../images/arrow.png')} />
                   </TouchableOpacity>
-                  <TouchableOpacity style={{marginLeft: 30, marginTop: 10}}>
+                  <TouchableOpacity style={{ marginLeft: 30, marginTop: 10 }}>
                     <Image source={require('../images/arrow-down.png')} />
                   </TouchableOpacity>
                 </View>
@@ -401,9 +394,9 @@ export default class Home extends Component {
                     marginRight: 30,
                   }}>
                   <TouchableOpacity
-                    style={{marginLeft: 30}}
+                    style={{ marginLeft: 30 }}
                     onPress={() => {
-                      this.setState({pause_dialog: true});
+                      this.setState({ pause_dialog: true });
                     }}>
                     <Text
                       style={{
@@ -419,9 +412,9 @@ export default class Home extends Component {
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    style={{marginLeft: 30}}
+                    style={{ marginLeft: 30 }}
                     onPress={() => {
-                      this.setState({cancel_dialog: true});
+                      this.setState({ cancel_dialog: true });
                     }}>
                     <Text
                       style={{
@@ -450,7 +443,7 @@ export default class Home extends Component {
   };
 
   fillCard = () => {
-    var {height, width} = Dimensions.get('window');
+    var { height, width } = Dimensions.get('window');
     var items = [];
     this.state.dataSource.map((item, i) => {
       {
@@ -465,8 +458,8 @@ export default class Home extends Component {
                 borderBottomWidth: 1,
                 paddingBottom: 10,
               }}>
-              <View style={{flex: 0.9}}>
-                <Text style={{fontSize: 25}}>
+              <View style={{ flex: 0.9 }}>
+                <Text style={{ fontSize: 25 }}>
                   {i + 1}
                   {'. '}
                   <Text
@@ -492,7 +485,7 @@ export default class Home extends Component {
                     fontWeight: 'bold',
                   }}>
                   X{' '}
-                  <Text style={{fontWeight: 'bold', fontSize: 40}}>
+                  <Text style={{ fontWeight: 'bold', fontSize: 40 }}>
                     {item.qty}
                   </Text>
                 </Text>
@@ -554,18 +547,30 @@ export default class Home extends Component {
     return items;
   };
 
+  get_selectedorder(item) {
+    var objfind = this.state.dataIni.filter(o => o.is_selected == true);
+    if (objfind.length > 0) {
+      objfind[0].is_selected = false
+    }
+    item.is_selected = true;
+    //setTimeout(function () {
+    this.setState({ dataIni: this.state.dataIni })
+    //})
+
+  }
+
   render() {
-    var {height, width} = Dimensions.get('window');
+    var { height, width } = Dimensions.get('window');
     var left = (
-      <Left style={{flex: 1}}>
+      <Left style={{ flex: 1 }}>
         <Button onPress={() => this._sideMenuDrawer.open()} transparent>
           <FontAwesomeIcon icon={faBars} color={'white'} size={25} />
         </Button>
       </Left>
     );
     var right = (
-      <Right style={{flex: 1}}>
-        <Text style={{color: 'white', fontFamily: 'Roboto', fontWeight: '100'}}>
+      <Right style={{ flex: 1 }}>
+        <Text style={{ color: 'white', fontFamily: 'Roboto', fontWeight: '100' }}>
           Station 1
         </Text>
       </Right>
@@ -573,11 +578,11 @@ export default class Home extends Component {
     return (
       <SideMenuDrawer
         ref={ref => (this._sideMenuDrawer = ref)}
-        style={{zIndex: 1}}
+        style={{ zIndex: 1 }}
         navigation={this.props}>
         <View style={styles.container}>
           <Navbar left={left} right={right} title="Kitchen" />
-          <View style={{flex: 0.88}}>
+          <View style={{ flex: 0.88 }}>
             <View>{this.fillOrder()}</View>
           </View>
           <Dialog
@@ -591,9 +596,9 @@ export default class Home extends Component {
               alignSelf: 'center',
               backgroundColor: '#efeff4',
             }}
-            onTouchOutside={() => this.setState({pause_dialog: false})}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 0.95}}>
+            onTouchOutside={() => this.setState({ pause_dialog: false })}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 0.95 }}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -607,9 +612,9 @@ export default class Home extends Component {
                   Pause order
                 </Text>
               </View>
-              <View style={{justifyContent: 'center'}}>
+              <View style={{ justifyContent: 'center' }}>
                 <TouchableOpacity
-                  onPress={() => this.setState({pause_dialog: false})}>
+                  onPress={() => this.setState({ pause_dialog: false })}>
                   <FontAwesomeIcon
                     icon={faWindowClose}
                     color={'#ff9500'}
@@ -634,22 +639,22 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-around',
               }}>
-              <View style={{flex: 0.9, marginTop: 10}}>
+              <View style={{ flex: 0.9, marginTop: 10 }}>
                 <TouchableOpacity
                   style={styles.yes}
                   onPress={() => {
                     this.pauseStatus();
                   }}>
-                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
+                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
                     Yes
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{marginTop: 10}}>
+              <View style={{ marginTop: 10 }}>
                 <TouchableOpacity
                   style={styles.no}
-                  onPress={() => this.setState({pause_dialog: false})}>
-                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
+                  onPress={() => this.setState({ pause_dialog: false })}>
+                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
                     No
                   </Text>
                 </TouchableOpacity>
@@ -667,9 +672,9 @@ export default class Home extends Component {
               alignSelf: 'center',
               backgroundColor: '#efeff4',
             }}
-            onTouchOutside={() => this.setState({cancel_dialog: false})}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 0.95}}>
+            onTouchOutside={() => this.setState({ cancel_dialog: false })}>
+            <View style={{ flexDirection: 'row' }}>
+              <View style={{ flex: 0.95 }}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -683,9 +688,9 @@ export default class Home extends Component {
                   Cancel order
                 </Text>
               </View>
-              <View style={{justifyContent: 'center'}}>
+              <View style={{ justifyContent: 'center' }}>
                 <TouchableOpacity
-                  onPress={() => this.setState({cancel_dialog: false})}>
+                  onPress={() => this.setState({ cancel_dialog: false })}>
                   <FontAwesomeIcon
                     icon={faWindowClose}
                     color={'#ff9500'}
@@ -710,29 +715,29 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-around',
               }}>
-              <View style={{flex: 0.9, marginTop: 10}}>
+              <View style={{ flex: 0.9, marginTop: 10 }}>
                 <TouchableOpacity
                   style={styles.yes}
                   onPress={() => {
                     this.cancelStatus();
                   }}>
-                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
+                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
                     Yes
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{marginTop: 10}}>
+              <View style={{ marginTop: 10 }}>
                 <TouchableOpacity
                   style={styles.no}
-                  onPress={() => this.setState({cancel_dialog: false})}>
-                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
+                  onPress={() => this.setState({ cancel_dialog: false })}>
+                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
                     No
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </Dialog>
-          <View style={{flex: 0.12, flexDirection: 'row'}}>
+          <View style={{ flex: 0.12, flexDirection: 'row' }}>
             <View
               style={{
                 backgroundColor: '#ff9500',
@@ -740,7 +745,7 @@ export default class Home extends Component {
                 justifyContent: 'center',
                 padding: 20,
               }}>
-              <Text style={{fontSize: 40, color: 'white', fontWeight: 'bold'}}>
+              <Text style={{ fontSize: 40, color: 'white', fontWeight: 'bold' }}>
                 CURRENT ORDER {this.state.getId}
               </Text>
             </View>
@@ -754,7 +759,7 @@ export default class Home extends Component {
               onPress={() => {
                 this.completeStatus();
               }}>
-              <Text style={{fontSize: 40, color: 'white', fontWeight: 'bold'}}>
+              <Text style={{ fontSize: 40, color: 'white', fontWeight: 'bold' }}>
                 COMPLETE
               </Text>
             </TouchableOpacity>
@@ -790,4 +795,24 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     backgroundColor: '#ff9500',
   },
+  defultpress: {
+    color: '#383330',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#383330',
+    backgroundColor: '#efeff4'
+  },
+  selected_order: {
+    color: '#383330',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#383330',
+    backgroundColor: '#383330'
+  },
+  defulttext: {
+    fontSize: 30, fontWeight: 'bold', color: '#625e5e', textAlign: 'center'
+  },
+  selected_order_text: {
+    fontSize: 30, fontWeight: 'bold', color: '#ffffff', textAlign: 'center'
+  }
 });
