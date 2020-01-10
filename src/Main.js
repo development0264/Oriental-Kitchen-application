@@ -17,6 +17,9 @@ import CreateDish from './pages/CreateDish';
 import Menu from './pages/Menu';
 import Splashscreen from './components/Splashscreen';
 
+var x = new Date();
+var offset = -x.getTimezoneOffset();
+global.CurrentOffset = (offset >= 0 ? "+" : "-") + ('00' + parseInt(Math.abs(offset) / 60).toString()).slice(-2) + ":" + ('00' + (Math.abs(offset) % 60).toString()).slice(-2);
 
 const AppNavigator = createStackNavigator({
     Splashscreen: {
