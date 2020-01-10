@@ -29,6 +29,7 @@ export default class Login extends Component {
       userId: '',
       roleName: '',
       name: '',
+      wok: '',
     };
     this.storeData = this.storeData.bind(this);
   }
@@ -39,6 +40,7 @@ export default class Login extends Component {
       userToken: this.state.userToken,
       roleName: this.state.roleName,
       name: this.state.name,
+      wok: this.state.wok,
     };
     console.log(obj);
     try {
@@ -86,6 +88,7 @@ export default class Login extends Component {
                 roleName: responseJson.role,
                 userToken: responseJson.access_token,
                 name: responseJson.vender.name,
+                wok: responseJson.vender.logo,
               });
             } else {
               this.setState({
@@ -96,7 +99,6 @@ export default class Login extends Component {
               });
             }
             this.storeData();
-            // this.props.navigation.navigate('Employee');
           } else if (responseJson.status == 'fail') {
             alert('Unauthorized user');
           } else {

@@ -6,25 +6,11 @@ import Employee from './pages/Employee';
 import History from './pages/History';
 import Payment from './pages/Payment';
 import IngrediantsGroups from './pages/IngrediantsGroups';
-import { createAppContainer, SafeAreaView } from 'react-navigation';
-import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
-import { Image, Dimensions, ScrollView, View, Text } from 'react-native';
+import {createAppContainer, SafeAreaView} from 'react-navigation';
+import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
+import {Image, Dimensions, ScrollView, View, Text} from 'react-native';
 
-var { height, width } = Dimensions.get('window');
-
-// const design = (props) =>(
-//   <SafeAreaView style={{flex:1}}>
-//     <View style={{alignItems:'center',marginTop:20,marginBottom:20}}>
-//       <Image
-//         source={require('./images/profile-circle-picture-8.png')}
-//         style={{width:80,height:80}}
-//       />
-//     </View>
-//     <ScrollView>
-//       <DrawerItems {...props}/>
-//     </ScrollView>
-//   </SafeAreaView>
-// )
+var {height, width} = Dimensions.get('window');
 const Primary_Nav = createDrawerNavigator(
   {
     Login: {

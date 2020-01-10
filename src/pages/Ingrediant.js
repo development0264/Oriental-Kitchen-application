@@ -56,7 +56,7 @@ export default class Home extends Component {
       let auth = 'Bearer ' + user_details.userToken;
       headers.append('Authorization', auth);
       headers.append('Accept', 'application/json');
-      console.log(headers);
+      console.log('Header = ' + JSON.stringify(headers));
       fetch('http://dev-fs.8d.ie/api/venders/1/ingredient-groups', {
         method: 'GET',
         headers: headers,
@@ -124,6 +124,7 @@ export default class Home extends Component {
   };
   render() {
     var {height, width} = Dimensions.get('window');
+    const user_details = this.state.userDetail;
     console.log(width);
     var left = (
       <Left style={{flex: 1}}>
@@ -146,6 +147,27 @@ export default class Home extends Component {
         navigation={this.props}>
         <View style={styles.container}>
           <Navbar left={left} right={right} title="Ingredient" />
+          <View
+            style={{
+              position: 'absolute',
+              zIndex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              top: 35,
+              left: 0,
+              right: 0,
+            }}>
+            <Image
+              style={{
+                width: 65,
+                height: 65,
+                borderRadius: 65 / 2,
+              }}
+              source={{
+                uri: 'http://dev-fs.8d.ie/storage/' + user_details.wok,
+              }}
+            />
+          </View>
           <View style={{flex: 0.92, flexDirection: 'row', padding: 5}}>
             <FlatList
               data={this.state.dataSource}
@@ -153,62 +175,62 @@ export default class Home extends Component {
               numColumns={width < height ? 5 : 8}
               renderItem={({item}) => (
                 <View>
-                  <TouchableOpacity onPress={() => this.ingredients_data(item)}>
-                    {item.isgroup == true ? (
-                      <View
+                  {item.isgroup == true ? (
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        backgroundColor: '#ff9500',
+                        height: 150,
+                        width: 150,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                        marginLeft: 8,
+                        marginTop: 8,
+                      }}>
+                      <Image
                         style={{
-                          flex: 1,
-                          flexDirection: 'row',
+                          height: 130,
+                          width: 130,
                           backgroundColor: '#ff9500',
-                          height: 150,
-                          width: 150,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          textAlign: 'center',
-                          marginLeft: 8,
-                          marginTop: 8,
+                        }}
+                        source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
+                      />
+                      <Text
+                        style={{
+                          position: 'absolute',
+                          fontSize: 40,
+                          color: 'white',
+                          top: 23,
+                          textDecorationLine: 'line-through',
+                          textDecorationStyle: 'solid',
                         }}>
-                        <Image
-                          style={{
-                            height: 130,
-                            width: 130,
-                            backgroundColor: '#ff9500',
-                          }}
-                          source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
-                        />
-                        <Text
-                          style={{
-                            position: 'absolute',
-                            fontSize: 40,
-                            color: 'white',
-                            top: 23,
-                            textDecorationLine: 'line-through',
-                            textDecorationStyle: 'solid',
-                          }}>
-                          {item.name}
-                        </Text>
+                        {item.name}
+                      </Text>
 
+                      <Text
+                        style={{
+                          position: 'absolute',
+                          fontSize: 18,
+                          color: 'white',
+                          bottom: 40,
+                        }}>
+                        MAX{' '}
                         <Text
                           style={{
                             position: 'absolute',
-                            fontSize: 18,
+                            fontSize: 15,
                             color: 'white',
                             bottom: 40,
                           }}>
-                          MAX{' '}
-                          <Text
-                            style={{
-                              position: 'absolute',
-                              fontSize: 15,
-                              color: 'white',
-                              bottom: 40,
-                            }}>
-                            {item.max}
-                          </Text>{' '}
-                          SEL.
-                        </Text>
-                      </View>
-                    ) : (
+                          {item.max}
+                        </Text>{' '}
+                        SEL.
+                      </Text>
+                    </View>
+                  ) : (
+                    <TouchableOpacity>
                       <View
                         style={{
                           flex: 1,
@@ -235,8 +257,8 @@ export default class Home extends Component {
                           {item.sequence}
                         </Text>
                       </View>
-                    )}
-                  </TouchableOpacity>
+                    </TouchableOpacity>
+                  )}
                 </View>
               )}
             />

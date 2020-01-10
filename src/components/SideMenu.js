@@ -111,8 +111,8 @@ export default class SideMenu extends Component {
         <View>
           <View style={styles.MainContainer}>
             <Image
-              source={require('../images/profile-circle-picture-8.png')}
-              style={{width: 120, height: 120}}
+              source={require('../images/profile-circle-picture-8.jpg')}
+              style={{width: 120, height: 120, borderRadius: 120 / 2}}
             />
             <Text style={{color: 'white', fontSize: 20, marginTop: 20}}>
               {this.state.userDetail.name}
@@ -416,16 +416,19 @@ var KitchenmenuItems = [
     id: 1,
     title: 'Kitchen',
     icon: faStar,
+    page: 'Home_kitchen',
   },
   {
     id: 2,
     title: 'Dishes',
     icon: faHistory,
+    page: 'Menu',
   },
   {
     id: 3,
     title: 'Sales',
     icon: faHistory,
+    // page: 'History',
   },
   {
     id: 4,

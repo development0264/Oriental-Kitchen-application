@@ -818,7 +818,7 @@ export default class Employee extends Component {
                               height: 200,
                               borderRadius: 200 / 2,
                             }}
-                            source={require('../images/profile-circle-picture-8.png')}></Image>
+                            source={require('../images/profile-circle-picture-8.jpg')}></Image>
                         ) : (
                           <Image
                             style={{

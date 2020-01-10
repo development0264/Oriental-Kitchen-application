@@ -809,6 +809,7 @@ export default class Employee extends Component {
 
   render() {
     const {isSwitchOn} = this.state;
+    const user_details = this.state.userDetail;
     var {height, width} = Dimensions.get('window');
     console.log(width);
     var left = (
@@ -1138,7 +1139,7 @@ export default class Employee extends Component {
                     {this.state.img_uri == '' ? (
                       <Image
                         style={{width: 200, height: 200, borderRadius: 200 / 2}}
-                        source={require('../images/profile-circle-picture-8.png')}></Image>
+                        source={require('../images/profile-circle-picture-8.jpg')}></Image>
                     ) : (
                       <Image
                         style={{width: 200, height: 200, borderRadius: 200 / 2}}
@@ -1986,7 +1987,27 @@ export default class Employee extends Component {
             </Dialog>
           </KeyboardAvoidingView>
           <Navbar left={left} right={right} title="Payment" />
-
+          <View
+            style={{
+              position: 'absolute',
+              zIndex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              top: 35,
+              left: 0,
+              right: 0,
+            }}>
+            <Image
+              style={{
+                width: 65,
+                height: 65,
+                borderRadius: 65 / 2,
+              }}
+              source={{
+                uri: 'http://dev-fs.8d.ie/storage/' + user_details.wok,
+              }}
+            />
+          </View>
           <View style={{flex: 0.9, flexDirection: 'row', padding: 5}}>
             <FlatList
               data={this.state.dataSource}
@@ -1994,62 +2015,63 @@ export default class Employee extends Component {
               numColumns={width < height ? 5 : 8}
               renderItem={({item}) => (
                 <View>
-                  <TouchableOpacity onPress={() => this.ingredients_data(item)}>
-                    {item.isgroup == true ? (
-                      <View
+                  {item.isgroup == true ? (
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        backgroundColor: '#ff9500',
+                        height: 150,
+                        width: 150,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        textAlign: 'center',
+                        marginLeft: 8,
+                        marginTop: 8,
+                      }}>
+                      <Image
                         style={{
-                          flex: 1,
-                          flexDirection: 'row',
+                          height: 130,
+                          width: 130,
                           backgroundColor: '#ff9500',
-                          height: 150,
-                          width: 150,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          textAlign: 'center',
-                          marginLeft: 8,
-                          marginTop: 8,
+                        }}
+                        source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
+                      />
+                      <Text
+                        style={{
+                          position: 'absolute',
+                          fontSize: 40,
+                          color: 'white',
+                          top: 23,
+                          textDecorationLine: 'line-through',
+                          textDecorationStyle: 'solid',
                         }}>
-                        <Image
-                          style={{
-                            height: 130,
-                            width: 130,
-                            backgroundColor: '#ff9500',
-                          }}
-                          source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
-                        />
-                        <Text
-                          style={{
-                            position: 'absolute',
-                            fontSize: 40,
-                            color: 'white',
-                            top: 23,
-                            textDecorationLine: 'line-through',
-                            textDecorationStyle: 'solid',
-                          }}>
-                          {item.name}
-                        </Text>
+                        {item.name}
+                      </Text>
 
+                      <Text
+                        style={{
+                          position: 'absolute',
+                          fontSize: 18,
+                          color: 'white',
+                          bottom: 40,
+                        }}>
+                        MAX{' '}
                         <Text
                           style={{
                             position: 'absolute',
-                            fontSize: 18,
+                            fontSize: 15,
                             color: 'white',
                             bottom: 40,
                           }}>
-                          MAX{' '}
-                          <Text
-                            style={{
-                              position: 'absolute',
-                              fontSize: 15,
-                              color: 'white',
-                              bottom: 40,
-                            }}>
-                            {item.max}
-                          </Text>{' '}
-                          SEL.
-                        </Text>
-                      </View>
-                    ) : (
+                          {item.max}
+                        </Text>{' '}
+                        SEL.
+                      </Text>
+                    </View>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => this.ingredients_data(item)}>
                       <View
                         style={{
                           flex: 1,
@@ -2062,7 +2084,7 @@ export default class Employee extends Component {
                           style={{
                             height: 150,
                             width: 150,
-                            backgroundColor: '#ffffff',
+                            backgroundColor: 'white',
                           }}
                           source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
                         />
@@ -2076,8 +2098,8 @@ export default class Employee extends Component {
                           {item.sequence}
                         </Text>
                       </View>
-                    )}
-                  </TouchableOpacity>
+                    </TouchableOpacity>
+                  )}
 
                   {this.getindiexistingqty(item)}
                 </View>
