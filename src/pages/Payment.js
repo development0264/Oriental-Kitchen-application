@@ -9,13 +9,13 @@ import {
   FlatList,
   TouchableOpacity,
   ToastAndroid,
-  CheckBox,
   ScrollView,
   Alert,
   KeyboardAvoidingView,
 } from 'react-native';
 import {Button, Left, Right, Grid, Col, Row, Picker, Switch} from 'native-base';
 import Navbar from '../components/Navbar';
+import CheckBox from 'react-native-check-box';
 import {
   faBars,
   faWindowClose,
@@ -37,7 +37,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 
-var price = 0;
 export default class Employee extends Component {
   constructor(props) {
     super(props);
@@ -177,40 +176,6 @@ export default class Employee extends Component {
 
   componentDidMount() {}
 
-  // saveValueFunction = () => {
-  //     //function to save the value in AsyncStorage
-  //     if (this.state.textInputData) {
-  //         //To check the input not empty
-  //         AsyncStorage.setItem('data', this.state.textInputData);
-  //         //Setting a data to a AsyncStorage with respect to a key
-  //         //Setting a data to a AsyncStorage with respect to a key
-  //         //Setting a data to a AsyncStorage with respect to a key
-  //         this.setState({ textInputData: '' })
-  //         //Resetting the TextInput
-  //         alert('Data Saved');
-  //         //alert to confirm
-  //     } else {
-  //         alert('Please fill data');
-  //         //alert for the empty InputText
-  //     }
-  // };
-  // getValueFunction = () => {
-  //     //function to get the value from AsyncStorage
-  //     AsyncStorage.getItem('data').then(value =>
-  //         //AsyncStorage returns a promise so adding a callback to get the value
-  //         this.setState({ getValue: value })
-  //         //Setting the value in Text
-  //         //Setting the value in Text
-  //         //Setting the value in Text
-  //     );
-  // };
-
-  // onValueChange(value) {
-  //     this.setState({
-  //         selected: value
-  //     });
-  // }
-
   show_card = () => {
     var headers = new Headers();
     let auth =
@@ -345,9 +310,9 @@ export default class Employee extends Component {
       });
   }
 
-  add_dish = () => {
-    this.setState({add_dish_dialog: true});
-  };
+  // add_dish = () => {
+  //   this.setState({add_dish_dialog: true});
+  // };
 
   ingredients_data = item => {
     this.setState({did: item.idingredient});
@@ -355,19 +320,14 @@ export default class Employee extends Component {
     this.setState({groupname: item.groupname});
     this.setState({max: item.max});
     this.setState({name: item.name});
+    this.setState({quantity: 1});
     this.setState({groupmax: item.groupmax});
     this.setState({ingredient_group_id: item.ingredient_group_id});
     this.setState({description: item.description});
     this.setState({cover: item.cover});
-    // console.log(item.idingredient);
-    // console.log(item.groupname);
-    // console.log(item.groupmax);
-    // console.log(item.name);
-    // console.log(item.description);
-    // console.log(item.price);
     this.state.ingredientexixts.map(items => {
       if (item.id == items.id) {
-        this.setState({quantity: items.qty});
+        this.setState({quantity: parseInt(items.qty)});
         this.setState({dishPrice: items.dishPrice});
       }
     });
@@ -432,7 +392,7 @@ export default class Employee extends Component {
       name: this.state.dishname,
       employee_id: null,
       description: this.state.dishdescription,
-      is_popular: this.state.isPopular,
+      is_popular: this.state.isPopular == true ? 1 : 0,
       ingredients: ingredientsList,
     };
 
@@ -448,7 +408,7 @@ export default class Employee extends Component {
           if (responseJson['dish'] != undefined) {
             // alert(JSON.stringify(responseJson["dish"]));
             ToastAndroid.show('Dish creatded succefully !', ToastAndroid.SHORT);
-
+            // this.setState({add_dish_dialog: true});
             AsyncStorage.setItem('INGREDIENT', '');
             this.setState({ingredientexixts: []});
           } else {
@@ -459,7 +419,7 @@ export default class Employee extends Component {
           }
         });
     } else {
-      this.setState({add_dish_dialog: true});
+      // this.setState({add_dish_dialog: true});
       ToastAndroid.show('Enter Dish Name !', ToastAndroid.SHORT);
     }
   }
@@ -469,10 +429,6 @@ export default class Employee extends Component {
     var {height, width} = Dimensions.get('window');
     if (this.state.paymentData) {
       this.state.paymentData.map((item, i) => {
-        // var total = item.qty * parseInt(item.rate);
-        // console.log('total = ' + total);
-        // price = price + total;
-        // console.log('price = ' + price);
         items.push(
           <View style={{flexDirection: 'row'}}>
             <View style={{flex: 0.2, justifyContent: 'center'}}>
@@ -522,9 +478,9 @@ export default class Employee extends Component {
           </View>,
         );
       });
-      items.push(this.showCustomDish(this.state.paymentData.length));
-      // this.setState({takeTotal: price});
-      // Alert.alert(this.state.takeTotal);
+      if (this.state.totalPriceCustom != 0) {
+        items.push(this.showCustomDish(this.state.paymentData.length));
+      }
     }
     return items;
   };
@@ -534,12 +490,12 @@ export default class Employee extends Component {
     return (
       <View style={{flexDirection: 'row'}}>
         <View style={{flex: 0.2, justifyContent: 'center'}}>
-          <Text style={{fontSize: width * 0.015, color: '#76726d'}}>
+          <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
             {i + 1}
           </Text>
         </View>
         <View style={{flex: 0.35, justifyContent: 'center'}}>
-          <Text style={{fontSize: width * 0.015, color: '#76726d'}}>
+          <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
             Custom Dish
           </Text>
         </View>
@@ -560,7 +516,7 @@ export default class Employee extends Component {
             </TouchableOpacity>
             <Text
               style={{
-                fontSize: width * 0.015,
+                fontSize: width * 0.018,
                 marginHorizontal: 5,
                 color: '#76726d',
               }}>
@@ -580,7 +536,7 @@ export default class Employee extends Component {
           </View>
         </View>
         <View style={{flex: 0.2, justifyContent: 'center'}}>
-          <Text style={{fontSize: width * 0.015, color: '#76726d'}}>
+          <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
             ${(this.state.qty * this.state.totalPriceCustom).toFixed(2)}
           </Text>
         </View>
@@ -864,13 +820,13 @@ export default class Employee extends Component {
     );
     var right = (
       <Right style={{flex: 1}}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{marginVertical: 8}}
           onPress={() => this.add_dish()}
           transparent
           title="Add Dish">
           <FontAwesomeIcon icon={faPlus} color={'white'} size={25} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={{paddingHorizontal: 8}}
@@ -942,14 +898,13 @@ export default class Employee extends Component {
                 <View style={{flex: 1, width: 250, maxHeight: 200}}>
                   <View style={{flexDirection: 'row'}}>
                     <View style={{marginLeft: 20, marginTop: 20}}>
-                      {console.log('http://dev-fs.8d.ie/' + this.state.cover)}
                       <Image
                         style={{
                           justifyContent: 'center',
                           alignItems: 'center',
                           width: 100,
                           height: 110,
-                          backgroundColor: 'black',
+                          backgroundColor: 'white',
                         }}
                         source={{
                           uri: 'http://dev-fs.8d.ie/' + this.state.cover,
@@ -957,7 +912,7 @@ export default class Employee extends Component {
                     </View>
                     <View style={{marginLeft: 40, marginTop: 10}}>
                       <Text
-                        style={{fontSize: width * 0.016, fontWeight: 'bold'}}>
+                        style={{fontSize: width * 0.018, fontWeight: 'bold'}}>
                         {this.state.name}
                       </Text>
                       <Text style={{fontSize: 16, width: 350, marginTop: 10}}>
@@ -984,9 +939,9 @@ export default class Employee extends Component {
                       onPress={() =>
                         this.setState({
                           quantity:
-                            this.state.quantity > 1
+                            this.state.quantity > 0
                               ? this.state.quantity - 1
-                              : 1,
+                              : 0,
                         })
                       }>
                       <FontAwesomeIcon
@@ -1001,7 +956,7 @@ export default class Employee extends Component {
                         textAlign: 'center',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        fontSize: width * 0.016,
+                        fontSize: width * 0.018,
                         marginLeft: 30,
                         marginTop: 20,
                       }}>
@@ -1033,7 +988,7 @@ export default class Employee extends Component {
                         backgroundColor: '#ff9500',
                       }}
                       onPress={() => this.add_Dish_ingredient()}>
-                      <Text style={{fontSize: width * 0.016, color: 'white'}}>
+                      <Text style={{fontSize: width * 0.018, color: 'white'}}>
                         Add
                       </Text>
                     </TouchableOpacity>
@@ -1042,7 +997,7 @@ export default class Employee extends Component {
               </View>
             </Dialog>
 
-            <Dialog
+            {/* <Dialog
               visible={this.state.add_dish_dialog}
               dialogStyle={{
                 borderRadius: 10,
@@ -1070,7 +1025,15 @@ export default class Employee extends Component {
                 </View>
                 <View style={{justifyContent: 'center'}}>
                   <TouchableOpacity
-                    onPress={() => this.setState({add_dish_dialog: false})}>
+                    onPress={() =>
+                      this.setState({
+                        add_dish_dialog: false,
+                        dishname: '',
+                        dishdescription: '',
+                        isPopular: '',
+                        img_uri: '',
+                      })
+                    }>
                     <FontAwesomeIcon
                       icon={faWindowClose}
                       color={'#ff9500'}
@@ -1089,7 +1052,7 @@ export default class Employee extends Component {
                   }}>
                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <View style={{width: 150}}>
-                      <Text style={{fontSize: width * 0.016, color: '#76726d'}}>
+                      <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
                         Dish Name:
                       </Text>
                     </View>
@@ -1118,7 +1081,7 @@ export default class Employee extends Component {
                       marginTop: 15,
                     }}>
                     <View style={{width: 150}}>
-                      <Text style={{fontSize: width * 0.016, color: '#76726d'}}>
+                      <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
                         Dish Description:
                       </Text>
                     </View>
@@ -1149,17 +1112,20 @@ export default class Employee extends Component {
                       marginTop: 15,
                     }}>
                     <View style={{width: 150}}>
-                      <Text style={{fontSize: width * 0.016, color: '#76726d'}}>
+                      <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
                         Popular:
                       </Text>
                     </View>
-                    {/* <CheckBox
-                                    style={{ flex: 1, marginLeft: 15, }}
-                                    tintColors={{ true: 'orange' }}
-                                    value={this.state.isPopular}
-                                    onValueChange={() => this.setState({ isPopular: !this.state.isPopular })}
-                                    leftText={"PopularCheck"}
-                                /> */}
+                    <CheckBox
+                      style={{flex: 1, paddingLeft: 20}}
+                      onClick={() => {
+                        this.setState({
+                          isPopular: !this.state.isPopular,
+                        });
+                      }}
+                      isChecked={this.state.isPopular}
+                      checkedCheckBoxColor={'orange'}
+                    />
                   </View>
                 </View>
                 <View
@@ -1204,7 +1170,7 @@ export default class Employee extends Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </Dialog>
+            </Dialog> */}
 
             <Dialog
               visible={this.state.card_dish_dialog}
@@ -1265,7 +1231,7 @@ export default class Employee extends Component {
                             <Text
                               style={{
                                 fontWeight: 'bold',
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.018,
                                 paddingTop: 8,
                               }}>
                               {item.name}
@@ -1294,7 +1260,7 @@ export default class Employee extends Component {
                               style={{
                                 color: '#ff9500',
                                 fontWeight: 'bold',
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.018,
                                 marginLeft: 8,
                                 marginTop: 8,
                               }}>
@@ -1326,7 +1292,7 @@ export default class Employee extends Component {
                                   textAlign: 'center',
                                   justifyContent: 'center',
                                   alignItems: 'center',
-                                  fontSize: width * 0.016,
+                                  fontSize: width * 0.018,
                                   paddingHorizontal: 10,
                                 }}>
                                 {item.qty}
@@ -1358,7 +1324,7 @@ export default class Employee extends Component {
                               onPress={() => this.card_add_dish(item)}>
                               <Text
                                 style={{
-                                  fontSize: width * 0.016,
+                                  fontSize: width * 0.018,
                                   fontWeight: 'bold',
                                   color: 'white',
                                   textAlign: 'center',
@@ -1386,8 +1352,7 @@ export default class Employee extends Component {
                 justifyContent: 'center',
                 alignSelf: 'center',
                 backgroundColor: '#efeff4',
-              }}
-              onTouchOutside={() => this.setState({add_dish_dialog: false})}>
+              }}>
               <ScrollView>
                 <View style={{flexDirection: 'row'}}>
                   <View style={{flex: 1}}>
@@ -1516,7 +1481,7 @@ export default class Employee extends Component {
                           <View style={{flex: 0.2, justifyContent: 'center'}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.018,
                                 color: '#76726d',
                               }}>
                               Srno.
@@ -1525,7 +1490,7 @@ export default class Employee extends Component {
                           <View style={{flex: 0.4, justifyContent: 'center'}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.018,
                                 color: '#76726d',
                               }}>
                               Name
@@ -1534,7 +1499,7 @@ export default class Employee extends Component {
                           <View style={{flex: 0.2, justifyContent: 'center'}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.018,
                                 color: '#76726d',
                               }}>
                               Qty
@@ -1543,7 +1508,7 @@ export default class Employee extends Component {
                           <View style={{flex: 0.2, justifyContent: 'center'}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.018,
                                 color: '#76726d',
                               }}>
                               Price
@@ -1575,8 +1540,7 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
                               color: 'grey',
                             }}>
                             7
@@ -1589,8 +1553,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             8
@@ -1603,8 +1567,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             9
@@ -1625,8 +1589,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             %
@@ -1645,8 +1609,8 @@ export default class Employee extends Component {
                           onPress={() => {}}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             -
@@ -1662,8 +1626,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             4
@@ -1676,8 +1640,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             5
@@ -1690,8 +1654,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             6
@@ -1721,8 +1685,8 @@ export default class Employee extends Component {
                               }}>
                               <Text
                                 style={{
-                                  fontSize: width * 0.016,
-                                  fontWeight: 'bold',
+                                  fontSize: width * 0.018,
+                                  // fontWeight: 'bold',
                                   color: 'grey',
                                 }}>
                                 1
@@ -1735,8 +1699,8 @@ export default class Employee extends Component {
                               }}>
                               <Text
                                 style={{
-                                  fontSize: width * 0.016,
-                                  fontWeight: 'bold',
+                                  fontSize: width * 0.018,
+                                  // fontWeight: 'bold',
                                   color: 'grey',
                                 }}>
                                 2
@@ -1749,8 +1713,8 @@ export default class Employee extends Component {
                               }}>
                               <Text
                                 style={{
-                                  fontSize: width * 0.016,
-                                  fontWeight: 'bold',
+                                  fontSize: width * 0.018,
+                                  // fontWeight: 'bold',
                                   color: 'grey',
                                 }}>
                                 3
@@ -1769,8 +1733,8 @@ export default class Employee extends Component {
                               }}>
                               <Text
                                 style={{
-                                  fontSize: width * 0.016,
-                                  fontWeight: 'bold',
+                                  fontSize: width * 0.018,
+                                  // fontWeight: 'bold',
                                   color: 'grey',
                                 }}>
                                 0
@@ -1783,8 +1747,8 @@ export default class Employee extends Component {
                               }}>
                               <Text
                                 style={{
-                                  fontSize: width * 0.016,
-                                  fontWeight: 'bold',
+                                  fontSize: width * 0.018,
+                                  // fontWeight: 'bold',
                                   color: 'grey',
                                 }}>
                                 00
@@ -1797,8 +1761,8 @@ export default class Employee extends Component {
                               }}>
                               <Text
                                 style={{
-                                  fontSize: width * 0.016,
-                                  fontWeight: 'bold',
+                                  fontSize: width * 0.018,
+                                  // fontWeight: 'bold',
                                   color: 'grey',
                                 }}>
                                 .
@@ -1823,7 +1787,7 @@ export default class Employee extends Component {
                             <Text
                               style={{
                                 fontSize: 30,
-                                fontWeight: 'bold',
+                                // fontWeight: 'bold',
                                 color: 'grey',
                               }}>
                               CE
@@ -1842,8 +1806,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             50
@@ -1856,8 +1820,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             20
@@ -1870,8 +1834,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             10
@@ -1884,8 +1848,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             2
@@ -1900,8 +1864,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             1
@@ -1914,8 +1878,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             0.5
@@ -1928,8 +1892,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             0.2
@@ -1942,8 +1906,8 @@ export default class Employee extends Component {
                           }}>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
-                              fontWeight: 'bold',
+                              fontSize: width * 0.018,
+                              // fontWeight: 'bold',
                               color: 'grey',
                             }}>
                             0.1

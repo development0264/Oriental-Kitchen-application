@@ -510,7 +510,7 @@ export default class Employee extends Component {
                           borderBottomColor: 'lightgrey',
                           paddingBottom: 15,
                           marginTop: 0,
-                          fontSize: width * 0.0165,
+                          fontSize: width * 0.025,
                         }}>
                         Add Employee
                       </Text>
@@ -546,7 +546,7 @@ export default class Employee extends Component {
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             User Name:
                           </Text>
                         </View>
@@ -575,7 +575,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             First Name:
                           </Text>
                         </View>
@@ -604,7 +604,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Last Name:
                           </Text>
                         </View>
@@ -633,7 +633,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Email:
                           </Text>
                         </View>
@@ -664,7 +664,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Phone:
                           </Text>
                         </View>
@@ -693,7 +693,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Password:
                           </Text>
                         </View>
@@ -756,7 +756,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Re-type:
                           </Text>
                         </View>
@@ -790,7 +790,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 160}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Role:
                           </Text>
                         </View>
@@ -916,7 +916,7 @@ export default class Employee extends Component {
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             User Name:
                           </Text>
                         </View>
@@ -948,7 +948,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             First Name:
                           </Text>
                         </View>
@@ -980,7 +980,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Last Name:
                           </Text>
                         </View>
@@ -1012,7 +1012,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Email:
                           </Text>
                         </View>
@@ -1043,7 +1043,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Phone:
                           </Text>
                         </View>
@@ -1073,7 +1073,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Password:
                           </Text>
                         </View>
@@ -1137,7 +1137,7 @@ export default class Employee extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Re-type:
                           </Text>
                         </View>
@@ -1170,8 +1170,7 @@ export default class Employee extends Component {
                           marginTop: 15,
                         }}>
                         <View style={{width: 160}}>
-                          <Text
-                            style={{fontSize: width * 0.016, color: 'grey'}}>
+                          <Text style={{fontSize: width * 0.02, color: 'grey'}}>
                             Role:
                           </Text>
                         </View>
@@ -1238,8 +1237,7 @@ export default class Employee extends Component {
                       <TouchableOpacity
                         style={styles.delete_btn}
                         onPress={() => this.deletePress()}>
-                        <Text
-                          style={{fontSize: width * 0.0165, color: 'white'}}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
                           Delete
                         </Text>
                       </TouchableOpacity>
@@ -1250,8 +1248,7 @@ export default class Employee extends Component {
                         onPress={() =>
                           this.updateEmployee(this.state.Employeeid)
                         }>
-                        <Text
-                          style={{fontSize: width * 0.0165, color: 'white'}}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
                           Update
                         </Text>
                       </TouchableOpacity>
@@ -1301,6 +1298,7 @@ export default class Employee extends Component {
                   margin: 10,
                   justifyContent: 'center',
                   flexDirection: 'row',
+                  alignItems: 'center',
                 }}>
                 {this.state.Search_result != '' ? (
                   <TouchableOpacity
@@ -1341,21 +1339,19 @@ export default class Employee extends Component {
             <View style={{flex: 0.8}}>
               <View
                 style={{
+                  padding: 15,
                   flexDirection: 'row',
                   borderBottomColor: 'lightgrey',
-                  paddingBottom: 8,
                   borderBottomWidth: 1,
                 }}>
                 <View
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
-                    marginLeft: 10,
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.016,
+                      fontSize: width * 0.02,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -1370,12 +1366,10 @@ export default class Employee extends Component {
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
-                    marginLeft: 10,
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.016,
+                      fontSize: width * 0.02,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -1390,12 +1384,10 @@ export default class Employee extends Component {
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
-                    marginLeft: 10,
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.016,
+                      fontSize: width * 0.02,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -1419,20 +1411,20 @@ export default class Employee extends Component {
                       }}>
                       <View style={styles.dynamic_list_view}>
                         <View style={{flex: 0.5, alignItems: 'center'}}>
-                          <Text style={{fontSize: width * 0.0165}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             {item.name}
                           </Text>
                         </View>
                         <View style={{flex: 0.5, alignItems: 'center'}}>
-                          <Text style={{fontSize: width * 0.0165}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             {item.display_name}
                           </Text>
                         </View>
                         <View style={{flex: 0.5, alignItems: 'center'}}>
                           {item.status == 1 ? (
-                            <Text style={{fontSize: width * 0.0165}}>Yes</Text>
+                            <Text style={{fontSize: width * 0.025}}>Yes</Text>
                           ) : (
-                            <Text style={{fontSize: width * 0.0165}}>No</Text>
+                            <Text style={{fontSize: width * 0.025}}>No</Text>
                           )}
                         </View>
                       </View>
@@ -1452,20 +1444,20 @@ export default class Employee extends Component {
                       }}>
                       <View style={styles.dynamic_list_view}>
                         <View style={{flex: 0.5, alignItems: 'center'}}>
-                          <Text style={{fontSize: width * 0.0165}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             {item.name}
                           </Text>
                         </View>
                         <View style={{flex: 0.5, alignItems: 'center'}}>
-                          <Text style={{fontSize: width * 0.0165}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             {item.display_name}
                           </Text>
                         </View>
                         <View style={{flex: 0.5, alignItems: 'center'}}>
                           {item.status == 1 ? (
-                            <Text style={{fontSize: width * 0.0165}}>Yes</Text>
+                            <Text style={{fontSize: width * 0.025}}>Yes</Text>
                           ) : (
-                            <Text style={{fontSize: width * 0.0165}}>No</Text>
+                            <Text style={{fontSize: width * 0.025}}>No</Text>
                           )}
                         </View>
                       </View>

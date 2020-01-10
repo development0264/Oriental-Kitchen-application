@@ -8,6 +8,8 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   TextInput,
+  ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import Navbar from '../components/Navbar';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -139,7 +141,7 @@ export default class History extends React.Component {
             <View style={{flex: 0.1, alignItems: 'center'}}>
               <Text
                 style={{
-                  fontSize: width * 0.016,
+                  fontSize: width * 0.02,
                   marginRight: 20,
                   color: '#808080',
                 }}>
@@ -147,7 +149,7 @@ export default class History extends React.Component {
               </Text>
             </View>
             <View style={{flex: 0.4, alignItems: 'center', marginRight: 50}}>
-              <Text style={{fontSize: width * 0.016, color: '#808080'}}>
+              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
                 Custom({item.dish_name})
               </Text>
             </View>
@@ -155,18 +157,18 @@ export default class History extends React.Component {
               style={{flex: 0.4, alignItems: 'center', flexDirection: 'row'}}>
               <Text
                 style={{
-                  fontSize: width * 0.016,
+                  fontSize: width * 0.02,
                   color: '#808080',
                   paddingLeft: 30,
                 }}>
                 ${item.dish_price} x {}
               </Text>
-              <Text style={{fontSize: width * 0.016, color: '#808080'}}>
+              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
                 {item.qty}
               </Text>
             </View>
             <View style={{flex: 0.4, alignItems: 'center'}}>
-              <Text style={{fontSize: width * 0.016, color: '#808080'}}>
+              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
                 ${item.dish_price * item.qty}
               </Text>
             </View>
@@ -261,238 +263,221 @@ export default class History extends React.Component {
         navigation={this.props}>
         <View style={styles.container}>
           <Navbar left={left} right={right} title="History" />
-          {/* History Update Dialog */}
-          <Dialog
-            visible={this.state.edit_history_dialog}
-            dialogStyle={{
-              borderRadius: 10,
-              borderWidth: 2,
-              borderColor: '#efeff4',
-              width: '80%',
-              margin: 0,
-              padding: 0,
-              justifyContent: 'center',
-              alignSelf: 'center',
-              backgroundColor: '#efeff4',
-            }}
-            onTouchOutside={() => this.setState({edit_history_dialog: false})}>
-            <View style={{flexDirection: 'row'}}>
-              <View style={{flex: 0.99, margin: 0, padding: 0}}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    borderBottomWidth: 1,
-                    borderBottomColor: 'lightgrey',
-                    paddingBottom: 5,
-                    fontSize: width * 0.016,
-                  }}>
-                  Order
-                </Text>
-              </View>
-              <View style={{justifyContent: 'center'}}>
-                <TouchableOpacity
-                  style={{marginBottom: 40, marginStart: 50}}
-                  onPress={() => this.setState({edit_history_dialog: false})}>
-                  <FontAwesomeIcon
-                    icon={faWindowClose}
-                    color={'#ff9500'}
-                    size={30}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <View
-                style={{
-                  flex: 0.78,
-                  borderRightWidth: 1,
-                  borderRightColor: 'lightgrey',
-                  padding: 10,
-                }}>
-                {this.filldata()}
-              </View>
-              <View
-                style={{
-                  flex: 0.22,
+
+          <ScrollView>
+            <KeyboardAvoidingView behavior="padding" enabled>
+              {/* History Update Dialog */}
+              <Dialog
+                visible={this.state.edit_history_dialog}
+                dialogStyle={{
+                  borderRadius: 10,
+                  borderWidth: 2,
+                  borderColor: '#efeff4',
+                  width: '80%',
+                  margin: 0,
+                  padding: 0,
                   justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                  <TouchableOpacity
-                    style={[styles.add_btn, {paddingHorizontal: 25}]}>
-                    <Text style={{fontSize: width * 0.0165, color: 'white'}}>
-                      -
+                  alignSelf: 'center',
+                  backgroundColor: '#efeff4',
+                }}
+                onTouchOutside={() =>
+                  this.setState({edit_history_dialog: false})
+                }>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 0.99, margin: 0, padding: 0}}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        borderBottomWidth: 1,
+                        borderBottomColor: 'lightgrey',
+                        paddingBottom: 5,
+                        fontSize: width * 0.02,
+                      }}>
+                      Order
                     </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.add_btn, {paddingHorizontal: 20}]}>
-                    <Text style={{fontSize: width * 0.0165, color: 'white'}}>
-                      +
-                    </Text>
-                  </TouchableOpacity>
+                  </View>
+                  <View style={{justifyContent: 'center'}}>
+                    <TouchableOpacity
+                      style={{marginBottom: 40, marginStart: 50}}
+                      onPress={() =>
+                        this.setState({edit_history_dialog: false})
+                      }>
+                      <FontAwesomeIcon
+                        icon={faWindowClose}
+                        color={'#ff9500'}
+                        size={30}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={{flexDirection: 'row'}}>
+                  <View
+                    style={{
+                      flex: 0.78,
+                      borderRightWidth: 1,
+                      borderRightColor: 'lightgrey',
+                      padding: 10,
+                    }}>
+                    {this.filldata()}
+                  </View>
+                  <View
+                    style={{
+                      flex: 0.22,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                      <TouchableOpacity
+                        style={[styles.add_btn, {paddingHorizontal: 25}]}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                          -
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[styles.add_btn, {paddingHorizontal: 20}]}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                          +
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View
+                      style={{
+                        marginVertical: 15,
+                        padding: 20,
+                        elevation: 8,
+                        backgroundColor: '#FAFAFA',
+                        borderRadius: 25,
+                        marginRight: 10,
+                      }}>
+                      <Text style={{fontSize: width * 0.02}}>STATUS</Text>
+                      <Text style={{fontSize: width * 0.02, color: 'orange'}}>
+                        {orderStatus}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      style={[
+                        styles.add_btn,
+                        {
+                          justifyContent: 'center',
+                          alignSelf: 'center',
+                          width: 160,
+                        },
+                      ]}>
+                      <Text
+                        style={{
+                          fontSize: width * 0.025,
+                          color: 'white',
+                          textAlign: 'center',
+                        }}>
+                        DEL
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[
+                        styles.add_btn,
+                        {justifyContent: 'center', alignSelf: 'center'},
+                      ]}>
+                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                        REFUND
+                      </Text>
+                    </TouchableOpacity>
+                    <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                      <TouchableOpacity style={styles.print_btn}>
+                        <FontAwesomeIcon icon={faPrint} size={25} />
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.print_btn}>
+                        <FontAwesomeIcon icon={faReceipt} size={25} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
                 <View
                   style={{
-                    marginVertical: 15,
-                    padding: 20,
-                    elevation: 8,
-                    backgroundColor: '#FAFAFA',
-                    borderRadius: 25,
-                    marginRight: 10,
+                    marginTop: 20,
+                    borderTopColor: 'lightgrey',
+                    borderTopWidth: 1,
+                    flexDirection: 'row',
                   }}>
-                  <Text style={{fontSize: width * 0.016}}>STATUS</Text>
-                  <Text style={{fontSize: width * 0.016, color: 'orange'}}>
-                    {orderStatus}
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  style={[
-                    styles.add_btn,
-                    {justifyContent: 'center', alignSelf: 'center', width: 160},
-                  ]}>
                   <Text
                     style={{
-                      fontSize: width * 0.0165,
-                      color: 'white',
-                      textAlign: 'center',
+                      fontSize: width * 0.03,
+                      alignSelf: 'flex-start',
+                      flex: 0.4,
+                      textAlign: 'left',
+                      marginTop: 10,
+                      paddingVertical: 10,
+                      color: '#5a5a5a',
                     }}>
-                    DEL
+                    Total: ${totalPrice}
                   </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[
-                    styles.add_btn,
-                    {justifyContent: 'center', alignSelf: 'center'},
-                  ]}>
-                  <Text style={{fontSize: width * 0.0165, color: 'white'}}>
-                    REFUND
-                  </Text>
-                </TouchableOpacity>
-                <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                  <TouchableOpacity style={styles.print_btn}>
-                    <FontAwesomeIcon icon={faPrint} size={25} />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.print_btn}>
-                    <FontAwesomeIcon icon={faReceipt} size={25} />
+                  <View
+                    style={{
+                      flex: 0.56,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      marginTop: 10,
+                    }}>
+                    <View style={{width: 150}}>
+                      <Text style={{fontSize: width * 0.03, color: '#5a5a5a'}}>
+                        Refund:
+                      </Text>
+                    </View>
+                    <TextInput
+                      style={{
+                        borderColor: 'white',
+                        height: 50,
+                        width: '50%',
+                        marginLeft: 10,
+                        borderWidth: 1,
+                        textAlign: 'center',
+                        backgroundColor: 'white',
+                        borderRadius: 50,
+                        flexWrap: 'wrap',
+                      }}
+                      placeholder="Type here"
+                      keyboardType="numeric"
+                      onChangeText={refund => this.setState({refund})}
+                      value={this.state.refund}
+                    />
+                  </View>
+                  <TouchableOpacity style={styles.add_btn}>
+                    <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                      UPDATE
+                    </Text>
                   </TouchableOpacity>
                 </View>
-              </View>
-            </View>
+              </Dialog>
+            </KeyboardAvoidingView>
             <View
               style={{
-                marginTop: 20,
-                borderTopColor: 'lightgrey',
-                borderTopWidth: 1,
+                flex: 0.12,
+                backgroundColor: '#efeff4',
                 flexDirection: 'row',
-              }}>
-              <Text
-                style={{
-                  fontSize: width * 0.03,
-                  alignSelf: 'flex-start',
-                  flex: 0.4,
-                  textAlign: 'left',
-                  marginTop: 10,
-                  paddingVertical: 10,
-                  color: '#5a5a5a',
-                }}>
-                Total: ${totalPrice}
-              </Text>
-              <View
-                style={{
-                  flex: 0.56,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}>
-                <View style={{width: 150}}>
-                  <Text style={{fontSize: width * 0.03, color: '#5a5a5a'}}>
-                    Refund:
-                  </Text>
-                </View>
-                <TextInput
-                  style={{
-                    borderColor: 'white',
-                    height: 50,
-                    width: '50%',
-                    marginLeft: 10,
-                    borderWidth: 1,
-                    textAlign: 'center',
-                    backgroundColor: 'white',
-                    borderRadius: 50,
-                    flexWrap: 'wrap',
-                  }}
-                  placeholder="Type here"
-                  keyboardType="numeric"
-                  onChangeText={refund => this.setState({refund})}
-                  value={this.state.refund}
-                />
-              </View>
-              <TouchableOpacity style={styles.add_btn}>
-                <Text style={{fontSize: width * 0.0165, color: 'white'}}>
-                  UPDATE
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </Dialog>
-
-          <View
-            style={{
-              flex: 0.12,
-              backgroundColor: '#efeff4',
-              flexDirection: 'row',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                flex: 0.98,
-                margin: 10,
-                marginLeft: 40,
+                padding: 10,
+                justifyContent: 'center',
                 alignItems: 'center',
               }}>
               <View
-                style={{flexDirection: 'row', flex: 0.5, alignItems: 'center'}}>
-                <Text style={{fontSize: width * 0.03}}>Start:</Text>
-                <DatePicker
-                  style={{width: '80%'}}
-                  date={this.state.FromDate}
-                  mode="date"
-                  placeholder="From Date"
-                  format="YYYY-MM-DD"
-                  minDate="2019-01-01"
-                  maxDate={this.state.date}
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  customStyles={{
-                    dateIcon: {
-                      width: 0,
-                      height: 0,
-                    },
-                    dateInput: {
-                      marginLeft: 36,
-                      borderRadius: 50,
-                    },
-                  }}
-                  onDateChange={date => {
-                    this.setState({FromDate: date});
-                  }}
-                />
-              </View>
-              {this.state.FromDate != '' ? (
+                style={{
+                  flexDirection: 'row',
+                  flex: 0.98,
+                  marginLeft: 40,
+                  alignItems: 'center',
+                }}>
                 <View
                   style={{
-                    paddingLeft: 20,
                     flexDirection: 'row',
                     flex: 0.5,
                     alignItems: 'center',
                   }}>
-                  <Text style={{fontSize: width * 0.03}}>End:</Text>
+                  <Text style={{fontSize: width * 0.03}}>Start:</Text>
                   <DatePicker
                     style={{width: '80%'}}
-                    date={this.state.ToDate}
+                    date={this.state.FromDate}
                     mode="date"
-                    placeholder="To Date"
+                    placeholder="From Date"
                     format="YYYY-MM-DD"
-                    minDate={this.state.FromDate}
+                    minDate="2019-01-01"
                     maxDate={this.state.date}
                     confirmBtnText="Confirm"
                     cancelBtnText="Cancel"
@@ -507,243 +492,286 @@ export default class History extends React.Component {
                       },
                     }}
                     onDateChange={date => {
-                      this.setState({ToDate: date});
+                      this.setState({FromDate: date});
                     }}
                   />
                 </View>
-              ) : null}
+                {this.state.FromDate != '' ? (
+                  <View
+                    style={{
+                      paddingLeft: 20,
+                      flexDirection: 'row',
+                      flex: 0.5,
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{fontSize: width * 0.03}}>End:</Text>
+                    <DatePicker
+                      style={{width: '80%'}}
+                      date={this.state.ToDate}
+                      mode="date"
+                      placeholder="To Date"
+                      format="YYYY-MM-DD"
+                      minDate={this.state.FromDate}
+                      maxDate={this.state.date}
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      customStyles={{
+                        dateIcon: {
+                          width: 0,
+                          height: 0,
+                        },
+                        dateInput: {
+                          marginLeft: 36,
+                          borderRadius: 50,
+                        },
+                      }}
+                      onDateChange={date => {
+                        this.setState({ToDate: date});
+                      }}
+                    />
+                  </View>
+                ) : null}
+              </View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginVertical: 5,
+                }}>
+                {this.state.is_search == false ? (
+                  <TouchableOpacity
+                    underlayColor="lightgray"
+                    onPress={() => {
+                      this.searchHistory();
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: width * 0.03,
+                        backgroundColor: '#ff9500',
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        color: 'white',
+                        borderRadius: 10,
+                      }}>
+                      SEARCH
+                    </Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    underlayColor="lightgray"
+                    onPress={() => {
+                      this.clear();
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: width * 0.03,
+                        backgroundColor: '#ff9500',
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        color: 'white',
+                        borderRadius: 10,
+                      }}>
+                      CLEAR
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
-            <View style={{margin: 10, justifyContent: 'center'}}>
+            <View style={{flex: 0.8}}>
+              <View
+                style={{
+                  padding: 15,
+                  flex: 0.2,
+                  flexDirection: 'row',
+                  borderBottomColor: 'lightgrey',
+                  borderBottomWidth: 1,
+                }}>
+                <View
+                  style={{
+                    flex: 0.4,
+                    alignItems: 'center',
+                    marginTop: 10,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: width * 0.02,
+                      backgroundColor: '#ff9500',
+                      color: 'white',
+                      borderRadius: 80,
+                      padding: 15,
+                      paddingBottom: 2,
+                      paddingTop: 2,
+                    }}>
+                    Date
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 0.4,
+                    alignItems: 'center',
+                    marginTop: 10,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: width * 0.02,
+                      backgroundColor: '#ff9500',
+                      color: 'white',
+                      borderRadius: 80,
+                      padding: 15,
+                      paddingBottom: 2,
+                      paddingTop: 2,
+                    }}>
+                    No.
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 0.4,
+                    alignItems: 'center',
+                    marginTop: 10,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: width * 0.02,
+                      backgroundColor: '#ff9500',
+                      color: 'white',
+                      borderRadius: 80,
+                      padding: 15,
+                      paddingBottom: 2,
+                      paddingTop: 2,
+                    }}>
+                    Total
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 0.4,
+                    alignItems: 'center',
+                    marginTop: 10,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: width * 0.02,
+                      backgroundColor: '#ff9500',
+                      color: 'white',
+                      borderRadius: 80,
+                      padding: 15,
+                      paddingBottom: 2,
+                      paddingTop: 2,
+                    }}>
+                    Type
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    flex: 0.4,
+                    alignItems: 'center',
+                    marginTop: 10,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: width * 0.02,
+                      backgroundColor: '#ff9500',
+                      color: 'white',
+                      borderRadius: 80,
+                      padding: 15,
+                      paddingBottom: 2,
+                      paddingTop: 2,
+                    }}>
+                    Cashier
+                  </Text>
+                </View>
+              </View>
               {this.state.is_search == false ? (
-                <TouchableOpacity
-                  underlayColor="lightgray"
-                  onPress={() => {
-                    this.searchHistory();
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: width * 0.03,
-                      backgroundColor: '#ff9500',
-                      paddingLeft: 10,
-                      paddingRight: 10,
-                      color: 'white',
-                      borderRadius: 10,
-                    }}>
-                    SEARCH
-                  </Text>
-                </TouchableOpacity>
+                <FlatList
+                  pagingEnabled={true}
+                  data={this.state.dataSource}
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={({item}) => (
+                    <TouchableHighlight
+                      underlayColor="lightgray"
+                      style={{borderRadius: 20, marginHorizontal: 20}}
+                      onPress={() => this.getOrder(item.order_id)}>
+                      <View style={styles.dynamic_list_view}>
+                        <View style={{flex: 0.4, alignItems: 'center'}}>
+                          <Text
+                            style={{fontSize: width * 0.02, marginRight: 20}}>
+                            {item.order_date}
+                          </Text>
+                        </View>
+                        <View style={{flex: 0.4, alignItems: 'center'}}>
+                          <Text style={{fontSize: width * 0.02}}>
+                            {item.order_id}
+                          </Text>
+                        </View>
+                        <View style={{flex: 0.4, alignItems: 'center'}}>
+                          <Text style={{fontSize: width * 0.02}}>
+                            ${item.total_paid}
+                          </Text>
+                        </View>
+                        <View style={{flex: 0.4, alignItems: 'center'}}>
+                          <Text style={{fontSize: width * 0.02}}>
+                            {item.type}
+                          </Text>
+                        </View>
+                        <View style={{flex: 0.4, alignItems: 'center'}}>
+                          <Text
+                            style={{fontSize: width * 0.02, marginLeft: 20}}>
+                            {item.employee_name}
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableHighlight>
+                  )}
+                  keyExtractor={({id}, index) => id}
+                />
               ) : (
-                <TouchableOpacity
-                  underlayColor="lightgray"
-                  onPress={() => {
-                    this.clear();
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: width * 0.03,
-                      backgroundColor: '#ff9500',
-                      paddingLeft: 10,
-                      paddingRight: 10,
-                      color: 'white',
-                      borderRadius: 10,
-                    }}>
-                    CLEAR
-                  </Text>
-                </TouchableOpacity>
+                <FlatList
+                  pagingEnabled={true}
+                  data={this.state.Search_history}
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={({item}) => (
+                    <TouchableHighlight
+                      underlayColor="lightgray"
+                      style={{borderRadius: 20, marginHorizontal: 20}}
+                      onPress={() => this.getOrder(item.order_id)}>
+                      <View style={styles.dynamic_list_view}>
+                        <View style={{flex: 0.4, alignItems: 'center'}}>
+                          <Text
+                            style={{fontSize: width * 0.02, marginRight: 20}}>
+                            {item.order_date}
+                          </Text>
+                        </View>
+                        <View style={{flex: 0.4, alignItems: 'center'}}>
+                          <Text style={{fontSize: width * 0.02}}>
+                            {item.order_id}
+                          </Text>
+                        </View>
+                        <View style={{flex: 0.4, alignItems: 'center'}}>
+                          <Text style={{fontSize: width * 0.02}}>
+                            ${item.total_paid}
+                          </Text>
+                        </View>
+                        <View style={{flex: 0.4, alignItems: 'center'}}>
+                          <Text style={{fontSize: width * 0.02}}>
+                            {item.type}
+                          </Text>
+                        </View>
+                        <View style={{flex: 0.4, alignItems: 'center'}}>
+                          <Text
+                            style={{fontSize: width * 0.02, marginLeft: 20}}>
+                            {item.employee_name}
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableHighlight>
+                  )}
+                  keyExtractor={({id}, index) => id}
+                />
               )}
             </View>
-          </View>
-          <View style={{flex: 0.8}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                borderBottomColor: 'lightgrey',
-                paddingBottom: 8,
-                borderBottomWidth: 1,
-              }}>
-              <View
-                style={{
-                  flex: 0.4,
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}>
-                <Text
-                  style={{
-                    fontSize: width * 0.016,
-                    backgroundColor: '#ff9500',
-                    color: 'white',
-                    borderRadius: 80,
-                    padding: 15,
-                    paddingBottom: 2,
-                    paddingTop: 2,
-                  }}>
-                  Date
-                </Text>
-              </View>
-              <View
-                style={{
-                  flex: 0.4,
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}>
-                <Text
-                  style={{
-                    fontSize: width * 0.016,
-                    backgroundColor: '#ff9500',
-                    color: 'white',
-                    borderRadius: 80,
-                    padding: 15,
-                    paddingBottom: 2,
-                    paddingTop: 2,
-                  }}>
-                  No.
-                </Text>
-              </View>
-              <View
-                style={{
-                  flex: 0.4,
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}>
-                <Text
-                  style={{
-                    fontSize: width * 0.016,
-                    backgroundColor: '#ff9500',
-                    color: 'white',
-                    borderRadius: 80,
-                    padding: 15,
-                    paddingBottom: 2,
-                    paddingTop: 2,
-                  }}>
-                  Total
-                </Text>
-              </View>
-              <View
-                style={{
-                  flex: 0.4,
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}>
-                <Text
-                  style={{
-                    fontSize: width * 0.016,
-                    backgroundColor: '#ff9500',
-                    color: 'white',
-                    borderRadius: 80,
-                    padding: 15,
-                    paddingBottom: 2,
-                    paddingTop: 2,
-                  }}>
-                  Type
-                </Text>
-              </View>
-              <View
-                style={{
-                  flex: 0.4,
-                  alignItems: 'center',
-                  marginTop: 10,
-                }}>
-                <Text
-                  style={{
-                    fontSize: width * 0.016,
-                    backgroundColor: '#ff9500',
-                    color: 'white',
-                    borderRadius: 80,
-                    padding: 15,
-                    paddingBottom: 2,
-                    paddingTop: 2,
-                  }}>
-                  Cashier
-                </Text>
-              </View>
-            </View>
-            {this.state.is_search == false ? (
-              <FlatList
-                pagingEnabled={true}
-                data={this.state.dataSource}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({item}) => (
-                  <TouchableHighlight
-                    underlayColor="lightgray"
-                    style={{borderRadius: 20, marginHorizontal: 20}}
-                    onPress={() => this.getOrder(item.order_id)}>
-                    <View style={styles.dynamic_list_view}>
-                      <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text
-                          style={{fontSize: width * 0.016, marginRight: 20}}>
-                          {item.order_date}
-                        </Text>
-                      </View>
-                      <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.016}}>
-                          {item.order_id}
-                        </Text>
-                      </View>
-                      <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.016}}>
-                          ${item.total_paid}
-                        </Text>
-                      </View>
-                      <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.016}}>
-                          {item.type}
-                        </Text>
-                      </View>
-                      <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.016, marginLeft: 20}}>
-                          {item.employee_name}
-                        </Text>
-                      </View>
-                    </View>
-                  </TouchableHighlight>
-                )}
-                keyExtractor={({id}, index) => id}
-              />
-            ) : (
-              <FlatList
-                pagingEnabled={true}
-                data={this.state.Search_history}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({item}) => (
-                  <TouchableHighlight
-                    underlayColor="lightgray"
-                    style={{borderRadius: 20, marginHorizontal: 20}}
-                    onPress={() => this.getOrder(item.order_id)}>
-                    <View style={styles.dynamic_list_view}>
-                      <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text
-                          style={{fontSize: width * 0.016, marginRight: 20}}>
-                          {item.order_date}
-                        </Text>
-                      </View>
-                      <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.016}}>
-                          {item.order_id}
-                        </Text>
-                      </View>
-                      <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.016}}>
-                          ${item.total_paid}
-                        </Text>
-                      </View>
-                      <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.016}}>
-                          {item.type}
-                        </Text>
-                      </View>
-                      <View style={{flex: 0.4, alignItems: 'center'}}>
-                        <Text style={{fontSize: width * 0.016, marginLeft: 20}}>
-                          {item.employee_name}
-                        </Text>
-                      </View>
-                    </View>
-                  </TouchableHighlight>
-                )}
-                keyExtractor={({id}, index) => id}
-              />
-            )}
-          </View>
-          <View style={{flex: 0.1, backgroundColor: '#ff9500'}}></View>
+          </ScrollView>
+          <View style={{flex: 0.08, backgroundColor: '#ff9500'}}></View>
         </View>
       </SideMenuDrawer>
     );

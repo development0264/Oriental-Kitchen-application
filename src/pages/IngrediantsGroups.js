@@ -42,7 +42,7 @@ export default class IngrediantsGroups extends Component {
       img_uri: '',
       avatar: '',
       cover: '',
-      change_response: 0,
+      change_response: 1,
       add_name: '',
       add_max: '',
       add_min: '',
@@ -176,15 +176,15 @@ export default class IngrediantsGroups extends Component {
   };
 
   updatePress = id => {
-    if (this.state.editis_main == true) {
-      this.state.editis_main = 1;
-    } else {
-      this.state.editis_main = 0;
+    {
+      this.state.editis_main == true
+        ? (this.state.editis_main = 1)
+        : (this.state.editis_main = 0);
     }
-    if (this.state.editis_main == 1) {
-      this.setState({editis_main: true});
-    } else {
-      this.setState({editis_main: false});
+    {
+      this.state.editis_main == 1
+        ? this.setState({editis_main: true})
+        : this.setState({editis_main: false});
     }
     var data = new FormData();
     data.append('id', id);
@@ -754,7 +754,7 @@ export default class IngrediantsGroups extends Component {
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Name:
                           </Text>
                         </View>
@@ -784,7 +784,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Max:
                           </Text>
                         </View>
@@ -818,7 +818,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Min:
                           </Text>
                         </View>
@@ -852,7 +852,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150, alignSelf: 'flex-start'}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Description:
                           </Text>
                         </View>
@@ -887,7 +887,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Status :
                           </Text>
                         </View>
@@ -912,7 +912,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Is Main? :
                           </Text>
                         </View>
@@ -933,7 +933,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Sequence:
                           </Text>
                         </View>
@@ -1070,7 +1070,7 @@ export default class IngrediantsGroups extends Component {
                         style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Name :
                           </Text>
                         </View>
@@ -1100,7 +1100,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Max :
                           </Text>
                         </View>
@@ -1138,7 +1138,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Min :
                           </Text>
                         </View>
@@ -1174,7 +1174,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150, alignSelf: 'flex-start'}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Description :
                           </Text>
                         </View>
@@ -1210,7 +1210,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Status :
                           </Text>
                         </View>
@@ -1234,7 +1234,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Is_Main:
                           </Text>
                         </View>
@@ -1254,7 +1254,7 @@ export default class IngrediantsGroups extends Component {
                         }}>
                         <View style={{width: 150}}>
                           <Text
-                            style={{fontSize: width * 0.016, color: '#76726d'}}>
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Sequence :
                           </Text>
                         </View>
@@ -1334,8 +1334,7 @@ export default class IngrediantsGroups extends Component {
                       <TouchableOpacity
                         style={styles.delete_btn}
                         onPress={() => this.deleteIngredientGroup()}>
-                        <Text
-                          style={{fontSize: width * 0.0165, color: 'white'}}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
                           Delete
                         </Text>
                       </TouchableOpacity>
@@ -1346,8 +1345,7 @@ export default class IngrediantsGroups extends Component {
                         onPress={() =>
                           this.updatePress(this.state.ingrediant_id)
                         }>
-                        <Text
-                          style={{fontSize: width * 0.0165, color: 'white'}}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
                           Update
                         </Text>
                       </TouchableOpacity>
@@ -1418,7 +1416,7 @@ export default class IngrediantsGroups extends Component {
                             })
                           }>
                           <Text
-                            style={{color: 'white', fontSize: width * 0.016}}>
+                            style={{color: 'white', fontSize: width * 0.02}}>
                             Insert
                           </Text>
                         </TouchableOpacity>
@@ -1429,7 +1427,7 @@ export default class IngrediantsGroups extends Component {
                             this.setState({dialog: false, cover: ''})
                           }>
                           <Text
-                            style={{color: 'white', fontSize: width * 0.016}}>
+                            style={{color: 'white', fontSize: width * 0.02}}>
                             Insert
                           </Text>
                         </TouchableOpacity>
@@ -1446,7 +1444,7 @@ export default class IngrediantsGroups extends Component {
                             })
                           }>
                           <Text
-                            style={{color: 'white', fontSize: width * 0.016}}>
+                            style={{color: 'white', fontSize: width * 0.02}}>
                             View
                           </Text>
                         </TouchableOpacity>
@@ -1457,7 +1455,7 @@ export default class IngrediantsGroups extends Component {
                             this.getIngredientGroup();
                           }}>
                           <Text
-                            style={{color: 'white', fontSize: width * 0.016}}>
+                            style={{color: 'white', fontSize: width * 0.02}}>
                             View
                           </Text>
                         </TouchableOpacity>
@@ -1507,7 +1505,7 @@ export default class IngrediantsGroups extends Component {
                               <View style={{width: 150}}>
                                 <Text
                                   style={{
-                                    fontSize: width * 0.016,
+                                    fontSize: width * 0.02,
                                     color: '#76726d',
                                   }}>
                                   taxId:
@@ -1541,7 +1539,7 @@ export default class IngrediantsGroups extends Component {
                               <View style={{width: 150}}>
                                 <Text
                                   style={{
-                                    fontSize: width * 0.016,
+                                    fontSize: width * 0.02,
                                     color: '#76726d',
                                   }}>
                                   Name:
@@ -1575,7 +1573,7 @@ export default class IngrediantsGroups extends Component {
                               <View style={{width: 150}}>
                                 <Text
                                   style={{
-                                    fontSize: width * 0.016,
+                                    fontSize: width * 0.02,
                                     color: '#76726d',
                                   }}>
                                   Price:
@@ -1609,7 +1607,7 @@ export default class IngrediantsGroups extends Component {
                               <View style={{width: 150}}>
                                 <Text
                                   style={{
-                                    fontSize: width * 0.016,
+                                    fontSize: width * 0.02,
                                     color: '#76726d',
                                   }}>
                                   Max:
@@ -1641,7 +1639,7 @@ export default class IngrediantsGroups extends Component {
                               <View style={{width: 150}}>
                                 <Text
                                   style={{
-                                    fontSize: width * 0.016,
+                                    fontSize: width * 0.02,
                                     color: '#76726d',
                                   }}>
                                   Description:
@@ -1677,7 +1675,7 @@ export default class IngrediantsGroups extends Component {
                               <View style={{width: 150}}>
                                 <Text
                                   style={{
-                                    fontSize: width * 0.016,
+                                    fontSize: width * 0.02,
                                     color: '#76726d',
                                   }}>
                                   Sequence:
@@ -1711,7 +1709,7 @@ export default class IngrediantsGroups extends Component {
                               <View style={{width: 150}}>
                                 <Text
                                   style={{
-                                    fontSize: width * 0.016,
+                                    fontSize: width * 0.02,
                                     color: '#76726d',
                                   }}>
                                   Weight:
@@ -1745,7 +1743,7 @@ export default class IngrediantsGroups extends Component {
                               <View style={{width: 160}}>
                                 <Text
                                   style={{
-                                    fontSize: width * 0.016,
+                                    fontSize: width * 0.02,
                                     color: '#76726d',
                                   }}>
                                   Status:
@@ -1814,7 +1812,7 @@ export default class IngrediantsGroups extends Component {
                             this.addIngrediant();
                           }}>
                           <Text
-                            style={{fontSize: width * 0.0168, color: 'white'}}>
+                            style={{fontSize: width * 0.028, color: 'white'}}>
                             Add
                           </Text>
                         </TouchableOpacity>
@@ -1884,7 +1882,7 @@ export default class IngrediantsGroups extends Component {
                           <View style={{width: 150}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               taxId:
@@ -1919,7 +1917,7 @@ export default class IngrediantsGroups extends Component {
                           <View style={{width: 150}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Name:
@@ -1954,7 +1952,7 @@ export default class IngrediantsGroups extends Component {
                           <View style={{width: 150}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Price:
@@ -1989,7 +1987,7 @@ export default class IngrediantsGroups extends Component {
                           <View style={{width: 150}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Max:
@@ -2024,7 +2022,7 @@ export default class IngrediantsGroups extends Component {
                           <View style={{width: 150}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Description:
@@ -2061,7 +2059,7 @@ export default class IngrediantsGroups extends Component {
                           <View style={{width: 150}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Sequence:
@@ -2096,7 +2094,7 @@ export default class IngrediantsGroups extends Component {
                           <View style={{width: 150}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Weight:
@@ -2133,7 +2131,7 @@ export default class IngrediantsGroups extends Component {
                           <View style={{width: 160}}>
                             <Text
                               style={{
-                                fontSize: width * 0.016,
+                                fontSize: width * 0.02,
                                 color: '#76726d',
                               }}>
                               Status:
@@ -2206,8 +2204,7 @@ export default class IngrediantsGroups extends Component {
                       <TouchableOpacity
                         style={styles.delete_btn}
                         onPress={() => this.deleteIngredient()}>
-                        <Text
-                          style={{fontSize: width * 0.0165, color: 'white'}}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
                           Delete
                         </Text>
                       </TouchableOpacity>
@@ -2218,8 +2215,7 @@ export default class IngrediantsGroups extends Component {
                         onPress={() =>
                           this.updateIngredient(this.state.Ingredientid)
                         }>
-                        <Text
-                          style={{fontSize: width * 0.0165, color: 'white'}}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
                           Update
                         </Text>
                       </TouchableOpacity>
@@ -2244,7 +2240,7 @@ export default class IngrediantsGroups extends Component {
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
+                              fontSize: width * 0.02,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2260,7 +2256,7 @@ export default class IngrediantsGroups extends Component {
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
+                              fontSize: width * 0.02,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2276,7 +2272,7 @@ export default class IngrediantsGroups extends Component {
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
+                              fontSize: width * 0.02,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2292,7 +2288,7 @@ export default class IngrediantsGroups extends Component {
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
+                              fontSize: width * 0.02,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2308,7 +2304,7 @@ export default class IngrediantsGroups extends Component {
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
+                              fontSize: width * 0.02,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2324,7 +2320,7 @@ export default class IngrediantsGroups extends Component {
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.016,
+                              fontSize: width * 0.02,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2352,6 +2348,7 @@ export default class IngrediantsGroups extends Component {
 
   fillIngredient() {
     var items = [];
+    var {height, width} = Dimensions.get('window');
     this.state.dataSourceIngredient.map((item, i) => {
       items.push(
         <TouchableOpacity onPress={() => this.getIngredient(item.id)}>
@@ -2366,19 +2363,19 @@ export default class IngrediantsGroups extends Component {
                 alignItems: 'center',
               }}>
               <Col style={{alignItems: 'center'}}>
-                <Text style={{fontSize: width * 0.016}}>{item.name}</Text>
+                <Text style={{fontSize: width * 0.02}}>{item.name}</Text>
               </Col>
               <Col style={{alignItems: 'center'}}>
-                <Text style={{fontSize: width * 0.016}}>${item.price}</Text>
+                <Text style={{fontSize: width * 0.02}}>${item.price}</Text>
               </Col>
               <Col style={{alignItems: 'center'}}>
-                <Text style={{fontSize: width * 0.016}}>{item.max}</Text>
+                <Text style={{fontSize: width * 0.02}}>{item.max}</Text>
               </Col>
               <Col style={{alignItems: 'center'}}>
-                <Text style={{fontSize: width * 0.016}}>{item.weight}</Text>
+                <Text style={{fontSize: width * 0.02}}>{item.weight}</Text>
               </Col>
               <Col style={{alignItems: 'center'}}>
-                <Text style={{fontSize: width * 0.016}}>
+                <Text style={{fontSize: width * 0.02}}>
                   {item.status == 1 ? (
                     <Text>Enable</Text>
                   ) : (

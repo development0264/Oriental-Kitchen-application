@@ -146,7 +146,7 @@ export default class Home extends Component {
         navigation={this.props}>
         <View style={styles.container}>
           <Navbar left={left} right={right} title="Ingredient" />
-          <View style={{flex: 0.9, flexDirection: 'row', padding: 5}}>
+          <View style={{flex: 0.92, flexDirection: 'row', padding: 5}}>
             <FlatList
               data={this.state.dataSource}
               keyExtractor={({id}, index) => id}
@@ -241,7 +241,7 @@ export default class Home extends Component {
               )}
             />
           </View>
-          <View style={{flex: 0.1, backgroundColor: '#ff9500'}}></View>
+          <View style={{flex: 0.08, backgroundColor: '#ff9500'}}></View>
         </View>
       </SideMenuDrawer>
     );

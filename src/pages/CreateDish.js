@@ -810,7 +810,7 @@ export default class CreateDish extends Component {
                     </View>
                     <View style={{justifyContent: 'center'}}>
                       <TouchableOpacity
-                        onPress={() => this.setState({add_dialog: false})}>
+                        onPress={() => this.setState({add_dialog: false, di})}>
                         <FontAwesomeIcon
                           icon={faWindowClose}
                           color={'#ff9500'}
@@ -936,6 +936,7 @@ export default class CreateDish extends Component {
                             });
                           }}
                           isChecked={this.state.isPopular}
+                          checkedCheckBoxColor={'orange'}
                         />
                       </View>
                     </View>
