@@ -44,7 +44,13 @@ export default class Home extends Component {
       cancel_dialog: false,
       pause_dialog: false,
       userDetail: '',
-      order_pause_id: null
+      order_pause_id: null,
+      delivery_id: null,
+      order_date: null,
+      address_1: null,
+      address_2: null,
+      zip: null,
+      city: null,
     };
     this._retrieveData();
 
@@ -264,7 +270,11 @@ export default class Home extends Component {
             this.select_order(obj[0].order_id)
             this.setState({
               current_order: obj[0].reference,
+              delivery_id: obj[0].delivery_id,
             });
+          }
+          else {
+            this.makecurrentorder(this.state.dataIni)
           }
           // else {
           //   var obj = this.state.dataIni.filter(o => o.name == 'pause');
@@ -312,7 +322,13 @@ export default class Home extends Component {
           this.setState({
             dataSource: responseJson.data,
             dataImage: responseJson.data[0].ingredient,
-            //current_order: responseJson.data[0].reference,
+          });
+          this.setState({
+            order_date: this.state.dataSource[0].order_date,
+            address_1: this.state.dataSource[0].address[0].address_1,
+            address_2: this.state.dataSource[0].address[0].address_2,
+            zip: this.state.dataSource[0].address[0].zip,
+            city: this.state.dataSource[0].address[0].city,
           });
         } else {
           alert('Something wrong happened');
@@ -896,11 +912,26 @@ export default class Home extends Component {
                 backgroundColor: '#ff9500',
                 flex: 0.8,
                 justifyContent: 'center',
-                padding: 20,
+                flexDirection: 'row',
               }}>
-              <Text style={{ fontSize: 40, color: 'white', fontWeight: 'bold' }}>
+              <Text style={{ fontSize: 40, color: 'white', alignItems: 'flex-start', justifyContent: 'flex-start', alignSelf: 'center', fontWeight: 'bold', width: '40%' }}>
                 CURRENT ORDER {this.state.current_order}
               </Text>
+              {this.state.delivery_id == 2 ?
+                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'center', fontWeight: 'bold', width: '40%' }}>
+                  Collection Time : {this.state.order_date}
+                </Text>
+                :
+                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'center', fontWeight: 'bold', width: '40%' }}>
+                  Delivery Address :  {
+                    this.state.address_1 != null && this.state.address_2 != null ?
+                      this.state.address_1 + this.state.address_2 + this.state.city + this.state.zip
+                      :
+                      'N/A'
+                  }
+                </Text>
+              }
+
             </View>
             <TouchableOpacity
               style={{
