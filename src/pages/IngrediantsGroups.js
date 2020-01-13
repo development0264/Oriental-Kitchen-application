@@ -495,49 +495,6 @@ export default class IngrediantsGroups extends Component {
       });
   };
 
-  getIngredient = id => {
-    var data = new FormData();
-    data.append('id', id);
-
-    const user_details = this.state.userDetail;
-    var headers = new Headers();
-    let auth = 'Bearer ' + user_details.userToken;
-    headers.append('Authorization', auth);
-    headers.append('Accept', 'application/json');
-    console.log(headers);
-
-    fetch('http://dev-fs.8d.ie/api/kitchen/getIngredient', {
-      method: 'POST',
-      headers: headers,
-      body: data,
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        if (responseJson.status == 'success') {
-          console.log(responseJson);
-          this.setState({edit_ingredient_dialog: true});
-          this.setState({
-            Ingredientid: responseJson.ingredient.id,
-            Ingredienttaxid: responseJson.ingredient.tax_id,
-            Ingredientname: responseJson.ingredient.name,
-            Ingredientprice: responseJson.ingredient.price,
-            Ingredientmax: responseJson.ingredient.max,
-            Ingredientdesc: responseJson.ingredient.description,
-            Ingredientseq: responseJson.ingredient.sequence,
-            Ingredientweight: responseJson.ingredient.weight,
-            Ingredientstatus: responseJson.ingredient.status,
-            Ingredientimage: responseJson.ingredient.cover,
-          });
-          console.log(responseJson.ingredient.status);
-        } else {
-          alert('Something wrong happened');
-        }
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
-
   updateIngredient = id => {
     var data = new FormData();
     data.append('id', id);
@@ -582,6 +539,49 @@ export default class IngrediantsGroups extends Component {
           this.componentDidMount();
           this.getIngredientGroup();
           // alert('Update record successfully');
+        } else {
+          alert('Something wrong happened');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  getIngredient = id => {
+    var data = new FormData();
+    data.append('id', id);
+
+    const user_details = this.state.userDetail;
+    var headers = new Headers();
+    let auth = 'Bearer ' + user_details.userToken;
+    headers.append('Authorization', auth);
+    headers.append('Accept', 'application/json');
+    console.log(headers);
+
+    fetch('http://dev-fs.8d.ie/api/kitchen/getIngredient', {
+      method: 'POST',
+      headers: headers,
+      body: data,
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson.status == 'success') {
+          console.log(responseJson);
+          this.setState({edit_ingredient_dialog: true});
+          this.setState({
+            Ingredientid: responseJson.ingredient.id,
+            Ingredienttaxid: responseJson.ingredient.tax_id,
+            Ingredientname: responseJson.ingredient.name,
+            Ingredientprice: responseJson.ingredient.price,
+            Ingredientmax: responseJson.ingredient.max,
+            Ingredientdesc: responseJson.ingredient.description,
+            Ingredientseq: responseJson.ingredient.sequence,
+            Ingredientweight: responseJson.ingredient.weight,
+            Ingredientstatus: responseJson.ingredient.status,
+            Ingredientimage: responseJson.ingredient.cover,
+          });
+          console.log(responseJson.ingredient.status);
         } else {
           alert('Something wrong happened');
         }
@@ -2142,9 +2142,9 @@ export default class IngrediantsGroups extends Component {
                             mode="dropdown"
                             style={{width: '40%'}}
                             selectedValue={this.state.Ingredientstatus.toString()}
-                            onValueChange={status =>
+                            onValueChange={Ingredientstatus =>
                               this.setState({
-                                Ingredientstatus: status,
+                                Ingredientstatus: Ingredientstatus,
                               })
                             }>
                             <Picker.Item label="Enable" value="1" />
