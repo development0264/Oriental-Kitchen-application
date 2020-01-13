@@ -37,6 +37,7 @@ import {
   faSignOutAlt,
   faMoneyBill,
   faConciergeBell,
+  faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
 // Our custom files and classes import
 import Text from './Text';
@@ -416,7 +417,7 @@ var KitchenmenuItems = [
   {
     id: 1,
     title: 'Kitchen',
-    icon: faStar,
+    icon: faUtensils,
     page: 'Home_kitchen',
   },
   // {

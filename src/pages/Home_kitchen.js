@@ -45,15 +45,12 @@ export default class Home extends Component {
       pause_dialog: false,
       userDetail: '',
       order_pause_id: null,
-<<<<<<< HEAD
       delivery_id: null,
       order_date: null,
       address_1: null,
       address_2: null,
       zip: null,
       city: null,
-=======
->>>>>>> 3297d415562bfbc225ab4ba3716300bfefa6c9c3
     };
     this._retrieveData();
   }
@@ -270,9 +267,8 @@ export default class Home extends Component {
               current_order: obj[0].reference,
               delivery_id: obj[0].delivery_id,
             });
-          }
-          else {
-            this.makecurrentorder(this.state.dataIni)
+          } else {
+            this.makecurrentorder(this.state.dataIni);
           }
           // else {
           //   var obj = this.state.dataIni.filter(o => o.name == 'pause');
@@ -926,28 +922,47 @@ export default class Home extends Component {
                 justifyContent: 'center',
                 flexDirection: 'row',
               }}>
-<<<<<<< HEAD
-              <Text style={{ fontSize: 40, color: 'white', alignItems: 'flex-start', justifyContent: 'flex-start', alignSelf: 'center', fontWeight: 'bold', width: '40%' }}>
-=======
-              <Text style={{fontSize: 40, color: 'white', fontWeight: 'bold'}}>
->>>>>>> 3297d415562bfbc225ab4ba3716300bfefa6c9c3
+              <Text
+                style={{
+                  fontSize: 40,
+                  color: 'white',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                  alignSelf: 'center',
+                  fontWeight: 'bold',
+                  width: '40%',
+                }}>
                 CURRENT ORDER {this.state.current_order}
               </Text>
-              {this.state.delivery_id == 2 ?
-                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'center', fontWeight: 'bold', width: '40%' }}>
+              {this.state.delivery_id == 2 ? (
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: 'white',
+                    alignSelf: 'center',
+                    fontWeight: 'bold',
+                    width: '40%',
+                  }}>
                   Collection Time : {this.state.order_date}
                 </Text>
-                :
-                <Text style={{ fontSize: 20, color: 'white', alignSelf: 'center', fontWeight: 'bold', width: '40%' }}>
-                  Delivery Address :  {
-                    this.state.address_1 != null && this.state.address_2 != null ?
-                      this.state.address_1 + this.state.address_2 + this.state.city + this.state.zip
-                      :
-                      'N/A'
-                  }
+              ) : (
+                <Text
+                  style={{
+                    fontSize: 20,
+                    color: 'white',
+                    alignSelf: 'center',
+                    fontWeight: 'bold',
+                    width: '40%',
+                  }}>
+                  Delivery Address :{' '}
+                  {this.state.address_1 != null && this.state.address_2 != null
+                    ? this.state.address_1 +
+                      this.state.address_2 +
+                      this.state.city +
+                      this.state.zip
+                    : 'N/A'}
                 </Text>
-              }
-
+              )}
             </View>
             <TouchableOpacity
               style={{
