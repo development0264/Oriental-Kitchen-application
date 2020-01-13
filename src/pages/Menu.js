@@ -116,7 +116,7 @@ export default class Employee extends Component {
                 {
                     text: 'Yes',
                     onPress: () => {
-                        //this.deleteYesPress(id);
+                        // this.deleteYesPress(id);
                     },
                 },
             ],
@@ -243,6 +243,7 @@ export default class Employee extends Component {
             });
             this.setState({ dataSource: newData });
         } else {
+            alert('hi');
             this.setState({ dataSource: this.state.dataSourcenew });
         }
     };

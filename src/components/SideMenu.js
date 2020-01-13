@@ -366,18 +366,19 @@ var menuItems = [
 var CashiermenuItems = [
   {
     id: 1,
-    title: 'Order',
-    icon: faStar,
+    title: 'Payment',
+    icon: faMoneyBill,
+    page: 'Payment',
   },
-  {
-    id: 2,
-    title: 'Sales',
-    icon: faHistory,
-  },
+  // {
+  //   id: 2,
+  //   title: 'Sales',
+  //   icon: faHistory,
+  // },
   {
     id: 3,
     title: 'History',
-    icon: faShare,
+    icon: faHistory,
     page: 'History',
   },
 ];
@@ -418,24 +419,18 @@ var KitchenmenuItems = [
     icon: faStar,
     page: 'Home_kitchen',
   },
-  {
-    id: 2,
-    title: 'Dishes',
-    icon: faHistory,
-    page: 'Menu',
-  },
-  {
-    id: 3,
-    title: 'Sales',
-    icon: faHistory,
-    // page: 'History',
-  },
-  {
-    id: 4,
-    title: 'History',
-    icon: faShare,
-    page: 'History',
-  },
+  // {
+  //   id: 2,
+  //   title: 'Menu',
+  //   icon: faHistory,
+  //   page: 'Menu',
+  // },
+  // {
+  //   id: 4,
+  //   title: 'History',
+  //   icon: faShare,
+  //   page: 'History',
+  // },
 ];
 
 var vendermenuItems = [
@@ -451,23 +446,23 @@ var vendermenuItems = [
     icon: faHistory,
     page: 'Ingrediant',
   },
-  {
-    id: 3,
-    title: 'Report',
-    icon: faHistory,
-    page: 'History',
-  },
+  // {
+  //   id: 3,
+  //   title: 'Report',
+  //   icon: faHistory,
+  //   page: 'History',
+  // },
   {
     id: 4,
     title: 'IngridentGroup',
     icon: faStar,
     page: 'IngrediantsGroups',
   },
-  {
-    id: 5,
-    title: 'Sales',
-    icon: faHistory,
-  },
+  // {
+  //   id: 5,
+  //   title: 'Sales',
+  //   icon: faHistory,
+  // },
   {
     id: 6,
     title: 'History',

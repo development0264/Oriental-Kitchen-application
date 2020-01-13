@@ -33,7 +33,7 @@ export default class History extends React.Component {
       FromDate: '',
       ToDate: '',
       edit_history_dialog: false,
-      dataSource: '',
+      dataSource: [],
       Search_history: '',
       is_search: false,
       Numid: 0,
@@ -114,10 +114,10 @@ export default class History extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        if (responseJson) {
+        if (responseJson.status == 'success') {
           console.log(responseJson);
           this.setState({edit_history_dialog: true, Numid: 0});
-          this.setState({dataSourcePicker: responseJson});
+          this.setState({dataSourcePicker: responseJson.data});
           // this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -701,12 +701,12 @@ export default class History extends React.Component {
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
                           <Text style={{fontSize: width * 0.02}}>
-                            {item.order_id}
+                            {item.reference}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
                           <Text style={{fontSize: width * 0.02}}>
-                            ${item.total_paid}
+                            ${item.total}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
