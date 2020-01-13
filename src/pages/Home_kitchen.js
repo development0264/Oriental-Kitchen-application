@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Dimensions,
   Platform,
@@ -9,10 +9,10 @@ import {
   ScrollView,
   TouchableOpacity,
   TouchableHighlight,
-  ToastAndroid
+  ToastAndroid,
 } from 'react-native';
-import { Button, Left, Right, Icon } from 'native-base';
-import { Dialog } from 'react-native-simple-dialogs';
+import {Button, Left, Right, Icon} from 'native-base';
+import {Dialog} from 'react-native-simple-dialogs';
 import Navbar from '../components/Navbar';
 import {
   faBars,
@@ -20,14 +20,14 @@ import {
   faArrowDown,
   faCamera,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import moment from 'moment';
-import { Card } from 'react-native-elements';
+import {Card} from 'react-native-elements';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import AsyncStorage from '@react-native-community/async-storage';
 import SocketIOClient from 'socket.io-client';
 
-var order = []
+var order = [];
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -45,24 +45,24 @@ export default class Home extends Component {
       pause_dialog: false,
       userDetail: '',
       order_pause_id: null,
+<<<<<<< HEAD
       delivery_id: null,
       order_date: null,
       address_1: null,
       address_2: null,
       zip: null,
       city: null,
+=======
+>>>>>>> 3297d415562bfbc225ab4ba3716300bfefa6c9c3
     };
     this._retrieveData();
-
-
   }
-
 
   _retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('visited_onces');
       if (value !== null) {
-        this.setState({ userDetail: JSON.parse(value) });
+        this.setState({userDetail: JSON.parse(value)});
         this.get_vender_order();
 
         this.socket = SocketIOClient('http://dev-fs.8d.ie:6001');
@@ -70,22 +70,20 @@ export default class Home extends Component {
         this.socket.on('kitchenJoined', userId => {
           this.locad_socket();
         });
-
       }
     } catch (error) {
       alert(error);
     }
   };
 
-
   locad_socket() {
     this.socket.on('order_receive', message => {
-      var obj = order.filter(o => o.reference == message.reference)
+      var obj = order.filter(o => o.reference == message.reference);
       if (obj.length == 0) {
-        order.unshift(message)
+        order.unshift(message);
         ToastAndroid.show('New Order is Placed !', ToastAndroid.SHORT);
       }
-      this.setState({ dataIni: order })
+      this.setState({dataIni: order});
     });
   }
 
@@ -100,10 +98,10 @@ export default class Home extends Component {
   }
 
   startTime = () => {
-    this.setState({ isActive: true });
+    this.setState({isActive: true});
 
     this.countdown = setInterval(() => {
-      this.setState(({ secondsElapsed }) => ({
+      this.setState(({secondsElapsed}) => ({
         secondsElapsed: secondsElapsed - 1,
       }));
     }, 1000);
@@ -131,7 +129,7 @@ export default class Home extends Component {
       .then(responseJson => {
         //alert(JSON.stringify(responseJson))
         if (responseJson.status == 'success') {
-          this.setState({ pause_dialog: false });
+          this.setState({pause_dialog: false});
           this.get_vender_order();
         } else {
           alert('Something wrong happened');
@@ -166,7 +164,7 @@ export default class Home extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({ pause_dialog: false });
+          this.setState({pause_dialog: false});
           this.get_vender_order();
         } else {
           alert('Something wrong happened');
@@ -198,7 +196,7 @@ export default class Home extends Component {
       .then(responseJson => {
         console.log(responseJson);
         if (responseJson.status == 'success') {
-          this.setState({ cancel_dialog: false });
+          this.setState({cancel_dialog: false});
           //this.componentDidMount();
         } else {
           alert('Something wrong happened');
@@ -209,7 +207,7 @@ export default class Home extends Component {
       });
   };
 
-  currentStatus = (id) => {
+  currentStatus = id => {
     var headers = new Headers();
     let auth =
       'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjQwNTIwYjFiNGRkY2FmNTRjZGQ3NjViYzBhYzg5ODZjNzQ3OWJiNWIzNzc4M2NkODBkZGFjODQ5Mjc3Mzg4NjY5YmU5ZTgwNTBlMjJhMWIwIn0.eyJhdWQiOiIxIiwianRpIjoiNDA1MjBiMWI0ZGRjYWY1NGNkZDc2NWJjMGFjODk4NmM3NDc5YmI1YjM3NzgzY2Q4MGRkYWM4NDkyNzczODg2NjliZTllODA1MGUyMmExYjAiLCJpYXQiOjE1Nzc3ODE2ODgsIm5iZiI6MTU3Nzc4MTY4OCwiZXhwIjoxNjA5NDA0MDg4LCJzdWIiOiIxOCIsInNjb3BlcyI6W119.SlEA_7NoXPaANQ0TtusrLcl85p9Hnn0xxF2N6zSwGDeaNYxdM-I9VjeXLCU3AKWMC5_8Gxvb_SHDnABjVz1UgKgyUzT-pmrv9r1h70yh6qdsMGVu8dX7Dfzdr04KIu32lxkXhhgWRDHKpn4RZ9B_WlRCuHp72Us1q-z7rD0Vu_Bo5j_COAw-8HJsLjDxb2hls-On26FWSNHGgTa6siJtWruAmxBJVBWu9jSWNJFYisyzB5i6DgNCHRCk29Wl7sy-X2PUItRvTN7EKYKTBz6AvTq6-2yADmIfURiH3dBUHHG-KqqSvwav2HxCYcP7L5IH1HPm7-2Q09E8UWkkTSWgq3dX2g7zs9RBAduxiK1q7_GlgRXfDD9H_fGunkVqa0K83iZUH8TxLuqdcUY4vhW-pS5s0gVgAd7M9QLq8Oayab_QqkvqteuUjYd3zXX_Ar8S7L9yVg4-4u9ABN_wrT6lEwwA2SJoZtVAjScsrk8jVxHtMWo4kTKgYzNZTI9ZVLb2GmbGL36TYqoAH2t8JyEMgsXlvfrfpfcGj2_ERWjAMNwtS4hWiMgz7qKLwg7zji2-7LZLhuNY3tJtwp6DB7_frCCYNTejSdATu13rG__ko1fOdofqhdZ16SVEVO0p5ddw7ZX-n-BKesJsjSq-Qt1MK2_HEXm_gRjuyvswkvIvQrY';
@@ -244,7 +242,7 @@ export default class Home extends Component {
     let auth = 'Bearer ' + user_details.userToken;
     headers.append('Authorization', auth);
     // headers.append('Accept', 'application/json');
-    console.log("headers", headers);
+    console.log('headers', headers);
     fetch('http://dev-fs.8d.ie/api/order/get-vender-order', {
       method: 'POST',
       headers: headers,
@@ -266,8 +264,8 @@ export default class Home extends Component {
 
           var obj = this.state.dataIni.filter(o => o.name == 'current');
           if (obj.length) {
-            obj[0].is_selected = true
-            this.select_order(obj[0].order_id)
+            obj[0].is_selected = true;
+            this.select_order(obj[0].order_id);
             this.setState({
               current_order: obj[0].reference,
               delivery_id: obj[0].delivery_id,
@@ -341,17 +339,19 @@ export default class Home extends Component {
   }
 
   makecurrentorder(item) {
-    this.currentStatus(item[item.length - 1].order_id)
+    this.currentStatus(item[item.length - 1].order_id);
   }
 
   getOrderId = () => {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     var items = [];
-    var Status = "";
+    var Status = '';
     if (this.state.dataSource.length > 0) {
-      var StatusOrder = this.state.dataIni.filter(o => o.order_id == this.state.dataSource[0].order_id)
+      var StatusOrder = this.state.dataIni.filter(
+        o => o.order_id == this.state.dataSource[0].order_id,
+      );
       if (StatusOrder.length) {
-        Status = StatusOrder[0].delivery_name
+        Status = StatusOrder[0].delivery_name;
       }
     }
     this.state.dataSource.map((item, i) => {
@@ -375,28 +375,29 @@ export default class Home extends Component {
   };
 
   order = () => {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     var items = [];
     this.state.dataIni.map((item, i) => {
       items.push(
         <TouchableOpacity onPress={() => this.get_selectedorder(item)}>
           <View
             style={
-              (item.is_selected == null || item.is_selected == undefined || item.is_selected == false)
+              item.is_selected == null ||
+              item.is_selected == undefined ||
+              item.is_selected == false
                 ? styles.defultpress
-                :
-                styles.selected_order
+                : styles.selected_order
             }>
             <Text
               style={
-                (item.is_selected == null || item.is_selected == undefined || item.is_selected == false)
-                  ?
-                  styles.defulttext
-                  :
-                  styles.selected_order_text
+                item.is_selected == null ||
+                item.is_selected == undefined ||
+                item.is_selected == false
+                  ? styles.defulttext
+                  : styles.selected_order_text
               }>
               {item.reference}
-              {"\n"}
+              {'\n'}
               {item.delivery_name}
             </Text>
             {/* <Text>
@@ -408,31 +409,31 @@ export default class Home extends Component {
               }
             </Text> */}
           </View>
-        </TouchableOpacity >,
+        </TouchableOpacity>,
       );
     });
     return items;
   };
 
   calltimer() {
-    return "00:00"
+    return '00:00';
   }
 
   fillOrder = () => {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     var items = [];
     if (this.state.dataSource.length > 0) {
       this.state.dataSource.map((item, i) => {
         items.push(
           <View>
-            <View style={{ flexDirection: 'row' }}>
+            <View style={{flexDirection: 'row'}}>
               <View
                 style={{
-                  flex: 0.20,
+                  flex: 0.2,
                 }}>
                 <ScrollView>{this.order()}</ScrollView>
               </View>
-              <View style={{ flex: 0.89 }}>
+              <View style={{flex: 0.89}}>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -445,8 +446,8 @@ export default class Home extends Component {
                       backgroundColor: '#383330',
                       paddingVertical: 10,
                     }}>
-                    <View style={{ alignItems: 'flex-end', flex: 0.5 }}>
-                      <Text style={{ fontSize: width * 0.016, color: 'white' }}>
+                    <View style={{alignItems: 'flex-end', flex: 0.5}}>
+                      <Text style={{fontSize: width * 0.016, color: 'white'}}>
                         {item.created_at.split(' ')[1].substring(0, 5)}
                       </Text>
                     </View>
@@ -464,21 +465,21 @@ export default class Home extends Component {
                           color: 'white',
                         }}>
                         {this.state.dataSource.length} DISHES
-                    </Text>
+                      </Text>
                     </View>
                   </View>
                 </View>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{flexDirection: 'row'}}>
                   <View
                     style={{
                       flex: 0.3,
                       flexDirection: 'row',
                       justifyContent: 'flex-start',
                     }}>
-                    <TouchableOpacity style={{ marginLeft: 30, marginTop: 10 }}>
+                    <TouchableOpacity style={{marginLeft: 30, marginTop: 10}}>
                       <Image source={require('../images/arrow.png')} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ marginLeft: 30, marginTop: 10 }}>
+                    <TouchableOpacity style={{marginLeft: 30, marginTop: 10}}>
                       <Image source={require('../images/arrow-down.png')} />
                     </TouchableOpacity>
                   </View>
@@ -490,7 +491,7 @@ export default class Home extends Component {
                         justifyContent: 'flex-end',
                         alignItems: 'center',
                       }}>
-                      <Text style={{ fontSize: width * 0.016 }}>
+                      <Text style={{fontSize: width * 0.016}}>
                         {this.getMinutes()}:{this.getSeconds()}
                       </Text>
                     </View>
@@ -521,9 +522,9 @@ export default class Home extends Component {
                     </Text>
                     </TouchableOpacity> */}
                     <TouchableOpacity
-                      style={{ marginLeft: 30 }}
+                      style={{marginLeft: 30}}
                       onPress={() => {
-                        this.setState({ cancel_dialog: true });
+                        this.setState({cancel_dialog: true});
                       }}>
                       <Text
                         style={{
@@ -536,7 +537,7 @@ export default class Home extends Component {
                           marginTop: 10,
                         }}>
                         CANCEL
-                    </Text>
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -551,27 +552,39 @@ export default class Home extends Component {
     } else {
       items.push(
         <View>
-          <View style={{ flexDirection: 'row' }}>
+          <View style={{flexDirection: 'row'}}>
             <View
               style={{
-                flex: 0.20,
+                flex: 0.2,
               }}>
               <ScrollView>{this.order()}</ScrollView>
             </View>
-            <View style={{ flex: 1, alignSelf: 'center', alignContent: 'center', justifyContent: 'center' }}>
-              <Text style={{ flex: 1, alignSelf: 'center', alignContent: 'center', fontSize: 25 }}>
+            <View
+              style={{
+                flex: 1,
+                alignSelf: 'center',
+                alignContent: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  flex: 1,
+                  alignSelf: 'center',
+                  alignContent: 'center',
+                  fontSize: 25,
+                }}>
                 No Any Current Order Selectd !
-                  </Text>
+              </Text>
             </View>
           </View>
-        </View >,
+        </View>,
       );
     }
     return items;
   };
 
   fillCard = () => {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     var items = [];
     this.state.dataSource.map((item, i) => {
       {
@@ -586,8 +599,8 @@ export default class Home extends Component {
                 borderBottomWidth: 1,
                 paddingBottom: 10,
               }}>
-              <View style={{ flex: 0.9 }}>
-                <Text style={{ fontSize: 25 }}>
+              <View style={{flex: 0.9}}>
+                <Text style={{fontSize: 25}}>
                   {i + 1}
                   {'. '}
                   <Text
@@ -613,7 +626,7 @@ export default class Home extends Component {
                     fontWeight: 'bold',
                   }}>
                   X{' '}
-                  <Text style={{ fontWeight: 'bold', fontSize: 40 }}>
+                  <Text style={{fontWeight: 'bold', fontSize: 40}}>
                     {item.qty}
                   </Text>
                 </Text>
@@ -655,7 +668,7 @@ export default class Home extends Component {
       items.push(
         <View>
           <View>
-            {ingredient[i].is_group == true ?
+            {ingredient[i].is_group == true ? (
               <View
                 style={{
                   flex: 1,
@@ -677,7 +690,7 @@ export default class Home extends Component {
                     backgroundColor: '#ff9500',
                   }}
                   resizeMode="contain"
-                  source={{ uri: 'http://dev-fs.8d.ie/' + ingredient[i].cover }}
+                  source={{uri: 'http://dev-fs.8d.ie/' + ingredient[i].cover}}
                 />
                 <Text
                   style={{
@@ -691,7 +704,7 @@ export default class Home extends Component {
                   {ingredient[i].name}
                 </Text>
               </View>
-              :
+            ) : (
               <Image
                 source={{
                   uri: 'http://dev-fs.8d.ie/' + ingredient[i].cover,
@@ -703,7 +716,7 @@ export default class Home extends Component {
                 }}
                 resizeMode="contain"
               />
-            }
+            )}
             {/* <Text>{ingredient[i].name}</Text> */}
           </View>
         </View>,
@@ -715,31 +728,30 @@ export default class Home extends Component {
   get_selectedorder(item) {
     var objfind = this.state.dataIni.filter(o => o.is_selected == true);
     if (objfind.length > 0) {
-      objfind[0].is_selected = false
+      objfind[0].is_selected = false;
     }
     item.is_selected = true;
     // this.setState({
     //   current_order: item.reference,
     // });
-    this.select_order(item.order_id)
+    this.select_order(item.order_id);
     //setTimeout(function () {
-    this.setState({ dataIni: this.state.dataIni })
+    this.setState({dataIni: this.state.dataIni});
     //})
-
   }
 
   render() {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     var left = (
-      <Left style={{ flex: 1 }}>
+      <Left style={{flex: 1}}>
         <Button onPress={() => this._sideMenuDrawer.open()} transparent>
           <FontAwesomeIcon icon={faBars} color={'white'} size={25} />
         </Button>
       </Left>
     );
     var right = (
-      <Right style={{ flex: 1 }}>
-        <Text style={{ color: 'white', fontFamily: 'Roboto', fontWeight: '100' }}>
+      <Right style={{flex: 1}}>
+        <Text style={{color: 'white', fontFamily: 'Roboto', fontWeight: '100'}}>
           Station 1
         </Text>
       </Right>
@@ -747,11 +759,11 @@ export default class Home extends Component {
     return (
       <SideMenuDrawer
         ref={ref => (this._sideMenuDrawer = ref)}
-        style={{ zIndex: 1 }}
+        style={{zIndex: 1}}
         navigation={this.props}>
         <View style={styles.container}>
           <Navbar left={left} right={right} title="Kitchen" />
-          <View style={{ flex: 0.88 }}>
+          <View style={{flex: 0.88}}>
             <View>{this.fillOrder()}</View>
           </View>
           <Dialog
@@ -765,9 +777,9 @@ export default class Home extends Component {
               alignSelf: 'center',
               backgroundColor: '#efeff4',
             }}
-            onTouchOutside={() => this.setState({ pause_dialog: false })}>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 0.95 }}>
+            onTouchOutside={() => this.setState({pause_dialog: false})}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 0.95}}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -781,9 +793,9 @@ export default class Home extends Component {
                   Pause order
                 </Text>
               </View>
-              <View style={{ justifyContent: 'center' }}>
+              <View style={{justifyContent: 'center'}}>
                 <TouchableOpacity
-                  onPress={() => this.setState({ pause_dialog: false })}>
+                  onPress={() => this.setState({pause_dialog: false})}>
                   <FontAwesomeIcon
                     icon={faWindowClose}
                     color={'#ff9500'}
@@ -808,22 +820,22 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-around',
               }}>
-              <View style={{ flex: 0.9, marginTop: 10 }}>
+              <View style={{flex: 0.9, marginTop: 10}}>
                 <TouchableOpacity
                   style={styles.yes}
                   onPress={() => {
                     this.pauseStatus();
                   }}>
-                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
                     Yes
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{ marginTop: 10 }}>
+              <View style={{marginTop: 10}}>
                 <TouchableOpacity
                   style={styles.no}
-                  onPress={() => this.setState({ pause_dialog: false })}>
-                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+                  onPress={() => this.setState({pause_dialog: false})}>
+                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
                     No
                   </Text>
                 </TouchableOpacity>
@@ -841,9 +853,9 @@ export default class Home extends Component {
               alignSelf: 'center',
               backgroundColor: '#efeff4',
             }}
-            onTouchOutside={() => this.setState({ cancel_dialog: false })}>
-            <View style={{ flexDirection: 'row' }}>
-              <View style={{ flex: 0.95 }}>
+            onTouchOutside={() => this.setState({cancel_dialog: false})}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flex: 0.95}}>
                 <Text
                   style={{
                     textAlign: 'center',
@@ -857,9 +869,9 @@ export default class Home extends Component {
                   Cancel order
                 </Text>
               </View>
-              <View style={{ justifyContent: 'center' }}>
+              <View style={{justifyContent: 'center'}}>
                 <TouchableOpacity
-                  onPress={() => this.setState({ cancel_dialog: false })}>
+                  onPress={() => this.setState({cancel_dialog: false})}>
                   <FontAwesomeIcon
                     icon={faWindowClose}
                     color={'#ff9500'}
@@ -884,29 +896,29 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-around',
               }}>
-              <View style={{ flex: 0.9, marginTop: 10 }}>
+              <View style={{flex: 0.9, marginTop: 10}}>
                 <TouchableOpacity
                   style={styles.yes}
                   onPress={() => {
                     this.cancelStatus();
                   }}>
-                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
                     Yes
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{ marginTop: 10 }}>
+              <View style={{marginTop: 10}}>
                 <TouchableOpacity
                   style={styles.no}
-                  onPress={() => this.setState({ cancel_dialog: false })}>
-                  <Text style={{ fontSize: width * 0.015, color: 'white' }}>
+                  onPress={() => this.setState({cancel_dialog: false})}>
+                  <Text style={{fontSize: width * 0.015, color: 'white'}}>
                     No
                   </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </Dialog>
-          <View style={{ flex: 0.12, flexDirection: 'row' }}>
+          <View style={{flex: 0.12, flexDirection: 'row'}}>
             <View
               style={{
                 backgroundColor: '#ff9500',
@@ -914,7 +926,11 @@ export default class Home extends Component {
                 justifyContent: 'center',
                 flexDirection: 'row',
               }}>
+<<<<<<< HEAD
               <Text style={{ fontSize: 40, color: 'white', alignItems: 'flex-start', justifyContent: 'flex-start', alignSelf: 'center', fontWeight: 'bold', width: '40%' }}>
+=======
+              <Text style={{fontSize: 40, color: 'white', fontWeight: 'bold'}}>
+>>>>>>> 3297d415562bfbc225ab4ba3716300bfefa6c9c3
                 CURRENT ORDER {this.state.current_order}
               </Text>
               {this.state.delivery_id == 2 ?
@@ -943,7 +959,7 @@ export default class Home extends Component {
               onPress={() => {
                 this.completeStatus();
               }}>
-              <Text style={{ fontSize: 40, color: 'white', fontWeight: 'bold' }}>
+              <Text style={{fontSize: 40, color: 'white', fontWeight: 'bold'}}>
                 COMPLETE
               </Text>
             </TouchableOpacity>
@@ -984,29 +1000,38 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#383330',
-    backgroundColor: '#efeff4'
+    backgroundColor: '#efeff4',
   },
   selected_order: {
     color: '#383330',
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#383330',
-    backgroundColor: '#383330'
+    backgroundColor: '#383330',
   },
   selected_pause_order: {
     color: 'red',
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: 'red',
-    backgroundColor: 'red'
+    backgroundColor: 'red',
   },
   defulttext: {
-    fontSize: 30, fontWeight: 'bold', color: '#625e5e', textAlign: 'center'
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#625e5e',
+    textAlign: 'center',
   },
   selected_order_text: {
-    fontSize: 30, fontWeight: 'bold', color: 'white', textAlign: 'center'
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
   },
   selected_order_pause_text: {
-    fontSize: 30, fontWeight: 'bold', color: 'red', textAlign: 'center'
-  }
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: 'red',
+    textAlign: 'center',
+  },
 });
