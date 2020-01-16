@@ -1208,9 +1208,12 @@ export default class CreateDish extends Component {
                         <Text
                           style={{
                             position: 'absolute',
-                            fontSize: 40,
+                            fontSize: 35,
                             color: 'white',
-                            top: 23,
+                            top: 25,
+                            width: 100,
+                            textAlign: 'center',
+                            lineHeight: 35,
                             textDecorationLine: 'line-through',
                             textDecorationStyle: 'solid',
                           }}>
@@ -1222,7 +1225,7 @@ export default class CreateDish extends Component {
                             position: 'absolute',
                             fontSize: 18,
                             color: 'white',
-                            bottom: 40,
+                            bottom: 25,
                           }}>
                           MAX{' '}
                           <Text

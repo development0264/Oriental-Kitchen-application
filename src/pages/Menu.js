@@ -796,9 +796,6 @@ export default class Employee extends Component {
                       )}
                     </View>
                     <View style={{flex: 0.5, alignItems: 'center'}}>
-                      {/* <Button onPress={() => this._sideMenuDrawer.open()} transparent>
-                                                <FontAwesomeIcon icon={faBars} color={'white'} size={25} />
-                                            </Button> */}
                       <Row>
                         <Col style={{width: 80}}>
                           <Button

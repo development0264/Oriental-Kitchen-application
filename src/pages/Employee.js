@@ -60,6 +60,7 @@ export default class Employee extends Component {
       Editemail: '',
       Editphone: '',
       Editpassword: '',
+      Editrepassword: '',
       Editrole: '',
       EditImage: '',
       Search_result: '',
@@ -122,6 +123,7 @@ export default class Employee extends Component {
             Editemail: responseJson.Employee.email,
             Editphone: responseJson.Employee.phone_number,
             Editpassword: responseJson.Employee.password,
+            Editrepassword: responseJson.Employee.password,
             Editrole: responseJson.Employee.role_id,
             EditImage: responseJson.Employee.photo,
           });
@@ -147,54 +149,75 @@ export default class Employee extends Component {
     }
   };
   updateEmployee = id => {
-    var data = new FormData();
-    data.append('id', id);
-    data.append('first_name', this.state.Editfirstname);
-    data.append('last_name', this.state.Editlastname);
-    data.append('user_name', this.state.Editusername);
-    data.append('phone_number', this.state.Editphone);
-    data.append('email', this.state.Editemail);
-    data.append('password', this.state.Editpassword);
-    data.append('password_confirmation', this.state.Editpassword);
-    data.append('status', this.state.status);
-    if (this.state.avatar != '') {
-      data.append('photo', {
-        name: this.state.avatar.fileName,
-        type: this.state.avatar.type,
-        uri:
-          Platform.OS === 'android'
-            ? this.state.avatar.uri
-            : this.state.avatar.uri.replace('file://', ''),
-      });
-    }
-    data.append('role_id', this.state.Editrole);
-    console.log(data);
-    const user_details = this.state.userDetail;
-    var headers = new Headers();
-    let auth = 'Bearer ' + user_details.userToken;
-    headers.append('Authorization', auth);
-    headers.append('Accept', 'application/json');
-    console.log(headers);
-
-    fetch('http://dev-fs.8d.ie/api/kitchen/updateEmployee', {
-      method: 'POST',
-      headers: headers,
-      body: data,
-    })
-      .then(response => response.json())
-      .then(responseJson => {
-        console.log(responseJson);
-        if (responseJson.status == 'success') {
-          console.log(responseJson);
-          this.setState({edit_dialog: false, img_uri: '', hidePassword: true});
-          this.componentDidMount();
-        } else {
-          alert('Something wrong happened');
+    if (
+      this.state.Editusername == '' ||
+      this.state.Editfirstname == '' ||
+      this.state.Editlastname == '' ||
+      this.state.Editemail == '' ||
+      this.state.Editphone.length < 10 ||
+      this.state.Editpassword == '' ||
+      this.state.Editrepassword == '' ||
+      this.state.Editrole == ''
+    ) {
+      alert('Please inserted remaining fields');
+    } else {
+      if (this.state.Editrepassword != this.state.Editpassword) {
+        alert('Password mismatch');
+      } else {
+        var data = new FormData();
+        data.append('id', id);
+        data.append('first_name', this.state.Editfirstname);
+        data.append('last_name', this.state.Editlastname);
+        data.append('user_name', this.state.Editusername);
+        data.append('phone_number', this.state.Editphone);
+        data.append('email', this.state.Editemail);
+        data.append('password', this.state.Editpassword);
+        data.append('password_confirmation', this.state.Editrepassword);
+        data.append('status', this.state.status);
+        if (this.state.avatar != '') {
+          data.append('photo', {
+            name: this.state.avatar.fileName,
+            type: this.state.avatar.type,
+            uri:
+              Platform.OS === 'android'
+                ? this.state.avatar.uri
+                : this.state.avatar.uri.replace('file://', ''),
+          });
         }
-      })
-      .catch(error => {
-        console.error(error);
-      });
+        data.append('role_id', this.state.Editrole);
+        console.log(data);
+        const user_details = this.state.userDetail;
+        var headers = new Headers();
+        let auth = 'Bearer ' + user_details.userToken;
+        headers.append('Authorization', auth);
+        headers.append('Accept', 'application/json');
+        console.log(headers);
+
+        fetch('http://dev-fs.8d.ie/api/kitchen/updateEmployee', {
+          method: 'POST',
+          headers: headers,
+          body: data,
+        })
+          .then(response => response.json())
+          .then(responseJson => {
+            console.log(responseJson);
+            if (responseJson.status == 'success') {
+              console.log(responseJson);
+              this.setState({
+                edit_dialog: false,
+                img_uri: '',
+                hidePassword: true,
+              });
+              this.componentDidMount();
+            } else {
+              alert('Something wrong happened');
+            }
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+    }
   };
   searchResult = () => {
     var headers = new Headers();
@@ -1156,10 +1179,10 @@ export default class Employee extends Component {
                             alignSelf: 'flex-end',
                           }}
                           placeholder="Type message here.."
-                          onChangeText={Editpassword =>
-                            this.setState({Editpassword})
+                          onChangeText={Editrepassword =>
+                            this.setState({Editrepassword})
                           }
-                          defaultValue={this.state.Editpassword}
+                          defaultValue={this.state.Editrepassword}
                           secureTextEntry={true}
                         />
                       </View>

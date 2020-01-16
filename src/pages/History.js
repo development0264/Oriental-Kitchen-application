@@ -75,7 +75,7 @@ export default class History extends React.Component {
         .then(response => response.json())
         .then(responseJson => {
           if (responseJson.status == 'success') {
-            console.log(responseJson);
+            console.log('Main = ' + JSON.stringify(responseJson));
             // const dataSource = [];
             console.log(responseJson);
             this.setState({dataSource: responseJson.orders});
@@ -217,7 +217,7 @@ export default class History extends React.Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        console.log('Search =' + JSON.stringify(responseJson));
         if (responseJson.status == 'success') {
           if (responseJson.orders.length == 0) {
             alert('No data found');

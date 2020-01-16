@@ -2349,6 +2349,7 @@ export default class IngrediantsGroups extends Component {
   fillIngredient() {
     var items = [];
     var {height, width} = Dimensions.get('window');
+    console.log('Data = ' + JSON.stringify(this.state.dataSourceIngredient));
     this.state.dataSourceIngredient.map((item, i) => {
       items.push(
         <TouchableOpacity onPress={() => this.getIngredient(item.id)}>
