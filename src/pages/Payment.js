@@ -1671,14 +1671,13 @@ export default class Employee extends Component {
                       </View>
                       <View
                         style={{
+                          paddingHorizontal: 15,
                           flexDirection: 'row',
-                          height: 100,
-                          width: '70%',
-                          alignSelf: 'center',
-                          marginRight: 30,
+                          marginStart: 50,
                         }}>
-                        <View style={{flex: 0.6}}>
-                          <View style={{flexDirection: 'row', margin: 10}}>
+                        <View style={{flex: 0.5}}>
+                          <View
+                            style={{flexDirection: 'row', marginVertical: 10}}>
                             <TouchableOpacity
                               style={styles.touchablenumber1}
                               onPress={() => {
@@ -1725,7 +1724,7 @@ export default class Employee extends Component {
                           <View
                             style={{
                               flexDirection: 'row',
-                              marginHorizontal: 10,
+                              marginBottom: 10,
                             }}>
                             <TouchableOpacity
                               style={styles.touchablenumber1}
@@ -1771,7 +1770,11 @@ export default class Employee extends Component {
                             </TouchableOpacity>
                           </View>
                         </View>
-                        <View style={{flex: 0.4, margin: 10}}>
+                        <View
+                          style={{
+                            flex: 0.5,
+                            margin: 10,
+                          }}>
                           <TouchableOpacity
                             style={{
                               height: 90,
@@ -1780,15 +1783,15 @@ export default class Employee extends Component {
                               alignItems: 'center',
                               borderRadius: 10,
                               backgroundColor: 'white',
-                              marginStart: 8,
+                              // marginStart: 8,
                             }}
                             onPress={() => {
                               this.onClearPress('');
                             }}>
                             <Text
                               style={{
-                                fontSize: 30,
-                                // fontWeight: 'bold',
+                                fontSize: width * 0.025,
+                                fontWeight: '300',
                                 color: 'grey',
                               }}>
                               CE
@@ -1798,7 +1801,7 @@ export default class Employee extends Component {
                       </View>
                     </View>
 
-                    <View>
+                    <View style={{paddingBottom: 20, flexDirection: 'column'}}>
                       <View style={styles.touchable1}>
                         <TouchableOpacity
                           style={styles.touchablenumber2}
@@ -2008,11 +2011,17 @@ export default class Employee extends Component {
               }}
             />
           </View>
-          <View style={{flex: 0.9, flexDirection: 'row', padding: 5}}>
+          <View
+            style={{
+              flex: 0.9,
+              flexDirection: 'row',
+              padding: 5,
+              flexWrap: 'wrap',
+            }}>
             <FlatList
               data={this.state.dataSource}
               keyExtractor={({id}, index) => id}
-              numColumns={width < height ? 5 : 8}
+              numColumns={8}
               renderItem={({item}) => (
                 <View>
                   {item.isgroup == true ? (
@@ -2150,22 +2159,11 @@ const styles = StyleSheet.create({
   },
   touchable1: {
     paddingHorizontal: 15,
-    paddingVertical: 15,
-    flexDirection: 'row',
-    marginStart: 50,
-  },
-  touchable2: {
-    paddingHorizontal: 15,
-    flexDirection: 'row',
-    marginStart: 50,
-  },
-  touchable3: {
-    paddingHorizontal: 15,
     paddingVertical: 10,
     flexDirection: 'row',
     marginStart: 50,
   },
-  touchable4: {
+  touchable2: {
     paddingHorizontal: 15,
     flexDirection: 'row',
     marginStart: 50,
@@ -2180,13 +2178,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   touchablenumber2: {
-    height: 60,
-    width: 60,
+    height: 50,
+    width: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
     backgroundColor: 'white',
-    marginHorizontal: 10,
+    marginHorizontal: 13,
   },
   cardview: {
     flexDirection: 'column',

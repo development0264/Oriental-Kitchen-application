@@ -696,7 +696,7 @@ export default class History extends React.Component {
                         <View style={{flex: 0.4, alignItems: 'center'}}>
                           <Text
                             style={{fontSize: width * 0.02, marginRight: 20}}>
-                            {item.order_date}
+                            {item.order_date.split(' ')[0]}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
@@ -739,7 +739,7 @@ export default class History extends React.Component {
                         <View style={{flex: 0.4, alignItems: 'center'}}>
                           <Text
                             style={{fontSize: width * 0.02, marginRight: 20}}>
-                            {item.order_date}
+                            {item.order_date.split(' ')[0]}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
