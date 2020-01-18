@@ -16,6 +16,7 @@ import IngrediantsGroups from './pages/IngrediantsGroups';
 import CreateDish from './pages/CreateDish';
 import Menu from './pages/Menu';
 import Splashscreen from './components/Splashscreen';
+import Order_success from './pages/Order_success';
 
 var x = new Date();
 var offset = -x.getTimezoneOffset();
@@ -88,7 +89,12 @@ const AppNavigator = createStackNavigator({
             header: null,
         }
     },
-
+    Order_success: {
+        screen: Order_success,
+        navigationOptions: {
+            header: null,
+        }
+    }
 }, {
     initialRouteName: 'Splashscreen'
 });

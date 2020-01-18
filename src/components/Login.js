@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -9,8 +9,8 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faCoffee, faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCoffee, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -30,6 +30,7 @@ export default class Login extends Component {
       roleName: '',
       name: '',
       wok: '',
+      vender_id: null
     };
     this.storeData = this.storeData.bind(this);
   }
@@ -41,6 +42,7 @@ export default class Login extends Component {
       roleName: this.state.roleName,
       name: this.state.name,
       wok: this.state.wok,
+      vender_id: this.state.vender_id
     };
     console.log(obj);
     try {
@@ -80,7 +82,7 @@ export default class Login extends Component {
       })
         .then(response => response.json())
         .then(responseJson => {
-          console.log(responseJson);
+          console.log("safhjv", responseJson);
           if (responseJson.status == 'success') {
             if (responseJson.role == 'vender') {
               this.setState({
@@ -89,6 +91,7 @@ export default class Login extends Component {
                 userToken: responseJson.access_token,
                 name: responseJson.vender.name,
                 wok: responseJson.vender.logo,
+                vender_id: responseJson.vender.vender_id,
               });
             } else {
               this.setState({
@@ -96,6 +99,7 @@ export default class Login extends Component {
                 roleName: responseJson.employee.role_name,
                 userToken: responseJson.access_token,
                 name: responseJson.employee.name,
+                vender_id: responseJson.employee.vender_id,
               });
             }
             this.storeData();
@@ -106,14 +110,14 @@ export default class Login extends Component {
           }
         })
         .catch(error => {
-          this.setState({hasError: true, errorText: error});
+          this.setState({ hasError: true, errorText: error });
         });
     }
   };
 
   render() {
-    var {height, width} = Dimensions.get('window');
-    const {navigation} = this.props;
+    var { height, width } = Dimensions.get('window');
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <View
@@ -126,8 +130,8 @@ export default class Login extends Component {
           }}>
           <Image source={require('../images/logo.png')} />
         </View>
-        <View style={{flex: 0.5, marginTop: 10, alignItems: 'center'}}>
-          <View style={{width: '100%', alignItems: 'center'}}>
+        <View style={{ flex: 0.5, marginTop: 10, alignItems: 'center' }}>
+          <View style={{ width: '100%', alignItems: 'center' }}>
             <TextInput
               style={{
                 borderBottomColor: 'white',
@@ -141,11 +145,11 @@ export default class Login extends Component {
               placeholder="Username -or- Email"
               placeholderTextColor="white"
               numberOfLines={1}
-              onChangeText={email => this.setState({email})}
+              onChangeText={email => this.setState({ email })}
             />
           </View>
           <View
-            style={{position: 'relative', width: '100%', alignItems: 'center'}}>
+            style={{ position: 'relative', width: '100%', alignItems: 'center' }}>
             <TextInput
               style={{
                 borderBottomColor: 'white',
@@ -160,35 +164,35 @@ export default class Login extends Component {
               placeholder="Password"
               placeholderTextColor="white"
               numberOfLines={1}
-              onChangeText={password => this.setState({password})}
+              onChangeText={password => this.setState({ password })}
               secureTextEntry={this.state.showPassword}
             />
-            <View style={{position: 'absolute', right: width * 0.18, top: 40}}>
+            <View style={{ position: 'absolute', right: width * 0.18, top: 40 }}>
               {this.state.showPassword == true ? (
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({showPassword: false});
+                    this.setState({ showPassword: false });
                   }}>
                   <FontAwesomeIcon icon={faEyeSlash} color={'white'} />
                 </TouchableOpacity>
               ) : (
-                <TouchableOpacity
-                  onPress={() => {
-                    this.setState({showPassword: true});
-                  }}>
-                  <FontAwesomeIcon icon={faEye} color={'white'} />
-                </TouchableOpacity>
-              )}
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.setState({ showPassword: true });
+                    }}>
+                    <FontAwesomeIcon icon={faEye} color={'white'} />
+                  </TouchableOpacity>
+                )}
             </View>
             {this.state.hasError ? (
               <Text
-                style={{color: '#c0392b', textAlign: 'center', marginTop: 10}}>
+                style={{ color: '#c0392b', textAlign: 'center', marginTop: 10 }}>
                 {this.state.errorText}
               </Text>
             ) : null}
           </View>
           <TouchableOpacity
-            style={{backgroundColor: 'white', borderRadius: 9, marginTop: 20}}
+            style={{ backgroundColor: 'white', borderRadius: 9, marginTop: 20 }}
             onPress={() => this.login()}>
             <Text
               style={{
@@ -211,7 +215,7 @@ export default class Login extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ff9500b3',
+    backgroundColor: '#ff9500',
   },
   instructions: {
     textAlign: 'center',
