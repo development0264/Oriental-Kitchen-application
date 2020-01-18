@@ -172,7 +172,7 @@ export default class Home extends Component {
             <FlatList
               data={this.state.dataSource}
               keyExtractor={({id}, index) => id}
-              numColumns={width < height ? 5 : 8}
+              numColumns={8}
               renderItem={({item}) => (
                 <View>
                   {item.isgroup == true ? (
@@ -181,8 +181,8 @@ export default class Home extends Component {
                         flex: 1,
                         flexDirection: 'row',
                         backgroundColor: '#ff9500',
-                        height: 150,
-                        width: 150,
+                        height: width * 0.116,
+                        width: width * 0.116,
                         alignItems: 'center',
                         justifyContent: 'center',
                         textAlign: 'center',
@@ -191,8 +191,8 @@ export default class Home extends Component {
                       }}>
                       <Image
                         style={{
-                          height: 130,
-                          width: 130,
+                          height: width * 0.1,
+                          width: width * 0.1,
                           backgroundColor: '#ff9500',
                         }}
                         source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
@@ -200,10 +200,10 @@ export default class Home extends Component {
                       <Text
                         style={{
                           position: 'absolute',
-                          fontSize: 35,
+                          fontSize: width * 0.03,
                           color: 'white',
                           top: 25,
-                          width: 100,
+                          width: width * 0.08,
                           textAlign: 'center',
                           lineHeight: 35,
                           textDecorationLine: 'line-through',
@@ -215,7 +215,7 @@ export default class Home extends Component {
                       <Text
                         style={{
                           position: 'absolute',
-                          fontSize: 18,
+                          fontSize: width * 0.014,
                           color: 'white',
                           bottom: 25,
                         }}>
@@ -223,7 +223,7 @@ export default class Home extends Component {
                         <Text
                           style={{
                             position: 'absolute',
-                            fontSize: 15,
+                            fontSize: width * 0.01,
                             color: 'white',
                             bottom: 40,
                           }}>
@@ -233,7 +233,8 @@ export default class Home extends Component {
                       </Text>
                     </View>
                   ) : (
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => this.ingredients_data(item)}>
                       <View
                         style={{
                           flex: 1,
@@ -244,9 +245,9 @@ export default class Home extends Component {
                         }}>
                         <Image
                           style={{
-                            height: 150,
-                            width: 150,
-                            backgroundColor: '#ffffff',
+                            height: width * 0.116,
+                            width: width * 0.116,
+                            backgroundColor: 'white',
                           }}
                           source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
                         />

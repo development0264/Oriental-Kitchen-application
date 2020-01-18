@@ -655,8 +655,7 @@ export default class Employee extends Component {
                     style={{
                       fontSize: width * 0.03,
                       backgroundColor: '#ff9500',
-                      paddingLeft: 10,
-                      paddingRight: 10,
+                      paddingHorizontal: 10,
                       color: 'white',
                       borderRadius: 10,
                     }}>
@@ -687,7 +686,7 @@ export default class Employee extends Component {
                 style={{
                   flexDirection: 'row',
                   borderBottomColor: 'lightgrey',
-                  paddingBottom: 8,
+                  padding: 15,
                   borderBottomWidth: 1,
                 }}>
                 <View
@@ -699,7 +698,7 @@ export default class Employee extends Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.016,
+                      fontSize: width * 0.02,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -719,7 +718,7 @@ export default class Employee extends Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.016,
+                      fontSize: width * 0.02,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -739,7 +738,7 @@ export default class Employee extends Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.016,
+                      fontSize: width * 0.02,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -759,7 +758,7 @@ export default class Employee extends Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.016,
+                      fontSize: width * 0.02,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -795,43 +794,50 @@ export default class Employee extends Component {
                         <Text style={{fontSize: width * 0.0165}}>No</Text>
                       )}
                     </View>
-                    <View style={{flex: 0.5, alignItems: 'center'}}>
+                    <View
+                      style={{
+                        flex: 0.5,
+                        alignItems: 'center',
+                      }}>
                       <Row>
                         <Col style={{width: 80}}>
-                          <Button
+                          <TouchableOpacity
                             onPress={() => this.selectmenu(item.id)}
                             style={{
-                              fontSize: width * 0.016,
                               backgroundColor: '#ff9500',
-                              color: 'white',
-                              borderRadius: 80,
-                              padding: 15,
-                              paddingBottom: 2,
-                              paddingTop: 2,
+                              borderRadius: 40,
+                              padding: 5,
+                              justifyContent: 'center',
                             }}>
-                            <Text style={{color: 'white', fontSize: 18}}>
+                            <Text
+                              style={{
+                                color: 'white',
+                                fontSize: width * 0.015,
+                                textAlign: 'center',
+                              }}>
                               {' '}
                               Edit{' '}
                             </Text>
-                          </Button>
+                          </TouchableOpacity>
                         </Col>
                         <Col style={{marginLeft: 10, width: 110}}>
-                          <Button
+                          <TouchableOpacity
                             onPress={() => this.goto_add_dish(item.id)}
                             style={{
-                              fontSize: width * 0.016,
                               backgroundColor: '#ff9500',
-                              color: 'white',
-                              borderRadius: 80,
-                              padding: 15,
-                              paddingBottom: 2,
-                              paddingTop: 2,
+                              padding: 5,
+                              borderRadius: 40,
                             }}>
-                            <Text style={{color: 'white', fontSize: 18}}>
+                            <Text
+                              style={{
+                                color: 'white',
+                                fontSize: width * 0.015,
+                                textAlign: 'center',
+                              }}>
                               {' '}
                               Add Dish{' '}
                             </Text>
-                          </Button>
+                          </TouchableOpacity>
                         </Col>
                       </Row>
                     </View>
@@ -895,6 +901,7 @@ const styles = StyleSheet.create({
   dynamic_list_view: {
     flexDirection: 'row',
     padding: 15,
+    alignItems: 'center',
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,
   },

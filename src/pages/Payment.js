@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Dimensions,
   Image,
@@ -13,7 +13,19 @@ import {
   Alert,
   KeyboardAvoidingView,
 } from 'react-native';
-import { Button, Left, Right, Grid, Col, Row, Picker, Switch, Footer, Body, Container } from 'native-base';
+import {
+  Button,
+  Left,
+  Right,
+  Grid,
+  Col,
+  Row,
+  Picker,
+  Switch,
+  Footer,
+  Body,
+  Container,
+} from 'native-base';
 import Navbar from '../components/Navbar';
 import CheckBox from 'react-native-check-box';
 import {
@@ -27,14 +39,14 @@ import {
   faMinus,
   faReceipt,
 } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { Dialog } from 'react-native-simple-dialogs';
-import { Card } from 'react-native-elements';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {Dialog} from 'react-native-simple-dialogs';
+import {Card} from 'react-native-elements';
 import RNImagePicker from 'react-native-image-picker';
 import Colors from '../Colors';
 import ViewMoreText from 'react-native-view-more-text';
 import AsyncStorage from '@react-native-community/async-storage';
-import { TouchableHighlight } from 'react-native-gesture-handler';
+import {TouchableHighlight} from 'react-native-gesture-handler';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import SocketIOClient from 'socket.io-client';
 
@@ -83,22 +95,18 @@ export default class Employee extends Component {
       get_last_order: 0,
       custom_dish_total: 0,
       Is_custom_Id: null,
-      vender_id: 1
+      vender_id: 1,
     };
-
-
-
-
 
     this.socket = SocketIOClient('http://dev-fs.8d.ie:6001');
     this.dishQty = [];
     this._retrieveData();
 
-    AsyncStorage.setItem('INGREDIENT', "")
+    AsyncStorage.setItem('INGREDIENT', '');
     //AsyncStorage.setItem('Order_Dish', "")
     AsyncStorage.getItem('INGREDIENT', (err, res) => {
       if (res != null) {
-        this.setState({ ingredientexixts: JSON.parse(res) });
+        this.setState({ingredientexixts: JSON.parse(res)});
       }
       this.main_callvenderingredient();
     });
@@ -108,70 +116,68 @@ export default class Employee extends Component {
   }
 
   call_storage_order() {
-
-
     AsyncStorage.getItem('Order_Dish', (err, res) => {
       if (res != null) {
         var price = 0;
         let totalList = [];
-        this.setState({ Order_Dish: JSON.parse(res) });
+        this.setState({Order_Dish: JSON.parse(res)});
         totalList = JSON.parse(res);
         totalList.map(item => {
           var total = item.qty * parseFloat(item.rate);
           price = price + total;
         });
-        this.setState({ takeTotal: price });
+        this.setState({takeTotal: price});
       } else {
-        this.setState({ Order_Dish: [] });
-        this.setState({ takeTotal: 0 });
+        this.setState({Order_Dish: []});
+        this.setState({takeTotal: 0});
       }
     });
   }
 
   get_last_order = async () => {
-    fetch("http://dev-fs.8d.ie/api/order/get-last-order", {
-      method: "GET",
+    fetch('http://dev-fs.8d.ie/api/order/get-last-order', {
+      method: 'GET',
     })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson["status"] == "success") {
-          this.setState({ get_last_order: parseInt(responseJson["data"].reference) + 1 })
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson['status'] == 'success') {
+          this.setState({
+            get_last_order: parseInt(responseJson['data'].reference) + 1,
+          });
         } else {
-          this.setState({ get_last_order: 1 })
+          this.setState({get_last_order: 1});
         }
-      })
-  }
+      });
+  };
 
   delivery_types = async () => {
-
     var headers = new Headers();
     headers.append('Accept', 'application/json');
 
-    fetch("http://dev-fs.8d.ie/api/delivery-type", {
-      method: "GET",
+    fetch('http://dev-fs.8d.ie/api/delivery-type', {
+      method: 'GET',
       headers: headers,
     })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson["status"] == "success") {
-          var types = []
-          for (var i = 0; i < responseJson["data"].length; i++) {
+      .then(response => response.json())
+      .then(responseJson => {
+        if (responseJson['status'] == 'success') {
+          var types = [];
+          for (var i = 0; i < responseJson['data'].length; i++) {
             var obj = new Object();
-            obj.id = responseJson["data"][i].id;
-            obj.label = responseJson["data"][i].name;
-            types.push(obj)
+            obj.id = responseJson['data'][i].id;
+            obj.label = responseJson['data'][i].name;
+            types.push(obj);
           }
-          this.setState({ delivery_types: types })
+          this.setState({delivery_types: types});
         }
-
       });
-  }
+  };
 
   _retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('visited_onces');
       if (value !== null) {
-        this.setState({ userDetail: JSON.parse(value) });
+        this.setState({userDetail: JSON.parse(value)});
       }
     } catch (error) {
       alert(error);
@@ -193,11 +199,11 @@ export default class Employee extends Component {
       .then(response => response.json())
       .then(responseJson => {
         if (responseJson.status == 'success') {
-          this.setState({ card_dish_dialog: true });
+          this.setState({card_dish_dialog: true});
           for (var i = 0; i < responseJson.data.length; i++) {
             responseJson.data[i].qty = 1;
           }
-          this.setState({ card_dataSource: responseJson.data });
+          this.setState({card_dataSource: responseJson.data});
         } else {
           alert('Something wrong happened');
         }
@@ -207,10 +213,9 @@ export default class Employee extends Component {
       });
   };
 
-
   //Payment Page Dailog Open
   take_payment = () => {
-    this.setState({ payment_dialog: true });
+    this.setState({payment_dialog: true});
     this.orderFunction();
   };
 
@@ -219,13 +224,13 @@ export default class Employee extends Component {
       if (res != null) {
         var price = 0;
         let totalList = [];
-        this.setState({ paymentData: JSON.parse(res) });
+        this.setState({paymentData: JSON.parse(res)});
         totalList = JSON.parse(res);
         totalList.map(item => {
           var total = item.qty * parseFloat(item.rate);
           price = price + total;
         });
-        this.setState({ takeTotal: price });
+        this.setState({takeTotal: price});
       }
     });
   };
@@ -234,14 +239,14 @@ export default class Employee extends Component {
     let a = parseFloat(this.state.cash);
     let b = digit;
     let c = (a + b).toString();
-    this.setState({ cash: c });
+    this.setState({cash: c});
   };
 
   onDecimalPointPresssum = digit => {
     let a = parseFloat(this.state.cash);
     let b = digit;
     let c = (a + b).toString();
-    this.setState({ cash: c });
+    this.setState({cash: c});
   };
 
   _totalChange() {
@@ -252,11 +257,11 @@ export default class Employee extends Component {
   }
 
   onZeroPress = () => {
-    this.setState({ cash: this.state.cash + '0' });
+    this.setState({cash: this.state.cash + '0'});
   };
 
   onDoubleZeroPress = () => {
-    this.setState({ cash: this.state.cash + '00' });
+    this.setState({cash: this.state.cash + '00'});
   };
 
   onPercentCash = () => {
@@ -267,7 +272,7 @@ export default class Employee extends Component {
   };
 
   onClearPress = () => {
-    this.setState({ cash: 0 });
+    this.setState({cash: 0});
   };
 
   main_callvenderingredient() {
@@ -328,23 +333,23 @@ export default class Employee extends Component {
 
   //Open  add ingredient Dailog
   ingredients_data = item => {
-    this.setState({ did: item.idingredient });
-    this.setState({ dishPrice: item.dishPrice });
-    this.setState({ groupname: item.groupname });
-    this.setState({ max: item.max });
-    this.setState({ name: item.name });
-    this.setState({ quantity: 1 });
-    this.setState({ groupmax: item.groupmax });
-    this.setState({ ingredient_group_id: item.ingredient_group_id });
-    this.setState({ description: item.description });
-    this.setState({ cover: item.cover });
+    this.setState({did: item.idingredient});
+    this.setState({dishPrice: item.dishPrice});
+    this.setState({groupname: item.groupname});
+    this.setState({max: item.max});
+    this.setState({name: item.name});
+    this.setState({quantity: 1});
+    this.setState({groupmax: item.groupmax});
+    this.setState({ingredient_group_id: item.ingredient_group_id});
+    this.setState({description: item.description});
+    this.setState({cover: item.cover});
     this.state.ingredientexixts.map(items => {
       if (item.id == items.id) {
-        this.setState({ quantity: parseInt(items.qty) });
-        this.setState({ dishPrice: items.dishPrice });
+        this.setState({quantity: parseInt(items.qty)});
+        this.setState({dishPrice: items.dishPrice});
       }
     });
-    this.setState({ select_dish_dialog: true });
+    this.setState({select_dish_dialog: true});
     // console.log(this.state.ingredientexixts.length);
     // console.log(this.state.ingredientexixts);
   };
@@ -352,7 +357,7 @@ export default class Employee extends Component {
   //add Quantity ingredient Dailog
   addQuantity() {
     if (this.state.quantity + 1 <= this.state.max) {
-      this.setState({ quantity: this.state.quantity + 1 });
+      this.setState({quantity: this.state.quantity + 1});
     } else {
       ToastAndroid.show(
         'You have reached the maximum limit of qty!',
@@ -364,31 +369,30 @@ export default class Employee extends Component {
   //funtion for Take Payment Page Data
   showDishPaymentBox = () => {
     var items = [];
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
 
     if (this.state.paymentData) {
-
       this.state.paymentData.map((item, i) => {
-        var obj = null
+        var obj = null;
         if (item.Is_custom == true) {
-          obj = JSON.parse(item["ingredients"])[0]
-          obj.name = "Custom Dish (" + obj.name + ")"
+          obj = JSON.parse(item['ingredients'])[0];
+          obj.name = 'Custom Dish (' + obj.name + ')';
         } else {
           obj = item;
         }
         items.push(
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ flex: 0.2, justifyContent: 'center' }}>
-              <Text style={{ fontSize: width * 0.018, color: '#76726d' }}>
+          <View style={{flexDirection: 'row'}}>
+            <View style={{flex: 0.2, justifyContent: 'center'}}>
+              <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
                 {i + 1}
               </Text>
             </View>
-            <View style={{ flex: 0.35, justifyContent: 'center' }}>
-              <Text style={{ fontSize: width * 0.018, color: '#76726d' }}>
+            <View style={{flex: 0.35, justifyContent: 'center'}}>
+              <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
                 {obj.name}
               </Text>
             </View>
-            <View style={{ flex: 0.25, justifyContent: 'center' }}>
+            <View style={{flex: 0.25, justifyContent: 'center'}}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -405,8 +409,8 @@ export default class Employee extends Component {
                 </Text>
               </View>
             </View>
-            <View style={{ flex: 0.2, justifyContent: 'center' }}>
-              <Text style={{ fontSize: width * 0.018, color: '#76726d' }}>
+            <View style={{flex: 0.2, justifyContent: 'center'}}>
+              <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
                 ${item.rate * item.qty}
               </Text>
             </View>
@@ -421,20 +425,20 @@ export default class Employee extends Component {
   };
 
   showCustomDish = i => {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     return (
-      <View style={{ flexDirection: 'row' }}>
-        <View style={{ flex: 0.2, justifyContent: 'center' }}>
-          <Text style={{ fontSize: width * 0.018, color: '#76726d' }}>
+      <View style={{flexDirection: 'row'}}>
+        <View style={{flex: 0.2, justifyContent: 'center'}}>
+          <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
             {i + 1}
           </Text>
         </View>
-        <View style={{ flex: 0.35, justifyContent: 'center' }}>
-          <Text style={{ fontSize: width * 0.018, color: '#76726d' }}>
+        <View style={{flex: 0.35, justifyContent: 'center'}}>
+          <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
             Custom Dish
           </Text>
         </View>
-        <View style={{ flex: 0.25, justifyContent: 'center' }}>
+        <View style={{flex: 0.25, justifyContent: 'center'}}>
           <View
             style={{
               flexDirection: 'row',
@@ -470,8 +474,8 @@ export default class Employee extends Component {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{ flex: 0.2, justifyContent: 'center' }}>
-          <Text style={{ fontSize: width * 0.018, color: '#76726d' }}>
+        <View style={{flex: 0.2, justifyContent: 'center'}}>
+          <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
             ${(this.state.qty * this.state.totalPriceCustom).toFixed(2)}
           </Text>
         </View>
@@ -486,8 +490,8 @@ export default class Employee extends Component {
     var isqtyupdate = false;
     var orderdishlist = [];
     var obj = {
-      ingredients: []
-    }
+      ingredients: [],
+    };
     AsyncStorage.getItem('Order_Dish', (err, res) => {
       if (!res) {
         obj['rate'] = item.rate;
@@ -495,7 +499,7 @@ export default class Employee extends Component {
         obj['id'] = item.id;
         obj['qty'] = this.state.dishqty;
         obj['Is_custom'] = false;
-        obj.ingredients = item.ingredients
+        obj.ingredients = item.ingredients;
         Dish.push(obj);
         AsyncStorage.setItem('Order_Dish', JSON.stringify(Dish));
       } else {
@@ -575,7 +579,7 @@ export default class Employee extends Component {
           ToastAndroid.SHORT,
         );
         this.getindiexistingqtyAdd(ingredients);
-        this.setState({ select_dish_dialog: false });
+        this.setState({select_dish_dialog: false});
       } else {
         if (isqtyupdate) {
           ToastAndroid.show('Ingredient update quantity !', ToastAndroid.SHORT);
@@ -591,7 +595,7 @@ export default class Employee extends Component {
           } else {
             AsyncStorage.setItem('INGREDIENT', JSON.stringify(ingredientsList));
             this.getindiexistingqtyAdd(ingredients);
-            this.setState({ select_dish_dialog: false });
+            this.setState({select_dish_dialog: false});
           }
         } else {
           if (isgroupmax) {
@@ -606,7 +610,7 @@ export default class Employee extends Component {
               ToastAndroid.SHORT,
             );
             AsyncStorage.setItem('INGREDIENT', JSON.stringify(ingredientsList));
-            this.setState({ select_dish_dialog: false });
+            this.setState({select_dish_dialog: false});
             this.getindiexistingqtyAdd(ingredients);
           }
         }
@@ -618,7 +622,7 @@ export default class Employee extends Component {
     var itemsarray = [];
     AsyncStorage.getItem('INGREDIENT', (err, res) => {
       if (res != null) {
-        this.setState({ ingredientexixts: JSON.parse(res) });
+        this.setState({ingredientexixts: JSON.parse(res)});
         this.state.ingredientexixts.map(item => {
           if (item.id == items.id) {
             itemsarray.push(
@@ -635,7 +639,7 @@ export default class Employee extends Component {
                     backgroundColor: Colors.navbarBackgroundColor,
                     borderRadius: 200 / 2,
                   }}>
-                  <Text style={{ color: 'white' }}>{item.qty}</Text>
+                  <Text style={{color: 'white'}}>{item.qty}</Text>
                 </View>
               </View>,
             );
@@ -659,7 +663,7 @@ export default class Employee extends Component {
                 <View
                   style={{
                     position: 'absolute',
-                    bottom: 30,
+                    bottom: 10,
                     right: 10,
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -688,14 +692,14 @@ export default class Employee extends Component {
 
   renderViewMore = onPress => {
     return (
-      <Text onPress={onPress} style={{ color: '#ff9500', fontWeight: 'bold' }}>
+      <Text onPress={onPress} style={{color: '#ff9500', fontWeight: 'bold'}}>
         View more
       </Text>
     );
   };
   renderViewLess = onPress => {
     return (
-      <Text onPress={onPress} style={{ color: '#ff9500', fontWeight: 'bold' }}>
+      <Text onPress={onPress} style={{color: '#ff9500', fontWeight: 'bold'}}>
         View less
       </Text>
     );
@@ -713,7 +717,7 @@ export default class Employee extends Component {
     this.state.card_dataSource.map(item => {
       items.push(item);
     });
-    this.setState({ card_dataSource: items });
+    this.setState({card_dataSource: items});
   }
 
   addDish(item, cart_quantity) {
@@ -722,7 +726,7 @@ export default class Employee extends Component {
     this.state.paymentData.map(item => {
       items.push(item);
     });
-    this.setState({ paymentData: items, takeTotal: item.rate * item.qty });
+    this.setState({paymentData: items, takeTotal: item.rate * item.qty});
   }
 
   subDishQuantity(item, cart_quantity) {
@@ -731,7 +735,7 @@ export default class Employee extends Component {
     this.state.card_dataSource.map(item => {
       items.push(item);
     });
-    this.setState({ card_dataSource: items });
+    this.setState({card_dataSource: items});
   }
 
   subDish(item, cart_quantity) {
@@ -740,15 +744,15 @@ export default class Employee extends Component {
     this.state.paymentData.map(item => {
       items.push(item);
     });
-    this.setState({ paymentData: items, takeTotal: item.rate * item.qty });
+    this.setState({paymentData: items, takeTotal: item.rate * item.qty});
   }
 
   add_new_custom_dish() {
     var Dish = [];
     var orderdishlist = [];
     var obj = {
-      ingredients: []
-    }
+      ingredients: [],
+    };
     AsyncStorage.getItem('INGREDIENT', (err, resINGREDIENT) => {
       if (resINGREDIENT == null) {
         ToastAndroid.show(
@@ -757,7 +761,7 @@ export default class Employee extends Component {
         );
       } else {
         AsyncStorage.getItem('Order_Dish', (err, res) => {
-          console.log("Order_Dish", res)
+          console.log('Order_Dish', res);
           var price = 0;
           let INGREDIENTList = [];
           INGREDIENTList = JSON.parse(resINGREDIENT);
@@ -772,18 +776,22 @@ export default class Employee extends Component {
             obj['qty'] = 1;
             obj['Is_custom'] = true;
             obj['Is_custom_Id'] = 1;
-            obj.ingredients = resINGREDIENT
+            obj.ingredients = resINGREDIENT;
             Dish.push(obj);
             AsyncStorage.setItem('Order_Dish', JSON.stringify(Dish));
-          }
-          else {
+          } else {
             orderdishlist = JSON.parse(res);
             if (this.state.Is_custom_Id != null) {
-              var objfind = orderdishlist.filter(o => o.Is_custom_Id == this.state.Is_custom_Id);
+              var objfind = orderdishlist.filter(
+                o => o.Is_custom_Id == this.state.Is_custom_Id,
+              );
               if (objfind.length > 0) {
-                objfind[0].rate = price
-                objfind[0].ingredients = resINGREDIENT
-                AsyncStorage.setItem('Order_Dish', JSON.stringify(orderdishlist));
+                objfind[0].rate = price;
+                objfind[0].ingredients = resINGREDIENT;
+                AsyncStorage.setItem(
+                  'Order_Dish',
+                  JSON.stringify(orderdishlist),
+                );
               }
             } else {
               obj['rate'] = price;
@@ -792,13 +800,13 @@ export default class Employee extends Component {
               obj['qty'] = 1;
               obj['Is_custom'] = true;
               obj['Is_custom_Id'] = orderdishlist.length + 1;
-              obj.ingredients = resINGREDIENT
+              obj.ingredients = resINGREDIENT;
               orderdishlist.push(obj);
               AsyncStorage.setItem('Order_Dish', JSON.stringify(orderdishlist));
             }
           }
-          AsyncStorage.setItem('INGREDIENT', "")
-          this.setState({ ingredientexixts: [] });
+          AsyncStorage.setItem('INGREDIENT', '');
+          this.setState({ingredientexixts: []});
 
           ToastAndroid.show(
             'custom dish add successfully !',
@@ -807,38 +815,42 @@ export default class Employee extends Component {
           this.call_storage_order();
         });
       }
-    })
-
+    });
   }
 
   filldata = () => {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     var items = [];
     this.state.custom_dish_list.map((item, i) => {
-      var obj = JSON.parse(item["ingredients"])
+      var obj = JSON.parse(item['ingredients']);
       items.push(
         <TouchableOpacity
           underlayColor="lightgray"
           onPress={() => this.get_selected_dish(item)}>
-          <View style={item.Is_select == true ? styles.custom_select : styles.custom_no_select}>
-            <View style={{ flex: 0.1, alignSelf: 'center' }}>
+          <View
+            style={
+              item.Is_select == true
+                ? styles.custom_select
+                : styles.custom_no_select
+            }>
+            <View style={{flex: 0.1, alignSelf: 'center'}}>
               <Text
                 style={{
                   fontSize: width * 0.02,
                   marginRight: 20,
                   color: '#808080',
-                  alignSelf: 'center'
+                  alignSelf: 'center',
                 }}>
                 {i + 1}.
               </Text>
             </View>
-            <View style={{ flex: 0.4, alignSelf: 'center' }}>
-              <Text style={{ fontSize: 20, color: '#808080' }}>
+            <View style={{flex: 0.4, alignSelf: 'center'}}>
+              <Text style={{fontSize: 20, color: '#808080'}}>
                 Custom({obj[0].name})
               </Text>
             </View>
             <View
-              style={{ flex: 0.4, alignItems: 'center', flexDirection: 'row' }}>
+              style={{flex: 0.4, alignItems: 'center', flexDirection: 'row'}}>
               <Text
                 style={{
                   fontSize: width * 0.02,
@@ -847,17 +859,17 @@ export default class Employee extends Component {
                 }}>
                 ${item.rate} x {}
               </Text>
-              <Text style={{ fontSize: width * 0.02, color: '#808080' }}>
+              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
                 {item.qty}
               </Text>
             </View>
-            <View style={{ flex: 0.4, alignItems: 'center' }}>
-              <Text style={{ fontSize: width * 0.02, color: '#808080' }}>
+            <View style={{flex: 0.4, alignItems: 'center'}}>
+              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
                 ${item.rate * item.qty}
               </Text>
             </View>
           </View>
-        </TouchableOpacity >,
+        </TouchableOpacity>,
       );
     });
     return items;
@@ -869,48 +881,41 @@ export default class Employee extends Component {
       objfind[0].Is_select = false;
     }
     item.Is_select = true;
-    this.setState({ Is_custom_Id: item.Is_custom_Id })
-    this.setState({ custom_dish_list: this.state.custom_dish_list });
+    this.setState({Is_custom_Id: item.Is_custom_Id});
+    this.setState({custom_dish_list: this.state.custom_dish_list});
   }
 
   custom_dish_total = () => {
     let total = 0;
     this.state.custom_dish_list.map((item, i) => {
       if (item.rate > 0) {
-        total = total + (item.rate) * item.qty
+        total = total + item.rate * item.qty;
       }
-    })
-    return total
-  }
+    });
+    return total;
+  };
 
   get_custom_dish_List() {
-
     AsyncStorage.getItem('Order_Dish', (err, resINGREDIENT) => {
       if (resINGREDIENT != null) {
         var obj = JSON.parse(resINGREDIENT);
         obj = obj.filter(o => o.Is_custom == true);
         if (obj.length > 0) {
           obj[0].Is_select = true;
-          this.setState({ Is_custom_Id: obj[0].Is_custom_Id })
-          this.setState({ custom_dish_list: obj })
+          this.setState({Is_custom_Id: obj[0].Is_custom_Id});
+          this.setState({custom_dish_list: obj});
         } else {
-          this.setState({ custom_dish_list: [] })
+          this.setState({custom_dish_list: []});
         }
         if (this.state.custom_dish_list.length > 0) {
-          this.setState({ custom_dish_dialog: true })
+          this.setState({custom_dish_dialog: true});
         } else {
-          ToastAndroid.show(
-            "No Custom Dishes Added !",
-            ToastAndroid.SHORT,
-          );
+          ToastAndroid.show('No Custom Dishes Added !', ToastAndroid.SHORT);
         }
       } else {
-        ToastAndroid.show(
-          "No Custom Dishes Added !",
-          ToastAndroid.SHORT,
-        );
+        ToastAndroid.show('No Custom Dishes Added !', ToastAndroid.SHORT);
       }
-    })
+    });
   }
 
   change_quntity_up() {
@@ -918,7 +923,7 @@ export default class Employee extends Component {
     if (objfind.length > 0) {
       objfind[0].qty = objfind[0].qty + 1;
     }
-    this.setState({ custom_dish_list: this.state.custom_dish_list });
+    this.setState({custom_dish_list: this.state.custom_dish_list});
   }
 
   change_quntity_down() {
@@ -929,58 +934,64 @@ export default class Employee extends Component {
     if (objfind[0].qty < 1) {
       objfind[0].qty = 1;
     }
-    objfind[0].price * objfind[0].qty
-    this.setState({ custom_dish_list: this.state.custom_dish_list });
+    objfind[0].price * objfind[0].qty;
+    this.setState({custom_dish_list: this.state.custom_dish_list});
   }
 
   delete_custom_quntity() {
     let items = [];
-    this.state.custom_dish_list.map((item) => {
-      if (item.Is_select == undefined || item.Is_select == null || item.Is_select == false) {
+    this.state.custom_dish_list.map(item => {
+      if (
+        item.Is_select == undefined ||
+        item.Is_select == null ||
+        item.Is_select == false
+      ) {
         items.push(item);
       }
     });
-    this.state.custom_dish_list = items
-    this.setState({ custom_dish_list: this.state.custom_dish_list })
-    AsyncStorage.setItem('Order_Dish', JSON.stringify(this.state.custom_dish_list));
+    this.state.custom_dish_list = items;
+    this.setState({custom_dish_list: this.state.custom_dish_list});
+    AsyncStorage.setItem(
+      'Order_Dish',
+      JSON.stringify(this.state.custom_dish_list),
+    );
     AsyncStorage.getItem('Order_Dish', (err, res) => {
       if (res != null) {
         var price = 0;
         let totalList = [];
-        this.setState({ Order_Dish: JSON.parse(res) });
+        this.setState({Order_Dish: JSON.parse(res)});
         totalList = JSON.parse(res);
         totalList.map(item => {
           var total = item.qty * parseFloat(item.rate);
           price = price + total;
         });
-        this.setState({ takeTotal: price });
+        this.setState({takeTotal: price});
         var obj = JSON.parse(res);
         obj = obj.filter(o => o.Is_custom == true);
         if (obj.length > 0) {
           obj[0].Is_select = true;
-          this.setState({ custom_dish_list: obj })
+          this.setState({custom_dish_list: obj});
         } else {
-          this.setState({ custom_dish_list: [] })
+          this.setState({custom_dish_list: []});
         }
       }
     });
-    ToastAndroid.show(
-      'Dish Deleted Successfully!',
-      ToastAndroid.SHORT,
-    );
+    ToastAndroid.show('Dish Deleted Successfully!', ToastAndroid.SHORT);
   }
 
   update_quntity() {
-    var qty = 0
+    var qty = 0;
     var objfind = this.state.custom_dish_list.filter(o => o.Is_select == true);
     if (objfind.length > 0) {
-      qty = objfind[0].qty
+      qty = objfind[0].qty;
     }
     AsyncStorage.getItem('Order_Dish', (err, res) => {
       var orderdishlist = JSON.parse(res);
       if (res != null) {
         if (this.state.Is_custom_Id != null) {
-          var objfind = orderdishlist.filter(o => o.Is_custom_Id == this.state.Is_custom_Id);
+          var objfind = orderdishlist.filter(
+            o => o.Is_custom_Id == this.state.Is_custom_Id,
+          );
           if (objfind.length > 0) {
             objfind[0].qty = qty;
             AsyncStorage.setItem('Order_Dish', JSON.stringify(orderdishlist));
@@ -989,53 +1000,45 @@ export default class Employee extends Component {
 
         var price = 0;
         let totalList = [];
-        this.setState({ Order_Dish: orderdishlist });
+        this.setState({Order_Dish: orderdishlist});
         totalList = orderdishlist;
         totalList.map(item => {
           var total = item.qty * parseFloat(item.rate);
           price = price + total;
         });
-        this.setState({ takeTotal: price });
-
+        this.setState({takeTotal: price});
       } else {
-        this.setState({ takeTotal: 0 });
+        this.setState({takeTotal: 0});
       }
-
     });
-    this.setState({ custom_dish_dialog: false })
-    ToastAndroid.show(
-      'Dish Updated Successfully!',
-      ToastAndroid.SHORT,
-    );
+    this.setState({custom_dish_dialog: false});
+    ToastAndroid.show('Dish Updated Successfully!', ToastAndroid.SHORT);
   }
 
   edit_custom_dish() {
     var objfind = this.state.custom_dish_list.filter(o => o.Is_select == true);
     if (objfind.length > 0) {
-      AsyncStorage.setItem('INGREDIENT', (objfind[0].ingredients));
+      AsyncStorage.setItem('INGREDIENT', objfind[0].ingredients);
       AsyncStorage.getItem('INGREDIENT', (err, res) => {
         if (res != null) {
-          this.setState({ ingredientexixts: JSON.parse(res) });
-          this.setState({ custom_dish_dialog: false });
+          this.setState({ingredientexixts: JSON.parse(res)});
+          this.setState({custom_dish_dialog: false});
         }
       });
     }
   }
 
   placeorder() {
-
     //alert(JSON.stringify(this.props.navigation.navigate()))
-
 
     //return
 
-    var order_dish = []
-    var custom_order_dish_ing = []
-    var custom_order_dish = []
+    var order_dish = [];
+    var custom_order_dish_ing = [];
+    var custom_order_dish = [];
     var data;
 
-
-    var Menu_order = this.state.paymentData.filter(o => o.Is_custom == false)
+    var Menu_order = this.state.paymentData.filter(o => o.Is_custom == false);
     for (var i = 0; i < Menu_order.length; i++) {
       var obj = new Object();
       obj.dish_id = Menu_order[i].id;
@@ -1044,31 +1047,31 @@ export default class Employee extends Component {
       obj.dish_name = Menu_order[i].name;
       obj.dish_price = this.getingredients(Menu_order[i]).price;
       obj.dish_description = Menu_order[i].description;
-      order_dish.push(obj)
+      order_dish.push(obj);
     }
-    var custom_order = this.state.paymentData.filter(o => o.Is_custom == true)
+    var custom_order = this.state.paymentData.filter(o => o.Is_custom == true);
     if (custom_order.length > 0) {
       for (var i = 0; i < custom_order.length; i++) {
-        var ingredients = JSON.parse(custom_order[i].ingredients)[0]
+        var ingredients = JSON.parse(custom_order[i].ingredients)[0];
         var obj = new Object();
-        obj.name = "Custom Dish (" + ingredients.name + ")"
-        obj.qty = custom_order[i].qty
-        custom_order_dish.push(obj)
-        var ingredients_list = JSON.parse(custom_order[i].ingredients)
+        obj.name = 'Custom Dish (' + ingredients.name + ')';
+        obj.qty = custom_order[i].qty;
+        custom_order_dish.push(obj);
+        var ingredients_list = JSON.parse(custom_order[i].ingredients);
 
         var total = 0;
         ingredients_list.map((item, i) => {
-          total = total + parseFloat(item.price).toFixed(2) * item.qty
-        })
+          total = total + parseFloat(item.price).toFixed(2) * item.qty;
+        });
         for (var j = 0; j < ingredients_list.length; j++) {
           var obj = new Object();
-          obj.dish_name = "Custom Dish (" + ingredients.name + ")";
+          obj.dish_name = 'Custom Dish (' + ingredients.name + ')';
           obj.dish_index = i + 1;
           obj.ingredient_id = ingredients_list[j].id;
           obj.qty = ingredients_list[j].qty;
           // obj.ingredient_group_id = ingredients_list[j].group_id;
           // obj.price = total;
-          custom_order_dish_ing.push(obj)
+          custom_order_dish_ing.push(obj);
         }
       }
     }
@@ -1076,52 +1079,51 @@ export default class Employee extends Component {
     //alert(JSON.stringify(custom_order_dish_ing))
     //return
     data = {
-      "delivery_type_id": 4,
-      "station_id": null,
-      "reference": this.state.get_last_order,
-      "courier_id": "1",
-      "courier": "123",
-      "customer_id": null,
-      "employee_id": this.state.userDetail.user_id,
-      "address_id": null,
-      "order_status_id": 2,
-      "till_id": null,
-      "note": "this order by " + this.state.userDetail.name,
-      "number": "0",
-      "payment": "0",
-      "discounts": "0",
-      "total_products": Menu_order.length,
-      "total_shipping": "0",
-      "tax": "0",
-      "total": parseFloat(this.state.takeTotal).toFixed(2),
-      "total_paid": "0",
-      "invoice": "0",
-      "label_url": "0",
+      delivery_type_id: 4,
+      station_id: null,
+      reference: this.state.get_last_order,
+      courier_id: '1',
+      courier: '123',
+      customer_id: null,
+      employee_id: this.state.userDetail.user_id,
+      address_id: null,
+      order_status_id: 2,
+      till_id: null,
+      note: 'this order by ' + this.state.userDetail.name,
+      number: '0',
+      payment: '0',
+      discounts: '0',
+      total_products: Menu_order.length,
+      total_shipping: '0',
+      tax: '0',
+      total: parseFloat(this.state.takeTotal).toFixed(2),
+      total_paid: '0',
+      invoice: '0',
+      label_url: '0',
       //"tracking_number": "2",
       // "card_number": this.state.cardNumber,
       // "expmonth": this.state.expireMonth,
       // "expyear": this.state.expireYear,
       // "cvn": this.state.cvv,
       // "card_holder_name": this.state.cardholder,
-      "order_date": this.convertdateformat(new Date()),
-      "order_dish": order_dish,
-      "custom_order_dish": custom_order_dish_ing,
-      "vender_id": this.state.vender_id
-    }
+      order_date: this.convertdateformat(new Date()),
+      order_dish: order_dish,
+      custom_order_dish: custom_order_dish_ing,
+      vender_id: this.state.vender_id,
+    };
 
     var headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    fetch("http://dev-fs.8d.ie/api/kitchen/addOrder", {
-      method: "POST",
+    fetch('http://dev-fs.8d.ie/api/kitchen/addOrder', {
+      method: 'POST',
       headers: headers,
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-      .then((response) => response.json())
-      .then((responseJsonOrder) => {
-        alert(JSON.stringify(responseJsonOrder))
-        if (responseJsonOrder["status"] == "success") {
-
+      .then(response => response.json())
+      .then(responseJsonOrder => {
+        alert(JSON.stringify(responseJsonOrder));
+        if (responseJsonOrder['status'] == 'success') {
           var obj = this.state.delivery_types.find(o => o.id === 4);
           var type = null;
           if (obj) {
@@ -1130,43 +1132,36 @@ export default class Employee extends Component {
 
           //this.socket.on('connect', function () { });
           this.socket.emit('employeeJoined', this.state.userDetail.user_id);
-          this.socket.on('employeeJoined', (userId) => { });
+          this.socket.on('employeeJoined', userId => {});
           var obj = {
-            order_id: responseJsonOrder["data"].order_id,
+            order_id: responseJsonOrder['data'].order_id,
             vender_id: 1,
             reference: this.state.get_last_order,
             delivery_name: type,
-            name: "pending"
-          }
+            name: 'pending',
+          };
           this.socket.emit('order_placed', obj);
-          this.socket.on('disconnect', function () { });
+          this.socket.on('disconnect', function() {});
 
-          ToastAndroid.show(
-            responseJsonOrder["message"],
-            ToastAndroid.SHORT,
-          );
-          AsyncStorage.setItem('INGREDIENT', "")
-          AsyncStorage.setItem('Order_Dish', "")
+          ToastAndroid.show(responseJsonOrder['message'], ToastAndroid.SHORT);
+          AsyncStorage.setItem('INGREDIENT', '');
+          AsyncStorage.setItem('Order_Dish', '');
           this.get_last_order();
           this.call_storage_order();
-          this.setState({ payment_dialog: false })
+          this.setState({payment_dialog: false});
 
-          this.props.navigation.navigate('Order_success', { status: "Success", order_no: this.state.get_last_order });
-
+          this.props.navigation.navigate('Order_success', {
+            status: 'Success',
+            order_no: this.state.get_last_order,
+          });
         } else {
-
-          ToastAndroid.show(
-            responseJsonOrder["message"],
-            ToastAndroid.SHORT,
-          );
-          this.props.navigation.navigate('Order_success', { status: "Fail" });
+          ToastAndroid.show(responseJsonOrder['message'], ToastAndroid.SHORT);
+          this.props.navigation.navigate('Order_success', {status: 'Fail'});
         }
-
-      })
+      });
   }
 
   convertdateformat(date) {
-
     var date = new Date(date);
     var firstdayMonth = date.getMonth() + 1;
     var firstdayDay = date.getDate();
@@ -1175,74 +1170,93 @@ export default class Employee extends Component {
     var firstdayHours = date.getHours();
     var firstdaySeconds = date.getSeconds();
 
-    return ("0000" + firstdayYear.toString()).slice(-4) + "-" + ("00" + firstdayMonth.toString()).slice(-2) + "-" + ("00" + firstdayDay.toString()).slice(-2) + " " + ("00" + firstdayHours.toString()).slice(-2) + ":" + ("00" + firstdayMinutes.toString()).slice(-2) + ":" + ("00" + firstdaySeconds.toString()).slice(-2);
-
+    return (
+      ('0000' + firstdayYear.toString()).slice(-4) +
+      '-' +
+      ('00' + firstdayMonth.toString()).slice(-2) +
+      '-' +
+      ('00' + firstdayDay.toString()).slice(-2) +
+      ' ' +
+      ('00' + firstdayHours.toString()).slice(-2) +
+      ':' +
+      ('00' + firstdayMinutes.toString()).slice(-2) +
+      ':' +
+      ('00' + firstdaySeconds.toString()).slice(-2)
+    );
   }
 
   getingredients(item) {
     let items = {};
-    let ingredient = null
+    let ingredient = null;
     let price = 0;
     let totalprice = 0;
     if (item.rate > 0) {
       price = item.rate * item.qty;
-      items["price"] = parseFloat(price).toFixed(2);
-      return items
-
+      items['price'] = parseFloat(price).toFixed(2);
+      return items;
     } else {
       item.ingredients.map((item, i) => {
-        price = price + parseFloat(item.price).toFixed(2) * item.qty
-      })
-      price = (price) * item.qty;
-      items["price"] = parseFloat(price).toFixed(2);
-      return items
+        price = price + parseFloat(item.price).toFixed(2) * item.qty;
+      });
+      price = price * item.qty;
+      items['price'] = parseFloat(price).toFixed(2);
+      return items;
     }
   }
 
   render() {
-    const { isSwitchOn } = this.state;
+    const {isSwitchOn} = this.state;
     const user_details = this.state.userDetail;
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     var left = (
-      <Left style={{ flex: 0.15, flexDirection: 'row' }}>
-        <Button style={{ flex: 1, marginBottom: 10 }} onPress={() => this._sideMenuDrawer.open()} transparent>
-          <FontAwesomeIcon icon={faBars} size={25} style={{ color: 'white' }} />
+      <Left style={{flex: 1, flexDirection: 'row'}}>
+        <Button
+          style={{flex: 1}}
+          onPress={() => this._sideMenuDrawer.open()}
+          transparent>
+          <FontAwesomeIcon icon={faBars} size={25} style={{color: 'white'}} />
         </Button>
-
       </Left>
     );
     var right = (
-      <Right style={{ flex: 1 }}>
+      <Right style={{flex: 1}}>
         <TouchableOpacity onPress={() => this.get_custom_dish_List()}>
           <Image
             source={require('../images/bar_icon.png')}
-            style={{ height: 42, width: 42 }}></Image>
+            style={{height: 42, width: 42}}></Image>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{ paddingHorizontal: 8 }}
+          style={{paddingHorizontal: 8}}
           onPress={() => this.show_card()}>
           <Image
             source={require('../images/menu_list-5122.png')}
-            style={{ height: 42, width: 42 }}></Image>
+            style={{height: 42, width: 42}}></Image>
         </TouchableOpacity>
         <Button transparent>
-          <View style={{ width: 45, height: 45, top: 5 }} >
+          <View style={{width: 45, height: 45, top: 5}}>
             <Image
-              style={{ width: 42, height: 42 }} // must be passed from the parent, the number may vary depending upon your screen size
-              source={require('../images/dish-create.png')}
-            >
-            </Image>
+              style={{width: 42, height: 42}} // must be passed from the parent, the number may vary depending upon your screen size
+              source={require('../images/dish-create.png')}></Image>
           </View>
 
-          {this.state.Order_Dish.length > 0 ?
-            <View style={{ position: 'absolute', top: 3, right: 8, justifyContent: 'center', alignItems: 'center', height: 20, width: 20, backgroundColor: 'red', borderRadius: 200 / 2 }}>
-              <Text style={{ color: 'white' }}>
+          {this.state.Order_Dish.length > 0 ? (
+            <View
+              style={{
+                position: 'absolute',
+                top: 3,
+                right: 8,
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: 20,
+                width: 20,
+                backgroundColor: 'red',
+                borderRadius: 200 / 2,
+              }}>
+              <Text style={{color: 'white'}}>
                 {this.state.Order_Dish.length}
               </Text>
             </View>
-            :
-            null
-          }
+          ) : null}
         </Button>
       </Right>
     );
@@ -1250,27 +1264,25 @@ export default class Employee extends Component {
     return (
       <SideMenuDrawer
         ref={ref => (this._sideMenuDrawer = ref)}
-        style={{ zIndex: 1 }}
         navigation={this.props}>
-        <Container style={{ backgroundColor: '#ebeff0', position: 'relative' }}>
+        <Container style={{backgroundColor: '#ebeff0'}}>
           <KeyboardAvoidingView behavior="padding" enabled>
             {/* open ingredient model */}
-            <Dialog
+            {/* <Dialog
               visible={this.state.select_dish_dialog}
               dialogStyle={{
                 borderRadius: 10,
-                borderWidth: 10,
+                borderWidth: 2,
                 borderColor: '#efeff4',
                 width: '50%',
-                height: '50%',
                 justifyContent: 'center',
                 alignSelf: 'center',
                 backgroundColor: '#efeff4',
               }}
-              onTouchOutside={() => this.setState({ select_dish_dialog: false })}>
-              <View style={{ height: '100%' }}>
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={{ flex: 1 }}>
+              onTouchOutside={() => this.setState({select_dish_dialog: false})}>
+              <View style={{height: '100%'}}>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 1}}>
                     <Text
                       style={{
                         textAlign: 'center',
@@ -1283,10 +1295,10 @@ export default class Employee extends Component {
                       Select {this.state.groupname}
                     </Text>
                   </View>
-                  <View style={{ justifyContent: 'center' }}>
+                  <View style={{justifyContent: 'center'}}>
                     <TouchableOpacity
                       onPress={() =>
-                        this.setState({ select_dish_dialog: false })
+                        this.setState({select_dish_dialog: false})
                       }>
                       <FontAwesomeIcon
                         icon={faWindowClose}
@@ -1296,27 +1308,27 @@ export default class Employee extends Component {
                     </TouchableOpacity>
                   </View>
                 </View>
-                <View style={{ flex: 1, width: 250, maxHeight: 200 }}>
-                  <View style={{ flexDirection: 'row' }}>
-                    <View style={{ marginLeft: 20, marginTop: 20 }}>
+                <View style={{flex: 1}}>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{marginLeft: 20, marginTop: 20}}>
                       <Image
                         style={{
                           justifyContent: 'center',
                           alignItems: 'center',
                           width: 100,
-                          height: 110,
+                          height: 100,
                           backgroundColor: 'white',
                         }}
                         source={{
                           uri: 'http://dev-fs.8d.ie/' + this.state.cover,
                         }}></Image>
                     </View>
-                    <View style={{ marginLeft: 40, marginTop: 10 }}>
+                    <View style={{marginLeft: 40, marginTop: 10}}>
                       <Text
-                        style={{ fontSize: width * 0.018, fontWeight: 'bold' }}>
+                        style={{fontSize: width * 0.018, fontWeight: 'bold'}}>
                         {this.state.name}
                       </Text>
-                      <Text style={{ fontSize: 16, width: 350, marginTop: 10 }}>
+                      <Text style={{fontSize: 16, width: 350, marginTop: 10}}>
                         {this.state.description}
                       </Text>
                     </View>
@@ -1327,16 +1339,13 @@ export default class Employee extends Component {
                     borderTopWidth: 1,
                     borderColor: '#ccccde',
                     flex: 1,
-                    width: 530,
-                    maxHeight: 150,
-                    marginBottom: -100,
                   }}>
-                  <View style={{ flex: 1, flexDirection: 'row' }}>
+                  <View style={{flex: 1, flexDirection: 'row'}}>
                     <Button
                       block
                       icon
                       transparent
-                      style={{ marginTop: 10 }}
+                      style={{marginTop: 10}}
                       onPress={() =>
                         this.setState({
                           quantity:
@@ -1368,7 +1377,7 @@ export default class Employee extends Component {
                       block
                       icon
                       transparent
-                      style={{ marginLeft: 30, marginTop: 10 }}
+                      style={{marginLeft: 30, marginTop: 10}}
                       onPress={() => this.addQuantity()}>
                       <FontAwesomeIcon
                         icon={faPlus}
@@ -1381,19 +1390,148 @@ export default class Employee extends Component {
                       style={{
                         paddingLeft: 30,
                         paddingRight: 30,
-                        marginBottom: 80,
-                        marginLeft: 320,
                         borderRadius: 10,
                         justifyContent: 'center',
                         alignSelf: 'center',
                         backgroundColor: '#ff9500',
                       }}
                       onPress={() => this.add_Dish_ingredient()}>
-                      <Text style={{ fontSize: width * 0.018, color: 'white' }}>
+                      <Text style={{fontSize: width * 0.018, color: 'white'}}>
                         Add
                       </Text>
                     </TouchableOpacity>
                   </View>
+                </View>
+              </View>
+            </Dialog> */}
+            <Dialog
+              visible={this.state.select_dish_dialog}
+              dialogStyle={{
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: '#efeff4',
+                width: '40%',
+                justifyContent: 'center',
+                alignSelf: 'center',
+                backgroundColor: '#efeff4',
+              }}>
+              <View style={{flexDirection: 'row'}}>
+                <View style={{flex: 0.95}}>
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      borderBottomWidth: 1,
+                      borderBottomColor: 'lightgrey',
+                      fontSize: width * 0.02,
+                    }}>
+                    Select {this.state.groupname}
+                  </Text>
+                </View>
+                <View style={{justifyContent: 'center'}}>
+                  <TouchableOpacity
+                    onPress={() => this.setState({select_dish_dialog: false})}>
+                    <FontAwesomeIcon
+                      icon={faWindowClose}
+                      color={'#ff9500'}
+                      size={25}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={{flexDirection: 'row', marginVertical: 15}}>
+                <View
+                  style={{
+                    flex: 0.4,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <Image
+                    style={{
+                      width: 100,
+                      height: 100,
+                      backgroundColor: 'white',
+                    }}
+                    source={{
+                      uri: 'http://dev-fs.8d.ie/' + this.state.cover,
+                    }}></Image>
+                </View>
+                <View
+                  style={{
+                    flex: 0.6,
+                    flexDirection: 'column',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: width * 0.016,
+                      fontWeight: '900',
+                      textAlign: 'left',
+                    }}>
+                    {this.state.name}
+                  </Text>
+                  <Text style={{fontSize: width * 0.012, textAlign: 'left'}}>
+                    {this.state.description}
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  borderTopColor: 'lightgrey',
+                  borderTopWidth: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  padding: 5,
+                }}>
+                <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                    onPress={() =>
+                      this.setState({
+                        quantity:
+                          this.state.quantity > 0 ? this.state.quantity - 1 : 0,
+                      })
+                    }>
+                    <FontAwesomeIcon
+                      icon={faMinus}
+                      color={'orange'}
+                      size={width * 0.018}
+                    />
+                  </TouchableOpacity>
+
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      fontSize: width * 0.018,
+                      marginHorizontal: 20,
+                    }}>
+                    {this.state.quantity}
+                  </Text>
+
+                  <TouchableOpacity
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                    onPress={() => this.addQuantity()}>
+                    <FontAwesomeIcon
+                      icon={faPlus}
+                      color={'orange'}
+                      size={width * 0.018}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <View>
+                  <TouchableOpacity
+                    style={styles.no}
+                    onPress={() => this.add_Dish_ingredient()}>
+                    <Text style={{fontSize: width * 0.015, color: 'white'}}>
+                      Add
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </Dialog>
@@ -1412,10 +1550,10 @@ export default class Employee extends Component {
                 backgroundColor: '#efeff4',
               }}
               onTouchOutside={() =>
-                this.setState({ edit_history_dialog: false })
+                this.setState({edit_history_dialog: false})
               }>
-              <View style={{ flexDirection: 'row' }}>
-                <View style={{ flex: 0.99, margin: 0, padding: 0 }}>
+              <View style={{flexDirection: 'row'}}>
+                <View style={{flex: 0.99, margin: 0, padding: 0}}>
                   <Text
                     style={{
                       textAlign: 'center',
@@ -1427,12 +1565,10 @@ export default class Employee extends Component {
                     Order - {this.state.get_last_order}
                   </Text>
                 </View>
-                <View style={{ justifyContent: 'center' }}>
+                <View style={{justifyContent: 'center'}}>
                   <TouchableOpacity
-                    style={{ marginBottom: 40, marginStart: 50 }}
-                    onPress={() =>
-                      this.setState({ custom_dish_dialog: false })
-                    }>
+                    style={{marginBottom: 40, marginStart: 50}}
+                    onPress={() => this.setState({custom_dish_dialog: false})}>
                     <FontAwesomeIcon
                       icon={faWindowClose}
                       color={'#ff9500'}
@@ -1441,7 +1577,7 @@ export default class Employee extends Component {
                   </TouchableOpacity>
                 </View>
               </View>
-              <View style={{ flexDirection: 'row' }}>
+              <View style={{flexDirection: 'row'}}>
                 <View
                   style={{
                     flex: 0.78,
@@ -1457,20 +1593,20 @@ export default class Employee extends Component {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                  <View style={{flexDirection: 'row', alignSelf: 'center'}}>
                     <TouchableOpacity
-                      style={[styles.add_btn, { paddingHorizontal: 25 }]}
+                      style={[styles.add_btn, {paddingHorizontal: 25}]}
                       onPress={() => this.change_quntity_down()}>
-                      <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
                         -
-                        </Text>
+                      </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      style={[styles.add_btn, { paddingHorizontal: 20 }]}
+                      style={[styles.add_btn, {paddingHorizontal: 20}]}
                       onPress={() => this.change_quntity_up()}>
-                      <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
                         +
-                        </Text>
+                      </Text>
                     </TouchableOpacity>
                   </View>
                   <TouchableOpacity
@@ -1482,8 +1618,7 @@ export default class Employee extends Component {
                         width: 160,
                       },
                     ]}
-                    onPress={() => this.delete_custom_quntity()}
-                  >
+                    onPress={() => this.delete_custom_quntity()}>
                     <Text
                       style={{
                         fontSize: width * 0.025,
@@ -1491,20 +1626,19 @@ export default class Employee extends Component {
                         textAlign: 'center',
                       }}>
                       DEL
-                      </Text>
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[
                       styles.add_btn,
-                      { justifyContent: 'center', alignSelf: 'center' },
+                      {justifyContent: 'center', alignSelf: 'center'},
                     ]}
-                    onPress={() => this.edit_custom_dish()}
-                  >
-                    <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                    onPress={() => this.edit_custom_dish()}>
+                    <Text style={{fontSize: width * 0.025, color: 'white'}}>
                       Edit
-                      </Text>
+                    </Text>
                   </TouchableOpacity>
-                  <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                  <View style={{flexDirection: 'row', alignSelf: 'center'}}>
                     <TouchableOpacity style={styles.print_btn}>
                       <FontAwesomeIcon icon={faPrint} size={25} />
                     </TouchableOpacity>
@@ -1541,19 +1675,21 @@ export default class Employee extends Component {
                     alignItems: 'center',
                     marginTop: 10,
                   }}>
-                  <View style={{ width: 150 }}>
-                    <Text style={{ fontSize: width * 0.03, color: '#5a5a5a' }}>
+                  <View style={{width: 150}}>
+                    <Text style={{fontSize: width * 0.03, color: '#5a5a5a'}}>
                       Total:
-                      </Text>
+                    </Text>
                   </View>
-                  <Text style={{ fontSize: width * 0.03, color: '#5a5a5a' }}>
+                  <Text style={{fontSize: width * 0.03, color: '#5a5a5a'}}>
                     {this.custom_dish_total()}
                   </Text>
                 </View>
-                <TouchableOpacity style={styles.add_btn} onPress={() => this.update_quntity()}>
-                  <Text style={{ fontSize: width * 0.025, color: 'white' }}>
+                <TouchableOpacity
+                  style={styles.add_btn}
+                  onPress={() => this.update_quntity()}>
+                  <Text style={{fontSize: width * 0.025, color: 'white'}}>
                     UPDATE
-                    </Text>
+                  </Text>
                 </TouchableOpacity>
               </View>
             </Dialog>
@@ -1570,8 +1706,8 @@ export default class Employee extends Component {
                 backgroundColor: '#efeff4',
                 marginBottom: 25,
               }}
-              onTouchOutside={() => this.setState({ card_dish_dialog: false })}>
-              <View style={{ flexDirection: 'row-reverse' }}>
+              onTouchOutside={() => this.setState({card_dish_dialog: false})}>
+              <View style={{flexDirection: 'row-reverse'}}>
                 <View
                   style={{
                     justifyContent: 'flex-start',
@@ -1579,7 +1715,7 @@ export default class Employee extends Component {
                     marginTop: 10,
                   }}>
                   <TouchableOpacity
-                    onPress={() => this.setState({ card_dish_dialog: false })}>
+                    onPress={() => this.setState({card_dish_dialog: false})}>
                     <FontAwesomeIcon
                       icon={faWindowClose}
                       color={'#ff9500'}
@@ -1593,19 +1729,23 @@ export default class Employee extends Component {
                   pagingEnabled={this.state.card_dish_dialog}
                   data={this.state.card_dataSource}
                   showsHorizontalScrollIndicator={false}
-                  renderItem={({ item }) => (
+                  renderItem={({item}) => (
                     <View
-                      style={{ flexDirection: 'column', paddingVertical: 10 }}>
+                      style={{flexDirection: 'column', paddingVertical: 10}}>
                       <Card containerStyle={styles.cardview}>
-                        {(item.cover == "" || item.cover == null || item.cover == undefined)
-                          ?
-                          <Image style={{
-                            width: '100%',
-                            height: 230,
-                            borderTopLeftRadius: 15,
-                            borderTopRightRadius: 15,
-                          }} source={require('../images/b1.jpg')} />
-                          :
+                        {item.cover == '' ||
+                        item.cover == null ||
+                        item.cover == undefined ? (
+                          <Image
+                            style={{
+                              width: '100%',
+                              height: 230,
+                              borderTopLeftRadius: 15,
+                              borderTopRightRadius: 15,
+                            }}
+                            source={require('../images/b1.jpg')}
+                          />
+                        ) : (
                           <Image
                             style={{
                               width: '100%',
@@ -1615,16 +1755,15 @@ export default class Employee extends Component {
                             }}
                             source={{
                               uri: 'http://dev-fs.8d.ie/' + item.cover,
-                            }}>
-                          </Image>
-                        }
+                            }}></Image>
+                        )}
                         <View
                           style={{
                             flex: 1,
                             flexDirection: 'row',
                             justifyContent: 'space-around',
                           }}>
-                          <View style={{ flex: 0.8, flexDirection: 'column' }}>
+                          <View style={{flex: 0.8, flexDirection: 'column'}}>
                             <Text
                               style={{
                                 fontWeight: 'bold',
@@ -1642,7 +1781,7 @@ export default class Employee extends Component {
                                 color: 'grey',
                                 paddingBottom: 10,
                               }}>
-                              <Text style={{ marginTop: 10 }}>
+                              <Text style={{marginTop: 10}}>
                                 {item.description}
                               </Text>
                             </ViewMoreText>
@@ -1734,7 +1873,7 @@ export default class Employee extends Component {
                       </Card>
                     </View>
                   )}
-                  keyExtractor={({ id }, index) => id}
+                  keyExtractor={({id}, index) => id}
                 />
               </ScrollView>
             </Dialog>
@@ -1751,8 +1890,8 @@ export default class Employee extends Component {
                 backgroundColor: '#efeff4',
               }}>
               <ScrollView>
-                <View style={{ flexDirection: 'row' }}>
-                  <View style={{ flex: 1 }}>
+                <View style={{flexDirection: 'row'}}>
+                  <View style={{flex: 1}}>
                     <Text
                       style={{
                         textAlign: 'center',
@@ -1765,9 +1904,9 @@ export default class Employee extends Component {
                       Take Payment
                     </Text>
                   </View>
-                  <View style={{ justifyContent: 'center', marginLeft: 40 }}>
+                  <View style={{justifyContent: 'center', marginLeft: 40}}>
                     <TouchableOpacity
-                      onPress={() => this.setState({ payment_dialog: false })}>
+                      onPress={() => this.setState({payment_dialog: false})}>
                       <FontAwesomeIcon
                         icon={faWindowClose}
                         color={'#ff9500'}
@@ -1777,7 +1916,7 @@ export default class Employee extends Component {
                   </View>
                 </View>
 
-                <View style={{ flexDirection: 'row', height: 400 }}>
+                <View style={{flexDirection: 'row'}}>
                   <View
                     style={{
                       flex: 0.5,
@@ -1796,7 +1935,7 @@ export default class Employee extends Component {
                           paddingTop: 10,
                           marginTop: 20,
                         }}>
-                        <Text style={{ fontSize: 30, color: '#76726d' }}>
+                        <Text style={{fontSize: 30, color: '#76726d'}}>
                           Cash:
                         </Text>
                         <TextInput
@@ -1815,7 +1954,7 @@ export default class Employee extends Component {
                           defaultValue={this.state.cash.toString()}
                           onChange={() => this._totalChange()}
                           keyboardType={'numeric'}
-                          onChangeText={cash => this.setState({ cash: cash })}
+                          onChangeText={cash => this.setState({cash: cash})}
                         />
                       </View>
                       {/* 
@@ -1874,10 +2013,10 @@ export default class Employee extends Component {
                     */}
                     </View>
 
-                    <View style={{ height: 180 }}>
+                    <View style={{height: 180}}>
                       <ScrollView>
-                        <View style={{ flexDirection: 'row' }}>
-                          <View style={{ flex: 0.2, justifyContent: 'center' }}>
+                        <View style={{flexDirection: 'row'}}>
+                          <View style={{flex: 0.2, justifyContent: 'center'}}>
                             <Text
                               style={{
                                 fontSize: width * 0.018,
@@ -1886,7 +2025,7 @@ export default class Employee extends Component {
                               Srno.
                             </Text>
                           </View>
-                          <View style={{ flex: 0.4, justifyContent: 'center' }}>
+                          <View style={{flex: 0.4, justifyContent: 'center'}}>
                             <Text
                               style={{
                                 fontSize: width * 0.018,
@@ -1895,7 +2034,7 @@ export default class Employee extends Component {
                               Name
                             </Text>
                           </View>
-                          <View style={{ flex: 0.2, justifyContent: 'center' }}>
+                          <View style={{flex: 0.2, justifyContent: 'center'}}>
                             <Text
                               style={{
                                 fontSize: width * 0.018,
@@ -1904,7 +2043,7 @@ export default class Employee extends Component {
                               Qty
                             </Text>
                           </View>
-                          <View style={{ flex: 0.2, justifyContent: 'center' }}>
+                          <View style={{flex: 0.2, justifyContent: 'center'}}>
                             <Text
                               style={{
                                 fontSize: width * 0.018,
@@ -1921,7 +2060,6 @@ export default class Employee extends Component {
                   <View
                     style={{
                       flex: 0.5,
-                      height: '100%',
                     }}>
                     <View
                       style={{
@@ -1929,6 +2067,7 @@ export default class Employee extends Component {
                         borderBottomColor: 'lightgrey',
                         paddingBottom: 20,
                         flexDirection: 'column',
+                        alignItems: 'center',
                       }}>
                       <View style={styles.touchable1}>
                         <TouchableOpacity
@@ -2004,7 +2143,7 @@ export default class Employee extends Component {
                             borderRadius: 10,
                             marginHorizontal: 10,
                           }}
-                          onPress={() => { }}>
+                          onPress={() => {}}>
                           <Text
                             style={{
                               fontSize: width * 0.018,
@@ -2070,10 +2209,10 @@ export default class Employee extends Component {
                         style={{
                           paddingHorizontal: 15,
                           flexDirection: 'row',
-                          marginStart: 50,
                         }}>
-                        <View style={{ flex: 0.6 }}>
-                          <View style={{ flexDirection: 'row', margin: 10 }}>
+                        <View style={{}}>
+                          <View
+                            style={{flexDirection: 'row', marginVertical: 10}}>
                             <TouchableOpacity
                               style={styles.touchablenumber1}
                               onPress={() => {
@@ -2166,7 +2305,10 @@ export default class Employee extends Component {
                             </TouchableOpacity>
                           </View>
                         </View>
-                        <View style={{ flex: 0.4, margin: 10 }}>
+                        <View
+                          style={{
+                            margin: 10,
+                          }}>
                           <TouchableOpacity
                             style={{
                               height: 90,
@@ -2175,7 +2317,6 @@ export default class Employee extends Component {
                               alignItems: 'center',
                               borderRadius: 10,
                               backgroundColor: 'white',
-                              // marginStart: 8,
                             }}
                             onPress={() => {
                               this.onClearPress('');
@@ -2192,7 +2333,7 @@ export default class Employee extends Component {
                         </View>
                       </View>
                     </View>
-                    <View>
+                    <View style={{alignItems: 'center'}}>
                       <View style={styles.touchable1}>
                         <TouchableOpacity
                           style={styles.touchablenumber2}
@@ -2320,7 +2461,6 @@ export default class Employee extends Component {
                     borderTopWidth: 1,
                     flexDirection: 'row',
                   }}>
-
                   <Text
                     style={{
                       fontSize: width * 0.03,
@@ -2332,8 +2472,7 @@ export default class Employee extends Component {
                       paddingVertical: 10,
                       color: 'grey',
                     }}>
-                    Total :{' '}
-                    {this.state.takeTotal}
+                    Total : {this.state.takeTotal}
                   </Text>
 
                   <Text
@@ -2350,9 +2489,8 @@ export default class Employee extends Component {
                     {this.state.cash == 0
                       ? 0
                       : (
-                        parseFloat(this.state.cash) -
-                        (this.state.takeTotal)
-                      ).toFixed(2)}
+                          parseFloat(this.state.cash) - this.state.takeTotal
+                        ).toFixed(2)}
                   </Text>
 
                   <Text
@@ -2362,23 +2500,27 @@ export default class Employee extends Component {
                       marginTop: 10,
                       paddingVertical: 10,
                       color: 'grey',
-                      flex: 10
+                      flex: 10,
                     }}>
                     Receipt :
                   </Text>
 
                   <Switch
-                    trackColor={{ true: 'white', false: 'white' }}
+                    trackColor={{true: 'white', false: 'white'}}
                     value={isSwitchOn}
                     style={styles.btnswitch}
                     color="white"
-                    thumbColor={this.state.isSwitchOn == true ? "orange" : "grey"}
+                    thumbColor={
+                      this.state.isSwitchOn == true ? 'orange' : 'grey'
+                    }
                     onValueChange={() => {
-                      this.setState({ isSwitchOn: !isSwitchOn });
+                      this.setState({isSwitchOn: !isSwitchOn});
                     }}
                   />
-                  {this.state.cash > 0 ?
-                    <TouchableOpacity style={styles.add_btn} onPress={() => this.placeorder()}>
+                  {this.state.cash > 0 ? (
+                    <TouchableOpacity
+                      style={styles.add_btn}
+                      onPress={() => this.placeorder()}>
                       <Text
                         style={{
                           fontSize: 30,
@@ -2386,10 +2528,9 @@ export default class Employee extends Component {
                           textAlign: 'center',
                         }}>
                         Pay
-                    </Text>
-
+                      </Text>
                     </TouchableOpacity>
-                    : null}
+                  ) : null}
                 </View>
               </ScrollView>
             </Dialog>
@@ -2416,21 +2557,21 @@ export default class Employee extends Component {
               }}
             />
           </View>
-          <View style={{ flex: 0.9, flexDirection: 'row', padding: 5 }}>
+          <View style={{flex: 0.9, flexDirection: 'row', padding: 5}}>
             <FlatList
               data={this.state.dataSource}
-              keyExtractor={({ id }, index) => id}
-              numColumns={width < height ? 5 : 8}
-              renderItem={({ item }) => (
-                <View>
+              keyExtractor={({id}, index) => id}
+              numColumns={8}
+              renderItem={({item}) => (
+                <View style={{justifyContent: 'space-evenly'}}>
                   {item.isgroup == true ? (
                     <View
                       style={{
                         flex: 1,
                         flexDirection: 'row',
                         backgroundColor: '#ff9500',
-                        height: 150,
-                        width: 150,
+                        height: width * 0.116,
+                        width: width * 0.116,
                         alignItems: 'center',
                         justifyContent: 'center',
                         textAlign: 'center',
@@ -2439,21 +2580,21 @@ export default class Employee extends Component {
                       }}>
                       <Image
                         style={{
-                          height: 130,
-                          width: 130,
+                          height: width * 0.1,
+                          width: width * 0.1,
                           backgroundColor: '#ff9500',
                         }}
-                        source={{ uri: 'http://dev-fs.8d.ie/' + item.cover }}
+                        source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
                       />
                       <Text
                         style={{
                           position: 'absolute',
-                          fontSize: 35,
+                          fontSize: width * 0.03,
                           color: 'white',
                           top: 25,
-                          width: 100,
+                          width: width * 0.08,
                           textAlign: 'center',
-                          lineHeight: 35,
+                          lineHeight: 38,
                           textDecorationLine: 'line-through',
                           textDecorationStyle: 'solid',
                         }}>
@@ -2463,7 +2604,7 @@ export default class Employee extends Component {
                       <Text
                         style={{
                           position: 'absolute',
-                          fontSize: 18,
+                          fontSize: width * 0.014,
                           color: 'white',
                           bottom: 25,
                         }}>
@@ -2471,7 +2612,7 @@ export default class Employee extends Component {
                         <Text
                           style={{
                             position: 'absolute',
-                            fontSize: 15,
+                            fontSize: width * 0.01,
                             color: 'white',
                             bottom: 40,
                           }}>
@@ -2481,70 +2622,102 @@ export default class Employee extends Component {
                       </Text>
                     </View>
                   ) : (
-                      <TouchableOpacity
-                        onPress={() => this.ingredients_data(item)}>
-                        <View
+                    <TouchableOpacity
+                      onPress={() => this.ingredients_data(item)}>
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: 'row',
+                          marginLeft: 8,
+                          marginTop: 8,
+                        }}>
+                        <Image
                           style={{
-                            flex: 1,
-                            flexDirection: 'row',
-                            justifyContent: 'flex-start',
+                            height: width * 0.116,
+                            width: width * 0.116,
+                            backgroundColor: 'white',
+                          }}
+                          source={{uri: 'http://dev-fs.8d.ie/' + item.cover}}
+                        />
+                        <Text
+                          style={{
+                            position: 'absolute',
+                            fontSize: 15,
+                            top: 5,
                             marginLeft: 8,
-                            marginTop: 8,
                           }}>
-                          <Image
-                            style={{
-                              height: 150,
-                              width: 150,
-                              backgroundColor: 'white',
-                            }}
-                            source={{ uri: 'http://dev-fs.8d.ie/' + item.cover }}
-                          />
-                          <Text
-                            style={{
-                              position: 'absolute',
-                              fontSize: 15,
-                              top: 5,
-                              marginLeft: 8,
-                            }}>
-                            {item.sequence}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    )}
+                          {item.sequence}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
 
                   {this.getindiexistingqty(item)}
                 </View>
               )}
             />
           </View>
+          <Footer
+            style={{
+              backgroundColor: Colors.navbarBackgroundColor,
+              position: 'absolute',
+              bottom: 0,
+            }}
+            backgroundColor={Colors.navbarBackgroundColor}>
+            <Left>
+              <View style={{left: 10}}>
+                <Text style={{color: 'white', width: '100%', fontSize: 30}}>
+                  Total : {this.state.takeTotal}
+                </Text>
+              </View>
+            </Left>
+            <Body>
+              <Button
+                transparent
+                style={{
+                  width: 120,
+                  left: 150,
+                  alignSelf: 'center',
+                  alignItems: 'center',
+                }}
+                onPress={() => this.take_payment()}>
+                <Text style={{color: 'white', width: '100%', fontSize: 30}}>
+                  Pay Now
+                </Text>
+              </Button>
+            </Body>
+            <Right>
+              <Button transparent onPress={() => this.add_new_custom_dish()}>
+                <View style={styles.viewfooterimg}>
+                  <Image
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 50,
+                      height: 50,
+                      right: 20,
+                    }} // must be passed from the parent, the number may vary depending upon your screen size
+                    source={require('../images/dish-create.png')}></Image>
+                </View>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: 35,
+                    width: 35,
+                    right: 5,
+                    backgroundColor: 'red',
+                    borderRadius: 200 / 2,
+                  }}>
+                  <FontAwesomeIcon icon={faPlus} color={'white'} size={25} />
+                </View>
+              </Button>
+            </Right>
+          </Footer>
         </Container>
-        <Footer style={{ backgroundColor: Colors.navbarBackgroundColor }} backgroundColor={Colors.navbarBackgroundColor} >
-          <Left>
-            <View style={{ left: 10 }}>
-              <Text style={{ color: 'white', width: '100%', fontSize: 30 }} >Total : {this.state.takeTotal}</Text>
-            </View>
-          </Left>
-          <Body >
-            <Button transparent style={{ width: 120, left: 150, alignSelf: 'center', alignItems: 'center' }} onPress={() => this.take_payment()} >
-              <Text style={{ color: 'white', width: '100%', fontSize: 30 }} >Pay Now</Text>
-            </Button>
-          </Body>
-          <Right>
-            <Button transparent onPress={() => this.add_new_custom_dish()}>
-              <View style={styles.viewfooterimg}>
-                <Image
-                  style={{ alignItems: 'center', justifyContent: 'center', width: 50, height: 50, right: 20 }} // must be passed from the parent, the number may vary depending upon your screen size
-                  source={require('../images/dish-create.png')}
-                >
-                </Image>
-              </View>
-              <View style={{ position: 'absolute', top: 0, justifyContent: 'center', alignItems: 'center', height: 35, width: 35, right: 5, backgroundColor: 'red', borderRadius: 200 / 2 }}>
-                <FontAwesomeIcon icon={faPlus} color={'white'} size={25} />
-              </View>
-            </Button>
-          </Right>
-        </Footer>
-      </SideMenuDrawer >
+      </SideMenuDrawer>
     );
   }
 }
@@ -2553,6 +2726,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5FCFF',
+  },
+  no: {
+    paddingVertical: 2,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    backgroundColor: '#ff9500',
   },
   btnswitch: {
     marginTop: 10,
@@ -2574,12 +2753,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     flexDirection: 'row',
-    marginStart: 50,
   },
   touchable2: {
     paddingHorizontal: 15,
     flexDirection: 'row',
-    marginStart: 50,
   },
   touchablenumber1: {
     height: 40,
@@ -2669,13 +2846,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff9500',
     borderColor: '#ff9500',
     left: 120,
-    bottom: 20
+    bottom: 20,
   },
   custom_select: {
-    flexDirection: 'row', backgroundColor: 'white', borderRadius: 20
-  }
-  ,
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderRadius: 20,
+  },
   custom_no_select: {
-    flexDirection: 'row', borderRadius: 20
-  }
+    flexDirection: 'row',
+    borderRadius: 20,
+  },
 });

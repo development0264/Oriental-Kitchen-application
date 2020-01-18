@@ -785,8 +785,8 @@ const styles = StyleSheet.create({
   dynamic_list_view: {
     flexDirection: 'row',
     borderBottomColor: 'lightgrey',
-    paddingVertical: 10,
     borderBottomWidth: 1,
+    padding: 15,
   },
   print_btn: {
     marginTop: 10,

@@ -27,7 +27,7 @@ export default class SideMenuDrawer extends Component {
         panCloseMask={0.2}
         closedDrawerOffset={-3}
         onCloseStart={() => Keyboard.dismiss()}
-        style={{backgroundColor: '#2f2d2d'}}
+        style={{backgroundColor: 'red'}}
         captureGestures={true}>
         {this.props.children}
       </Drawer>
