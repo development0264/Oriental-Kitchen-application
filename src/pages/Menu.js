@@ -698,7 +698,7 @@ export default class Employee extends Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -718,7 +718,7 @@ export default class Employee extends Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -738,7 +738,7 @@ export default class Employee extends Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -758,7 +758,7 @@ export default class Employee extends Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -778,20 +778,18 @@ export default class Employee extends Component {
                 renderItem={({item}) => (
                   <View style={styles.dynamic_list_view}>
                     <View style={{flex: 0.5, alignItems: 'center'}}>
-                      <Text style={{fontSize: width * 0.0165}}>
-                        {item.name}
-                      </Text>
+                      <Text style={{fontSize: width * 0.025}}>{item.name}</Text>
                     </View>
                     <View style={{flex: 0.5, alignItems: 'center'}}>
-                      <Text style={{fontSize: width * 0.0165}}>
+                      <Text style={{fontSize: width * 0.025}}>
                         {item.description}
                       </Text>
                     </View>
                     <View style={{flex: 0.5, alignItems: 'center'}}>
                       {item.status == 1 ? (
-                        <Text style={{fontSize: width * 0.0165}}>Yes</Text>
+                        <Text style={{fontSize: width * 0.025}}>Yes</Text>
                       ) : (
-                        <Text style={{fontSize: width * 0.0165}}>No</Text>
+                        <Text style={{fontSize: width * 0.025}}>No</Text>
                       )}
                     </View>
                     <View
@@ -812,7 +810,7 @@ export default class Employee extends Component {
                             <Text
                               style={{
                                 color: 'white',
-                                fontSize: width * 0.015,
+                                fontSize: width * 0.02,
                                 textAlign: 'center',
                               }}>
                               {' '}
@@ -831,7 +829,7 @@ export default class Employee extends Component {
                             <Text
                               style={{
                                 color: 'white',
-                                fontSize: width * 0.015,
+                                fontSize: width * 0.02,
                                 textAlign: 'center',
                               }}>
                               {' '}

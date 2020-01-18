@@ -2235,12 +2235,13 @@ export default class IngrediantsGroups extends Component {
                         borderBottomWidth: 1,
                         alignItems: 'center',
                         justifyContent: 'center',
+                        paddingLeft: 20,
                       }}>
                       <Col style={{alignItems: 'center', width: '10%'}}>
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.02,
+                              fontSize: width * 0.025,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2256,7 +2257,7 @@ export default class IngrediantsGroups extends Component {
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.02,
+                              fontSize: width * 0.025,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2272,7 +2273,7 @@ export default class IngrediantsGroups extends Component {
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.02,
+                              fontSize: width * 0.025,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2288,7 +2289,7 @@ export default class IngrediantsGroups extends Component {
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.02,
+                              fontSize: width * 0.025,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2304,7 +2305,7 @@ export default class IngrediantsGroups extends Component {
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.02,
+                              fontSize: width * 0.025,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2320,7 +2321,7 @@ export default class IngrediantsGroups extends Component {
                         <View>
                           <Text
                             style={{
-                              fontSize: width * 0.02,
+                              fontSize: width * 0.025,
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
@@ -2394,6 +2395,7 @@ export default class IngrediantsGroups extends Component {
 
   filldata() {
     var items = [];
+    var {height, width} = Dimensions.get('window');
     this.state.dataSource.map((item, i) => {
       items.push(
         <Grid>
@@ -2412,16 +2414,16 @@ export default class IngrediantsGroups extends Component {
                   justifyContent: 'center',
                 }}>
                 <Col style={{alignItems: 'center', width: '10%'}}>
-                  <Text style={{fontSize: 25}}>{i + 1}</Text>
+                  <Text style={{fontSize: width * 0.025}}>{i + 1}</Text>
                 </Col>
                 <Col style={{alignItems: 'center', width: '18%'}}>
-                  <Text style={{fontSize: 25}}>{item.name}</Text>
+                  <Text style={{fontSize: width * 0.025}}>{item.name}</Text>
                 </Col>
                 <Col style={{alignItems: 'center', width: '18%'}}>
-                  <Text style={{fontSize: 25}}>{item.max}</Text>
+                  <Text style={{fontSize: width * 0.025}}>{item.max}</Text>
                 </Col>
                 <Col style={{alignItems: 'center', width: '18%'}}>
-                  <Text style={{fontSize: 25, marginLeft: 10}}>
+                  <Text style={{fontSize: width * 0.025, marginLeft: 10}}>
                     {item.status == 1 ? (
                       <Text>Enable</Text>
                     ) : (
@@ -2430,7 +2432,7 @@ export default class IngrediantsGroups extends Component {
                   </Text>
                 </Col>
                 <Col style={{alignItems: 'center', width: '18%'}}>
-                  <Text style={{fontSize: 25, marginLeft: 10}}>
+                  <Text style={{fontSize: width * 0.025, marginLeft: 10}}>
                     {item.is_main == 1 ? <Text>Yes</Text> : <Text>No</Text>}
                   </Text>
                 </Col>
@@ -2438,7 +2440,9 @@ export default class IngrediantsGroups extends Component {
                   <TouchableOpacity
                     style={styles.add}
                     onPress={() => this.add_ingredient(item.id)}>
-                    <Text style={{color: 'white', fontSize: 25}}>Add</Text>
+                    <Text style={{color: 'white', fontSize: width * 0.025}}>
+                      Add
+                    </Text>
                   </TouchableOpacity>
                 </Col>
               </View>

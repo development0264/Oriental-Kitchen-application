@@ -594,7 +594,7 @@ export default class History extends React.Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -613,7 +613,7 @@ export default class History extends React.Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -632,7 +632,7 @@ export default class History extends React.Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -651,7 +651,7 @@ export default class History extends React.Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -670,7 +670,7 @@ export default class History extends React.Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -695,28 +695,28 @@ export default class History extends React.Component {
                       <View style={styles.dynamic_list_view}>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
                           <Text
-                            style={{fontSize: width * 0.02, marginRight: 20}}>
+                            style={{fontSize: width * 0.025, marginRight: 20}}>
                             {item.order_date.split(' ')[0]}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
-                          <Text style={{fontSize: width * 0.02}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             {item.reference}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
-                          <Text style={{fontSize: width * 0.02}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             ${item.total}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
-                          <Text style={{fontSize: width * 0.02}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             {item.type}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
                           <Text
-                            style={{fontSize: width * 0.02, marginLeft: 20}}>
+                            style={{fontSize: width * 0.025, marginLeft: 20}}>
                             {item.employee_name}
                           </Text>
                         </View>
@@ -738,28 +738,28 @@ export default class History extends React.Component {
                       <View style={styles.dynamic_list_view}>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
                           <Text
-                            style={{fontSize: width * 0.02, marginRight: 20}}>
+                            style={{fontSize: width * 0.025, marginRight: 20}}>
                             {item.order_date.split(' ')[0]}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
-                          <Text style={{fontSize: width * 0.02}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             {item.order_id}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
-                          <Text style={{fontSize: width * 0.02}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             ${item.total_paid}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
-                          <Text style={{fontSize: width * 0.02}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             {item.type}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
                           <Text
-                            style={{fontSize: width * 0.02, marginLeft: 20}}>
+                            style={{fontSize: width * 0.025, marginLeft: 20}}>
                             {item.employee_name}
                           </Text>
                         </View>

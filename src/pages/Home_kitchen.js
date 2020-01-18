@@ -966,7 +966,7 @@ export default class Home extends Component {
               }}>
               <Text
                 style={{
-                  fontSize: width * 0.035,
+                  fontSize: width * 0.03,
                   color: 'white',
                   alignItems: 'flex-start',
                   justifyContent: 'flex-start',

@@ -743,7 +743,7 @@ export default class Employee extends Component {
                           style={{
                             position: 'absolute',
                             zIndex: 1,
-                            right: '13%',
+                            right: '5%',
                             top: '18%',
                           }}>
                           {this.state.hidePassword == true ? (
@@ -1374,7 +1374,7 @@ export default class Employee extends Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -1392,7 +1392,7 @@ export default class Employee extends Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
@@ -1410,7 +1410,7 @@ export default class Employee extends Component {
                   }}>
                   <Text
                     style={{
-                      fontSize: width * 0.02,
+                      fontSize: width * 0.025,
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
