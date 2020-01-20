@@ -274,8 +274,6 @@ export default class History extends React.Component {
                   borderWidth: 2,
                   borderColor: '#efeff4',
                   width: '80%',
-                  margin: 0,
-                  padding: 0,
                   justifyContent: 'center',
                   alignSelf: 'center',
                   backgroundColor: '#efeff4',
@@ -283,169 +281,180 @@ export default class History extends React.Component {
                 onTouchOutside={() =>
                   this.setState({edit_history_dialog: false})
                 }>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{flex: 0.99, margin: 0, padding: 0}}>
-                    <Text
+                <ScrollView>
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 0.99}}>
+                      <Text
+                        style={{
+                          textAlign: 'center',
+                          borderBottomWidth: 1,
+                          borderBottomColor: 'lightgrey',
+                          paddingBottom: 5,
+                          fontSize: width * 0.02,
+                        }}>
+                        Order
+                      </Text>
+                    </View>
+                    <View style={{justifyContent: 'center'}}>
+                      <TouchableOpacity
+                        onPress={() =>
+                          this.setState({edit_history_dialog: false})
+                        }>
+                        <FontAwesomeIcon
+                          icon={faWindowClose}
+                          color={'#ff9500'}
+                          size={30}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={{flexDirection: 'row'}}>
+                    <View
                       style={{
-                        textAlign: 'center',
-                        borderBottomWidth: 1,
-                        borderBottomColor: 'lightgrey',
-                        paddingBottom: 5,
-                        fontSize: width * 0.02,
+                        flex: 0.7,
+                        borderRightWidth: 1,
+                        borderRightColor: 'lightgrey',
+                        padding: 10,
                       }}>
-                      Order
-                    </Text>
-                  </View>
-                  <View style={{justifyContent: 'center'}}>
-                    <TouchableOpacity
-                      style={{marginBottom: 40, marginStart: 50}}
-                      onPress={() =>
-                        this.setState({edit_history_dialog: false})
-                      }>
-                      <FontAwesomeIcon
-                        icon={faWindowClose}
-                        color={'#ff9500'}
-                        size={30}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <View
-                    style={{
-                      flex: 0.78,
-                      borderRightWidth: 1,
-                      borderRightColor: 'lightgrey',
-                      padding: 10,
-                    }}>
-                    {this.filldata()}
-                  </View>
-                  <View
-                    style={{
-                      flex: 0.22,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                      <TouchableOpacity
-                        style={[styles.add_btn, {paddingHorizontal: 25}]}>
-                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                          -
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={[styles.add_btn, {paddingHorizontal: 20}]}>
-                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                          +
-                        </Text>
-                      </TouchableOpacity>
+                      {this.filldata()}
                     </View>
                     <View
                       style={{
-                        marginVertical: 15,
-                        padding: 20,
-                        elevation: 8,
-                        backgroundColor: '#FAFAFA',
-                        borderRadius: 25,
-                        marginRight: 10,
+                        flex: 0.3,
+                        justifyContent: 'space-around',
+                        alignItems: 'center',
+                        flexDirection: 'column',
                       }}>
-                      <Text style={{fontSize: width * 0.02}}>STATUS</Text>
-                      <Text style={{fontSize: width * 0.02, color: 'orange'}}>
-                        {orderStatus}
-                      </Text>
-                    </View>
-                    <TouchableOpacity
-                      style={[
-                        styles.add_btn,
-                        {
-                          justifyContent: 'center',
-                          alignSelf: 'center',
-                          width: 160,
-                        },
-                      ]}>
-                      <Text
+                      <View
                         style={{
-                          fontSize: width * 0.025,
-                          color: 'white',
-                          textAlign: 'center',
+                          flexDirection: 'row',
+                          justifyContent: 'space-around',
                         }}>
-                        DEL
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={[
-                        styles.add_btn,
-                        {justifyContent: 'center', alignSelf: 'center'},
-                      ]}>
-                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                        REFUND
-                      </Text>
-                    </TouchableOpacity>
-                    <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                      <TouchableOpacity style={styles.print_btn}>
-                        <FontAwesomeIcon icon={faPrint} size={25} />
+                        <TouchableOpacity
+                          style={[styles.add_btn, {paddingHorizontal: 20}]}>
+                          <Text
+                            style={{fontSize: width * 0.025, color: 'white'}}>
+                            -
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[styles.add_btn, {paddingHorizontal: 20}]}>
+                          <Text
+                            style={{fontSize: width * 0.025, color: 'white'}}>
+                            +
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      <View
+                        style={{
+                          marginTop: 10,
+                          padding: 20,
+                          elevation: 8,
+                          backgroundColor: '#FAFAFA',
+                          borderRadius: 25,
+                        }}>
+                        <Text style={{fontSize: width * 0.02}}>STATUS</Text>
+                        <Text style={{fontSize: width * 0.02, color: 'orange'}}>
+                          {orderStatus}
+                        </Text>
+                      </View>
+                      <TouchableOpacity
+                        style={[
+                          styles.add_btn,
+                          {
+                            width: width * 0.15,
+                          },
+                        ]}>
+                        <Text
+                          style={{
+                            fontSize: width * 0.025,
+                            color: 'white',
+                            textAlign: 'center',
+                          }}>
+                          DEL
+                        </Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.print_btn}>
-                        <FontAwesomeIcon icon={faReceipt} size={25} />
+                      <TouchableOpacity style={[styles.add_btn]}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                          REFUND
+                        </Text>
                       </TouchableOpacity>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                        }}>
+                        <TouchableOpacity style={styles.print_btn}>
+                          <FontAwesomeIcon
+                            icon={faPrint}
+                            size={width * 0.022}
+                          />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.print_btn}>
+                          <FontAwesomeIcon
+                            icon={faReceipt}
+                            size={width * 0.022}
+                          />
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
-                </View>
-                <View
-                  style={{
-                    marginTop: 20,
-                    borderTopColor: 'lightgrey',
-                    borderTopWidth: 1,
-                    flexDirection: 'row',
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: width * 0.03,
-                      alignSelf: 'flex-start',
-                      flex: 0.4,
-                      textAlign: 'left',
-                      marginTop: 10,
-                      paddingVertical: 10,
-                      color: '#5a5a5a',
-                    }}>
-                    Total: ${totalPrice}
-                  </Text>
                   <View
                     style={{
-                      flex: 0.56,
+                      marginTop: 20,
+                      borderTopColor: 'lightgrey',
+                      borderTopWidth: 1,
                       flexDirection: 'row',
-                      alignItems: 'center',
-                      marginTop: 10,
                     }}>
-                    <View style={{width: 150}}>
-                      <Text style={{fontSize: width * 0.03, color: '#5a5a5a'}}>
-                        Refund:
-                      </Text>
-                    </View>
-                    <TextInput
+                    <Text
                       style={{
-                        borderColor: 'white',
-                        height: 50,
-                        width: '50%',
-                        marginLeft: 10,
-                        borderWidth: 1,
-                        textAlign: 'center',
-                        backgroundColor: 'white',
-                        borderRadius: 50,
-                        flexWrap: 'wrap',
-                      }}
-                      placeholder="Type here"
-                      keyboardType="numeric"
-                      onChangeText={refund => this.setState({refund})}
-                      value={this.state.refund}
-                    />
-                  </View>
-                  <TouchableOpacity style={styles.add_btn}>
-                    <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                      UPDATE
+                        fontSize: width * 0.03,
+                        alignSelf: 'flex-start',
+                        flex: 0.4,
+                        textAlign: 'left',
+                        marginTop: 10,
+                        paddingVertical: 10,
+                        color: '#5a5a5a',
+                      }}>
+                      Total: ${totalPrice}
                     </Text>
-                  </TouchableOpacity>
-                </View>
+                    <View
+                      style={{
+                        flex: 0.56,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        marginTop: 10,
+                      }}>
+                      <View style={{width: width * 0.15}}>
+                        <Text
+                          style={{fontSize: width * 0.03, color: '#5a5a5a'}}>
+                          Refund:
+                        </Text>
+                      </View>
+                      <TextInput
+                        style={{
+                          borderColor: 'white',
+                          height: 50,
+                          width: '50%',
+                          marginLeft: 10,
+                          borderWidth: 1,
+                          textAlign: 'center',
+                          backgroundColor: 'white',
+                          borderRadius: 50,
+                          flexWrap: 'wrap',
+                        }}
+                        placeholder="Type here"
+                        keyboardType="numeric"
+                        onChangeText={refund => this.setState({refund})}
+                        value={this.state.refund}
+                      />
+                    </View>
+                    <TouchableOpacity style={styles.add_btn}>
+                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                        UPDATE
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </ScrollView>
               </Dialog>
             </KeyboardAvoidingView>
             <View
@@ -690,12 +699,11 @@ export default class History extends React.Component {
                   renderItem={({item}) => (
                     <TouchableHighlight
                       underlayColor="lightgray"
-                      style={{borderRadius: 20, marginHorizontal: 20}}
+                      style={{borderRadius: 20}}
                       onPress={() => this.getOrder(item.order_id)}>
                       <View style={styles.dynamic_list_view}>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
-                          <Text
-                            style={{fontSize: width * 0.025, marginRight: 20}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             {item.order_date.split(' ')[0]}
                           </Text>
                         </View>
@@ -715,8 +723,7 @@ export default class History extends React.Component {
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
-                          <Text
-                            style={{fontSize: width * 0.025, marginLeft: 20}}>
+                          <Text style={{fontSize: width * 0.025}}>
                             {item.employee_name}
                           </Text>
                         </View>
@@ -749,7 +756,7 @@ export default class History extends React.Component {
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
                           <Text style={{fontSize: width * 0.025}}>
-                            ${item.total_paid}
+                            ${item.total}
                           </Text>
                         </View>
                         <View style={{flex: 0.4, alignItems: 'center'}}>
@@ -789,12 +796,9 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   print_btn: {
-    marginTop: 10,
-    marginRight: 20,
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-    borderRadius: 25,
+    margin: 10,
+    padding: 15,
+    borderRadius: 15,
     backgroundColor: '#ffffff',
   },
   add_btn: {

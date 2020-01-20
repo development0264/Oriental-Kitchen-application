@@ -811,9 +811,9 @@ export default class CreateDish extends Component {
               }}>
               <Image
                 style={{
-                  width: 65,
-                  height: 65,
-                  borderRadius: 65 / 2,
+                  width: width * 0.06,
+                  height: width * 0.06,
+                  borderRadius: (width * 0.06) / 2,
                 }}
                 source={{
                   uri: 'http://dev-fs.8d.ie/storage/' + user_details.wok,
@@ -869,7 +869,7 @@ export default class CreateDish extends Component {
                       }}>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
                             Dish Name:
@@ -888,7 +888,7 @@ export default class CreateDish extends Component {
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           value={this.state.dishname}
                           onChangeText={dishname => this.setState({dishname})}
                           // onChangeText={this.setName}
@@ -900,7 +900,7 @@ export default class CreateDish extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
                             Dish Description:
@@ -919,7 +919,7 @@ export default class CreateDish extends Component {
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           value={this.state.dishdescription}
                           onChangeText={dishdescription =>
                             this.setState({dishdescription})
@@ -932,7 +932,7 @@ export default class CreateDish extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
                             Dish Rate:
@@ -951,7 +951,7 @@ export default class CreateDish extends Component {
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           value={this.state.dishrate.toString()}
                           onChangeText={dishrate => this.setState({dishrate})}
                         />
@@ -962,7 +962,7 @@ export default class CreateDish extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
                             Is Popular:
@@ -1035,148 +1035,6 @@ export default class CreateDish extends Component {
 
               {/* Quantity Dialog */}
 
-              {/* <Dialog
-                visible={this.state.show_dialog}
-                dialogStyle={{
-                  borderRadius: 10,
-                  borderWidth: 10,
-                  borderColor: '#efeff4',
-                  width: '50%',
-                  height: '50%',
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                  backgroundColor: '#efeff4',
-                }}
-                onTouchOutside={() => this.setState({show_dialog: false})}>
-                <View style={{height: '100%'}}>
-                  <View style={{flexDirection: 'row'}}>
-                    <View style={{flex: 1}}>
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          borderBottomWidth: 1,
-                          borderBottomColor: 'lightgrey',
-                          paddingBottom: 15,
-                          marginBottom: 0,
-                          fontSize: 23,
-                        }}>
-                        Select {this.state.groupname}
-                      </Text>
-                    </View>
-                    <View style={{justifyContent: 'center'}}>
-                      <TouchableOpacity
-                        onPress={() => this.setState({show_dialog: false})}>
-                        <FontAwesomeIcon
-                          icon={faWindowClose}
-                          color={'#ff9500'}
-                          size={25}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <View style={{flex: 1, width: 250, maxHeight: 200}}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View style={{marginLeft: 20, marginTop: 20}}>
-                        <Image
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: 100,
-                            height: 110,
-                            backgroundColor: 'white',
-                          }}
-                          source={{
-                            uri:
-                              'http://dev-fs.8d.ie/' +
-                              this.state.ingredientcover,
-                          }}></Image>
-                      </View>
-                      <View style={{marginLeft: 40, marginTop: 10}}>
-                        <Text
-                          style={{fontSize: width * 0.016, fontWeight: 'bold'}}>
-                          {this.state.name}
-                        </Text>
-                        <Text style={{fontSize: 16, width: 350, marginTop: 10}}>
-                          {this.state.description}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      borderTopWidth: 1,
-                      borderColor: '#ccccde',
-                      flex: 1,
-                      width: 530,
-                      maxHeight: 150,
-                      marginBottom: -100,
-                    }}>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                      <Button
-                        block
-                        icon
-                        transparent
-                        style={{marginTop: 10}}
-                        onPress={() =>
-                          this.setState({
-                            quantity:
-                              this.state.quantity > 0
-                                ? this.state.quantity - 1
-                                : 0,
-                          })
-                        }>
-                        <FontAwesomeIcon
-                          icon={faMinus}
-                          color={'orange'}
-                          size={20}
-                        />
-                      </Button>
-
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          fontSize: width * 0.016,
-                          marginLeft: 30,
-                          marginTop: 20,
-                        }}>
-                        {this.state.quantity}
-                      </Text>
-
-                      <Button
-                        block
-                        icon
-                        transparent
-                        style={{marginLeft: 30, marginTop: 10}}
-                        onPress={() => this.addQuantity()}>
-                        <FontAwesomeIcon
-                          icon={faPlus}
-                          color={'orange'}
-                          size={20}
-                        />
-                      </Button>
-
-                      <TouchableOpacity
-                        style={{
-                          paddingLeft: 30,
-                          paddingRight: 30,
-                          marginBottom: 80,
-                          marginLeft: 320,
-                          borderRadius: 10,
-                          justifyContent: 'center',
-                          alignSelf: 'center',
-                          backgroundColor: '#ff9500',
-                        }}
-                        onPress={() => this.add_Dish_ingredient()}>
-                        <Text style={{fontSize: width * 0.016, color: 'white'}}>
-                          Add
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              </Dialog> */}
               <Dialog
                 visible={this.state.show_dialog}
                 dialogStyle={{
@@ -1220,8 +1078,8 @@ export default class CreateDish extends Component {
                     }}>
                     <Image
                       style={{
-                        width: 100,
-                        height: 100,
+                        width: width * 0.1,
+                        height: width * 0.1,
                         backgroundColor: 'white',
                       }}
                       source={{
@@ -1330,8 +1188,8 @@ export default class CreateDish extends Component {
                           alignItems: 'center',
                           justifyContent: 'center',
                           textAlign: 'center',
-                          marginLeft: 8,
-                          marginTop: 8,
+                          marginLeft: width * 0.0075,
+                          marginTop: width * 0.0075,
                         }}>
                         <Image
                           style={{
@@ -1344,12 +1202,12 @@ export default class CreateDish extends Component {
                         <Text
                           style={{
                             position: 'absolute',
-                            fontSize: width * 0.03,
+                            fontSize: width * 0.025,
                             color: 'white',
-                            top: 25,
+                            top: width * 0.02,
                             width: width * 0.08,
                             textAlign: 'center',
-                            lineHeight: 35,
+                            lineHeight: width * 0.025,
                             textDecorationLine: 'line-through',
                             textDecorationStyle: 'solid',
                           }}>
@@ -1359,9 +1217,9 @@ export default class CreateDish extends Component {
                         <Text
                           style={{
                             position: 'absolute',
-                            fontSize: width * 0.014,
+                            fontSize: width * 0.012,
                             color: 'white',
-                            bottom: 25,
+                            bottom: width * 0.02,
                           }}>
                           MAX{' '}
                           <Text
@@ -1369,7 +1227,7 @@ export default class CreateDish extends Component {
                               position: 'absolute',
                               fontSize: width * 0.01,
                               color: 'white',
-                              bottom: 40,
+                              bottom: width * 0.02,
                             }}>
                             {item.max}
                           </Text>{' '}
@@ -1384,8 +1242,8 @@ export default class CreateDish extends Component {
                             flex: 1,
                             flexDirection: 'row',
                             justifyContent: 'flex-start',
-                            marginLeft: 8,
-                            marginTop: 8,
+                            marginLeft: width * 0.0075,
+                            marginTop: width * 0.0075,
                           }}>
                           <Image
                             style={{
@@ -1398,7 +1256,7 @@ export default class CreateDish extends Component {
                           <Text
                             style={{
                               position: 'absolute',
-                              fontSize: 15,
+                              fontSize: width * 0.012,
                               top: 5,
                               marginLeft: 8,
                             }}>

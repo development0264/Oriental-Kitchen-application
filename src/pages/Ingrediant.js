@@ -159,9 +159,9 @@ export default class Home extends Component {
             }}>
             <Image
               style={{
-                width: 65,
-                height: 65,
-                borderRadius: 65 / 2,
+                width: width * 0.06,
+                height: width * 0.06,
+                borderRadius: (width * 0.06) / 2,
               }}
               source={{
                 uri: 'http://dev-fs.8d.ie/storage/' + user_details.wok,
@@ -186,8 +186,8 @@ export default class Home extends Component {
                         alignItems: 'center',
                         justifyContent: 'center',
                         textAlign: 'center',
-                        marginLeft: 8,
-                        marginTop: 8,
+                        marginLeft: width * 0.0075,
+                        marginTop: width * 0.0075,
                       }}>
                       <Image
                         style={{
@@ -200,12 +200,12 @@ export default class Home extends Component {
                       <Text
                         style={{
                           position: 'absolute',
-                          fontSize: width * 0.03,
+                          fontSize: width * 0.025,
                           color: 'white',
-                          top: 25,
+                          top: width * 0.02,
                           width: width * 0.08,
                           textAlign: 'center',
-                          lineHeight: 35,
+                          lineHeight: width * 0.025,
                           textDecorationLine: 'line-through',
                           textDecorationStyle: 'solid',
                         }}>
@@ -215,9 +215,9 @@ export default class Home extends Component {
                       <Text
                         style={{
                           position: 'absolute',
-                          fontSize: width * 0.014,
+                          fontSize: width * 0.012,
                           color: 'white',
-                          bottom: 25,
+                          bottom: width * 0.02,
                         }}>
                         MAX{' '}
                         <Text
@@ -225,7 +225,7 @@ export default class Home extends Component {
                             position: 'absolute',
                             fontSize: width * 0.01,
                             color: 'white',
-                            bottom: 40,
+                            bottom: width * 0.02,
                           }}>
                           {item.max}
                         </Text>{' '}
@@ -233,15 +233,14 @@ export default class Home extends Component {
                       </Text>
                     </View>
                   ) : (
-                    <TouchableOpacity
-                      onPress={() => this.ingredients_data(item)}>
+                    <TouchableOpacity onPress={() => {}}>
                       <View
                         style={{
                           flex: 1,
                           flexDirection: 'row',
                           justifyContent: 'flex-start',
-                          marginLeft: 8,
-                          marginTop: 8,
+                          marginLeft: width * 0.0075,
+                          marginTop: width * 0.0075,
                         }}>
                         <Image
                           style={{
@@ -254,7 +253,7 @@ export default class Home extends Component {
                         <Text
                           style={{
                             position: 'absolute',
-                            fontSize: 15,
+                            fontSize: width * 0.012,
                             top: 5,
                             marginLeft: 8,
                           }}>

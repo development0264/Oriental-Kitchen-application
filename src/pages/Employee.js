@@ -567,7 +567,7 @@ export default class Employee extends Component {
                       }}>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             User Name:
@@ -579,14 +579,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={username => this.setState({username})}
                         />
                       </View>
@@ -596,7 +595,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             First Name:
@@ -608,14 +607,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={firstName => this.setState({firstName})}
                         />
                       </View>
@@ -625,7 +623,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Last Name:
@@ -637,14 +635,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={lastName => this.setState({lastName})}
                         />
                       </View>
@@ -654,7 +651,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Email:
@@ -667,14 +664,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={text => this.validate(text)}
                           value={this.state.email}
                         />
@@ -685,7 +681,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Phone:
@@ -697,14 +693,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={phone => this.setState({phone})}
                         />
                       </View>
@@ -714,7 +709,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Password:
@@ -727,14 +722,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           secureTextEntry={this.state.hidePassword}
                           onChangeText={password => this.setState({password})}
                         />
@@ -743,7 +737,7 @@ export default class Employee extends Component {
                           style={{
                             position: 'absolute',
                             zIndex: 1,
-                            right: '5%',
+                            right: '8%',
                             top: '18%',
                           }}>
                           {this.state.hidePassword == true ? (
@@ -777,7 +771,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Re-type:
@@ -789,7 +783,6 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
@@ -798,7 +791,7 @@ export default class Employee extends Component {
                             alignSelf: 'flex-end',
                             marginRight: 15,
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={repassword =>
                             this.setState({repassword})
                           }
@@ -811,7 +804,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 160}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Role:
@@ -837,17 +830,17 @@ export default class Employee extends Component {
                         {this.state.img_uri == '' ? (
                           <Image
                             style={{
-                              width: 200,
-                              height: 200,
-                              borderRadius: 200 / 2,
+                              width: width * 0.2,
+                              height: width * 0.2,
+                              borderRadius: (width * 0.2) / 2,
                             }}
                             source={require('../images/profile-circle-picture-8.jpg')}></Image>
                         ) : (
                           <Image
                             style={{
-                              width: 200,
-                              height: 200,
-                              borderRadius: 200 / 2,
+                              width: width * 0.2,
+                              height: width * 0.2,
+                              borderRadius: (width * 0.2) / 2,
                             }}
                             source={{uri: this.state.img_uri}}></Image>
                         )}
@@ -937,7 +930,7 @@ export default class Employee extends Component {
                       }}>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             User Name:
@@ -949,14 +942,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={Editusername =>
                             this.setState({Editusername})
                           }
@@ -969,7 +961,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             First Name:
@@ -981,14 +973,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={Editfirstname =>
                             this.setState({Editfirstname})
                           }
@@ -1001,7 +992,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Last Name:
@@ -1013,14 +1004,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={Editlastname =>
                             this.setState({Editlastname})
                           }
@@ -1033,7 +1023,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Email:
@@ -1046,14 +1036,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={Editemail => this.setState({Editemail})}
                           defaultValue={this.state.Editemail}
                         />
@@ -1064,7 +1053,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Phone:
@@ -1076,14 +1065,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={Editphone => this.setState({Editphone})}
                           defaultValue={this.state.Editphone}
                         />
@@ -1094,7 +1082,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Password:
@@ -1106,14 +1094,13 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={Editpassword =>
                             this.setState({Editpassword})
                           }
@@ -1124,7 +1111,7 @@ export default class Employee extends Component {
                           style={{
                             position: 'absolute',
                             zIndex: 1,
-                            right: '13%',
+                            right: '8%',
                             top: '18%',
                           }}>
                           {this.state.hidePassword ? (
@@ -1158,7 +1145,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.02, color: '#76726d'}}>
                             Re-type:
@@ -1170,7 +1157,6 @@ export default class Employee extends Component {
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
@@ -1178,7 +1164,7 @@ export default class Employee extends Component {
                             flexWrap: 'wrap',
                             alignSelf: 'flex-end',
                           }}
-                          placeholder="Type message here.."
+                          placeholder="Type here.."
                           onChangeText={Editrepassword =>
                             this.setState({Editrepassword})
                           }
@@ -1192,7 +1178,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 160}}>
+                        <View style={{width: width * 0.15}}>
                           <Text style={{fontSize: width * 0.02, color: 'grey'}}>
                             Role:
                           </Text>
@@ -1219,9 +1205,9 @@ export default class Employee extends Component {
                         {this.state.img_uri == '' ? (
                           <Image
                             style={{
-                              width: 200,
-                              height: 200,
-                              borderRadius: 200 / 2,
+                              width: width * 0.2,
+                              height: width * 0.2,
+                              borderRadius: (width * 0.2) / 2,
                             }}
                             source={{
                               uri:
@@ -1231,9 +1217,9 @@ export default class Employee extends Component {
                         ) : (
                           <Image
                             style={{
-                              width: 200,
-                              height: 200,
-                              borderRadius: 200 / 2,
+                              width: width * 0.2,
+                              height: width * 0.2,
+                              borderRadius: (width * 0.2) / 2,
                             }}
                             source={{uri: this.state.img_uri}}></Image>
                         )}
@@ -1255,8 +1241,9 @@ export default class Employee extends Component {
                       borderTopColor: 'lightgrey',
                       borderTopWidth: 1,
                       flexDirection: 'row',
+                      justifyContent: 'space-between',
                     }}>
-                    <View style={{flex: 0.9}}>
+                    <View>
                       <TouchableOpacity
                         style={styles.delete_btn}
                         onPress={() => this.deletePress()}>
@@ -1293,16 +1280,17 @@ export default class Employee extends Component {
                   margin: 10,
                   marginLeft: 40,
                 }}>
-                <Text style={{fontSize: width * 0.03}}>Name:</Text>
+                <Text style={{fontSize: width * 0.03, alignSelf: 'center'}}>
+                  Name:
+                </Text>
                 <TextInput
                   style={{
                     borderColor: 'gray',
-                    height: '70%',
+                    height: '80%',
                     width: '50%',
                     paddingLeft: 15,
                     marginLeft: 15,
                     borderWidth: 1,
-                    textAlignVertical: 'top',
                     backgroundColor: 'white',
                     borderRadius: 50,
                     flexWrap: 'wrap',
@@ -1505,11 +1493,8 @@ const styles = StyleSheet.create({
   },
   add_btn: {
     marginTop: 10,
-    marginRight: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 45,
-    paddingRight: 45,
+    paddingVertical: 10,
+    paddingHorizontal: 45,
     borderRadius: 20,
     justifyContent: 'flex-end',
     alignSelf: 'flex-end',
@@ -1518,13 +1503,9 @@ const styles = StyleSheet.create({
   delete_btn: {
     marginTop: 10,
     marginRight: 15,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 45,
-    paddingRight: 45,
-    borderRadius: 25,
-    justifyContent: 'flex-start',
-    alignSelf: 'flex-start',
+    paddingVertical: 10,
+    paddingHorizontal: 45,
+    borderRadius: 20,
     backgroundColor: '#ff5800',
   },
   camera_icon: {

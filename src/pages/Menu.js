@@ -338,7 +338,7 @@ export default class Employee extends Component {
                       }}>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
                             Name:
@@ -368,7 +368,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
                             Description:
@@ -401,7 +401,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
                             Is Status:
@@ -487,7 +487,7 @@ export default class Employee extends Component {
                       }}>
                       <View
                         style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
                             Name :
@@ -517,7 +517,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
                             Description:
@@ -549,7 +549,7 @@ export default class Employee extends Component {
                           alignItems: 'center',
                           marginTop: 15,
                         }}>
-                        <View style={{width: 150}}>
+                        <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
                             Is Status:

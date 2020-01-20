@@ -383,12 +383,22 @@ export default class Employee extends Component {
         items.push(
           <View style={{flexDirection: 'row'}}>
             <View style={{flex: 0.2, justifyContent: 'center'}}>
-              <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
+              <Text
+                style={{
+                  fontSize: width * 0.018,
+                  color: '#76726d',
+                  textAlign: 'center',
+                }}>
                 {i + 1}
               </Text>
             </View>
             <View style={{flex: 0.35, justifyContent: 'center'}}>
-              <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
+              <Text
+                style={{
+                  fontSize: width * 0.018,
+                  color: '#76726d',
+                  textAlign: 'center',
+                }}>
                 {obj.name}
               </Text>
             </View>
@@ -404,13 +414,19 @@ export default class Employee extends Component {
                     fontSize: width * 0.018,
                     marginHorizontal: 5,
                     color: '#76726d',
+                    textAlign: 'center',
                   }}>
                   {item.qty}
                 </Text>
               </View>
             </View>
             <View style={{flex: 0.2, justifyContent: 'center'}}>
-              <Text style={{fontSize: width * 0.018, color: '#76726d'}}>
+              <Text
+                style={{
+                  fontSize: width * 0.018,
+                  color: '#76726d',
+                  textAlign: 'center',
+                }}>
                 ${item.rate * item.qty}
               </Text>
             </View>
@@ -1675,7 +1691,7 @@ export default class Employee extends Component {
                     alignItems: 'center',
                     marginTop: 10,
                   }}>
-                  <View style={{width: 150}}>
+                  <View style={{width: width * 0.15}}>
                     <Text style={{fontSize: width * 0.03, color: '#5a5a5a'}}>
                       Total:
                     </Text>
@@ -1700,7 +1716,7 @@ export default class Employee extends Component {
                 borderRadius: 20,
                 borderWidth: 3,
                 borderColor: '#efeff4',
-                width: '45%',
+                width: '50%',
                 justifyContent: 'center',
                 alignSelf: 'center',
                 backgroundColor: '#efeff4',
@@ -1739,7 +1755,7 @@ export default class Employee extends Component {
                           <Image
                             style={{
                               width: '100%',
-                              height: 230,
+                              height: width * 0.2,
                               borderTopLeftRadius: 15,
                               borderTopRightRadius: 15,
                             }}
@@ -1749,7 +1765,7 @@ export default class Employee extends Component {
                           <Image
                             style={{
                               width: '100%',
-                              height: 230,
+                              height: width * 0.2,
                               borderTopLeftRadius: 15,
                               borderTopRightRadius: 15,
                             }}
@@ -1856,6 +1872,7 @@ export default class Employee extends Component {
                                 width: 60,
                                 borderRadius: 10,
                                 marginTop: 10,
+                                justifyContent: 'center',
                               }}
                               onPress={() => this.card_add_dish(item)}>
                               <Text
@@ -1884,7 +1901,7 @@ export default class Employee extends Component {
                 borderRadius: 10,
                 borderWidth: 2,
                 borderColor: '#efeff4',
-                width: '80%',
+                width: '90%',
                 justifyContent: 'center',
                 alignSelf: 'center',
                 backgroundColor: '#efeff4',
@@ -1927,28 +1944,32 @@ export default class Employee extends Component {
                       style={{
                         borderBottomWidth: 1,
                         borderBottomColor: 'lightgrey',
-                        paddingBottom: 37,
                       }}>
                       <View
                         style={{
                           flexDirection: 'row',
-                          paddingTop: 10,
-                          marginTop: 20,
+                          alignItems: 'center',
+                          marginVertical: 15,
+                          justifyContent: 'center',
                         }}>
-                        <Text style={{fontSize: 30, color: '#76726d'}}>
-                          Cash:
-                        </Text>
+                        <View style={{width: width * 0.1}}>
+                          <Text
+                            style={{fontSize: width * 0.02, color: '#76726d'}}>
+                            Cash:
+                          </Text>
+                        </View>
                         <TextInput
                           style={{
                             borderColor: 'white',
                             height: 40,
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 60,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
                             borderRadius: 50,
+                            flexWrap: 'wrap',
+                            alignSelf: 'flex-end',
                           }}
                           placeholder=""
                           defaultValue={this.state.cash.toString()}
@@ -1957,60 +1978,6 @@ export default class Employee extends Component {
                           onChangeText={cash => this.setState({cash: cash})}
                         />
                       </View>
-                      {/* 
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          paddingTop: 10,
-                          marginTop: 10,
-                        }}>
-                        <Text style={{ fontSize: 30, color: '#76726d' }}>
-                          Card:
-                        </Text>
-                        <TextInput
-                          style={{
-                            borderColor: 'white',
-                            height: 40,
-                            width: '60%',
-                            paddingLeft: 15,
-                            marginLeft: 65,
-                            borderWidth: 1,
-                            textAlignVertical: 'top',
-                            backgroundColor: 'white',
-                            borderRadius: 50,
-                          }}
-                          placeholder=""
-                          onChangeText={card => this.setState({ card: card })}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          paddingTop: 10,
-                          marginTop: 10,
-                        }}>
-                        <Text style={{ fontSize: 30, color: '#76726d' }}>
-                          Voucher:
-                        </Text>
-                        <TextInput
-                          style={{
-                            borderColor: 'white',
-                            height: 40,
-                            width: '60%',
-                            paddingLeft: 15,
-                            marginLeft: 18,
-                            borderWidth: 1,
-                            textAlignVertical: 'top',
-                            backgroundColor: 'white',
-                            borderRadius: 50,
-                          }}
-                          placeholder=""
-                          onChangeText={voucher =>
-                            this.setState({ voucher: voucher })
-                          }
-                        />
-                      </View>
-                    */}
                     </View>
 
                     <View style={{height: 180}}>
@@ -2021,6 +1988,7 @@ export default class Employee extends Component {
                               style={{
                                 fontSize: width * 0.018,
                                 color: '#76726d',
+                                textAlign: 'center',
                               }}>
                               Srno.
                             </Text>
@@ -2030,6 +1998,7 @@ export default class Employee extends Component {
                               style={{
                                 fontSize: width * 0.018,
                                 color: '#76726d',
+                                textAlign: 'center',
                               }}>
                               Name
                             </Text>
@@ -2039,6 +2008,7 @@ export default class Employee extends Component {
                               style={{
                                 fontSize: width * 0.018,
                                 color: '#76726d',
+                                textAlign: 'center',
                               }}>
                               Qty
                             </Text>
@@ -2048,6 +2018,7 @@ export default class Employee extends Component {
                               style={{
                                 fontSize: width * 0.018,
                                 color: '#76726d',
+                                textAlign: 'center',
                               }}>
                               Price
                             </Text>
@@ -2456,7 +2427,6 @@ export default class Employee extends Component {
 
                 <View
                   style={{
-                    marginTop: 20,
                     borderTopColor: 'lightgrey',
                     borderTopWidth: 1,
                     flexDirection: 'row',
@@ -2466,11 +2436,12 @@ export default class Employee extends Component {
                       fontSize: width * 0.03,
                       alignSelf: 'flex-start',
                       marginLeft: 10,
-                      flex: 30,
+                      flex: 20,
                       textAlign: 'left',
                       marginTop: 10,
                       paddingVertical: 10,
                       color: 'grey',
+                      textAlign: 'center',
                     }}>
                     Total : {this.state.takeTotal}
                   </Text>
@@ -2484,6 +2455,7 @@ export default class Employee extends Component {
                       marginTop: 10,
                       paddingVertical: 10,
                       color: 'grey',
+                      textAlign: 'center',
                     }}>
                     Return :{' '}
                     {this.state.cash == 0
@@ -2493,44 +2465,53 @@ export default class Employee extends Component {
                         ).toFixed(2)}
                   </Text>
 
-                  <Text
+                  <View
                     style={{
-                      fontSize: width * 0.02,
-                      alignSelf: 'center',
-                      marginTop: 10,
-                      paddingVertical: 10,
-                      color: 'grey',
-                      flex: 10,
+                      flex: 30,
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
                     }}>
-                    Receipt :
-                  </Text>
+                    <Text
+                      style={{
+                        fontSize: width * 0.03,
+                        alignSelf: 'center',
+                        color: 'grey',
+                      }}>
+                      Receipt :
+                    </Text>
 
-                  <Switch
-                    trackColor={{true: 'white', false: 'white'}}
-                    value={isSwitchOn}
-                    style={styles.btnswitch}
-                    color="white"
-                    thumbColor={
-                      this.state.isSwitchOn == true ? 'orange' : 'grey'
-                    }
-                    onValueChange={() => {
-                      this.setState({isSwitchOn: !isSwitchOn});
-                    }}
-                  />
-                  {this.state.cash > 0 ? (
-                    <TouchableOpacity
-                      style={styles.add_btn}
-                      onPress={() => this.placeorder()}>
-                      <Text
-                        style={{
-                          fontSize: 30,
-                          color: 'white',
-                          textAlign: 'center',
-                        }}>
-                        Pay
-                      </Text>
-                    </TouchableOpacity>
-                  ) : null}
+                    <Switch
+                      trackColor={{true: 'white', false: 'white'}}
+                      value={isSwitchOn}
+                      color="white"
+                      thumbColor={
+                        this.state.isSwitchOn == true ? 'orange' : 'grey'
+                      }
+                      onValueChange={() => {
+                        this.setState({isSwitchOn: !isSwitchOn});
+                      }}
+                    />
+                  </View>
+                  <View
+                    style={{
+                      flex: 20,
+                      justifyContent: 'center',
+                    }}>
+                    {this.state.cash > 0 ? (
+                      <TouchableOpacity
+                        style={styles.add_btn}
+                        onPress={() => this.placeorder()}>
+                        <Text
+                          style={{
+                            fontSize: 25,
+                            color: 'white',
+                            textAlign: 'center',
+                          }}>
+                          Pay
+                        </Text>
+                      </TouchableOpacity>
+                    ) : null}
+                  </View>
                 </View>
               </ScrollView>
             </Dialog>
@@ -2548,9 +2529,9 @@ export default class Employee extends Component {
             }}>
             <Image
               style={{
-                width: 65,
-                height: 65,
-                borderRadius: 65 / 2,
+                width: width * 0.06,
+                height: width * 0.06,
+                borderRadius: (width * 0.06) / 2,
               }}
               source={{
                 uri: 'http://dev-fs.8d.ie/storage/' + user_details.wok,
@@ -2575,8 +2556,8 @@ export default class Employee extends Component {
                         alignItems: 'center',
                         justifyContent: 'center',
                         textAlign: 'center',
-                        marginLeft: 8,
-                        marginTop: 8,
+                        marginLeft: width * 0.0075,
+                        marginTop: width * 0.0075,
                       }}>
                       <Image
                         style={{
@@ -2589,12 +2570,12 @@ export default class Employee extends Component {
                       <Text
                         style={{
                           position: 'absolute',
-                          fontSize: width * 0.03,
+                          fontSize: width * 0.025,
                           color: 'white',
-                          top: 25,
+                          top: width * 0.02,
                           width: width * 0.08,
                           textAlign: 'center',
-                          lineHeight: 38,
+                          lineHeight: width * 0.025,
                           textDecorationLine: 'line-through',
                           textDecorationStyle: 'solid',
                         }}>
@@ -2604,9 +2585,9 @@ export default class Employee extends Component {
                       <Text
                         style={{
                           position: 'absolute',
-                          fontSize: width * 0.014,
+                          fontSize: width * 0.012,
                           color: 'white',
-                          bottom: 25,
+                          bottom: width * 0.02,
                         }}>
                         MAX{' '}
                         <Text
@@ -2614,7 +2595,7 @@ export default class Employee extends Component {
                             position: 'absolute',
                             fontSize: width * 0.01,
                             color: 'white',
-                            bottom: 40,
+                            bottom: width * 0.02,
                           }}>
                           {item.max}
                         </Text>{' '}
@@ -2628,8 +2609,9 @@ export default class Employee extends Component {
                         style={{
                           flex: 1,
                           flexDirection: 'row',
-                          marginLeft: 8,
-                          marginTop: 8,
+                          justifyContent: 'flex-start',
+                          marginLeft: width * 0.0075,
+                          marginTop: width * 0.0075,
                         }}>
                         <Image
                           style={{
@@ -2642,7 +2624,7 @@ export default class Employee extends Component {
                         <Text
                           style={{
                             position: 'absolute',
-                            fontSize: 15,
+                            fontSize: width * 0.012,
                             top: 5,
                             marginLeft: 8,
                           }}>
@@ -2666,22 +2648,25 @@ export default class Employee extends Component {
             backgroundColor={Colors.navbarBackgroundColor}>
             <Left>
               <View style={{left: 10}}>
-                <Text style={{color: 'white', width: '100%', fontSize: 30}}>
+                <Text
+                  style={{
+                    color: 'white',
+                    width: '100%',
+                    fontSize: width * 0.035,
+                  }}>
                   Total : {this.state.takeTotal}
                 </Text>
               </View>
             </Left>
             <Body>
-              <Button
-                transparent
-                style={{
-                  width: 120,
-                  left: 150,
-                  alignSelf: 'center',
-                  alignItems: 'center',
-                }}
-                onPress={() => this.take_payment()}>
-                <Text style={{color: 'white', width: '100%', fontSize: 30}}>
+              <Button transparent onPress={() => this.take_payment()}>
+                <Text
+                  style={{
+                    color: 'white',
+                    width: '100%',
+                    fontSize: width * 0.035,
+                    textAlign: 'center',
+                  }}>
                   Pay Now
                 </Text>
               </Button>
@@ -2733,11 +2718,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: '#ff9500',
   },
-  btnswitch: {
-    marginTop: 10,
-    marginRight: 50,
-    marginVertical: 10,
-  },
   add_btn: {
     marginTop: 10,
     marginRight: 15,
@@ -2745,8 +2725,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    justifyContent: 'flex-end',
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
     backgroundColor: '#ff9500',
   },
   touchable1: {
