@@ -24,7 +24,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import AsyncStorage from '@react-native-community/async-storage';
-
+var {height, width} = Dimensions.get('window');
 export default class History extends React.Component {
   constructor(props) {
     super(props);
@@ -135,40 +135,62 @@ export default class History extends React.Component {
       items.push(
         <TouchableHighlight
           underlayColor="lightgray"
-          style={{borderRadius: 20, marginHorizontal: 20}}
+          style={{borderRadius: 20}}
           onPress={() => {}}>
-          <View style={{flexDirection: 'row', paddingVertical: 10}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingVertical: 10,
+            }}>
             <View style={{flex: 0.1, alignItems: 'center'}}>
               <Text
                 style={{
                   fontSize: width * 0.02,
-                  marginRight: 20,
+                  textAlign: 'center',
                   color: '#808080',
                 }}>
                 {i + 1}.
               </Text>
             </View>
-            <View style={{flex: 0.4, alignItems: 'center', marginRight: 50}}>
-              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
-                Custom({item.dish_name})
-              </Text>
-            </View>
-            <View
-              style={{flex: 0.4, alignItems: 'center', flexDirection: 'row'}}>
+            <View style={{flex: 0.4, alignItems: 'center'}}>
               <Text
                 style={{
                   fontSize: width * 0.02,
                   color: '#808080',
-                  paddingLeft: 30,
+                  textAlign: 'center',
+                }}>
+                Custom({item.dish_name})
+              </Text>
+            </View>
+            <View
+              style={{
+                flex: 0.3,
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: width * 0.02,
+                  color: '#808080',
                 }}>
                 ${item.dish_price} x {}
               </Text>
-              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
+              <Text
+                style={{
+                  fontSize: width * 0.02,
+                  color: '#808080',
+                }}>
                 {item.qty}
               </Text>
             </View>
-            <View style={{flex: 0.4, alignItems: 'center'}}>
-              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
+            <View style={{flex: 0.2, alignItems: 'center'}}>
+              <Text
+                style={{
+                  fontSize: width * 0.02,
+                  color: '#808080',
+                  textAlign: 'center',
+                }}>
                 ${item.dish_price * item.qty}
               </Text>
             </View>
@@ -303,7 +325,7 @@ export default class History extends React.Component {
                         <FontAwesomeIcon
                           icon={faWindowClose}
                           color={'#ff9500'}
-                          size={30}
+                          size={width * 0.03}
                         />
                       </TouchableOpacity>
                     </View>
@@ -311,74 +333,83 @@ export default class History extends React.Component {
                   <View style={{flexDirection: 'row'}}>
                     <View
                       style={{
-                        flex: 0.7,
+                        flex: 0.74,
                         borderRightWidth: 1,
                         borderRightColor: 'lightgrey',
-                        padding: 10,
+                        padding: width * 0.01,
                       }}>
                       {this.filldata()}
                     </View>
                     <View
                       style={{
-                        flex: 0.3,
-                        justifyContent: 'space-around',
+                        flex: 0.26,
+                        padding: width * 0.01,
                         alignItems: 'center',
-                        flexDirection: 'column',
                       }}>
                       <View
                         style={{
                           flexDirection: 'row',
-                          justifyContent: 'space-around',
                         }}>
-                        <TouchableOpacity
-                          style={[styles.add_btn, {paddingHorizontal: 20}]}>
+                        <TouchableOpacity style={styles.btn}>
                           <Text
                             style={{fontSize: width * 0.025, color: 'white'}}>
                             -
                           </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity
-                          style={[styles.add_btn, {paddingHorizontal: 20}]}>
+                        <TouchableOpacity style={styles.btn}>
                           <Text
                             style={{fontSize: width * 0.025, color: 'white'}}>
                             +
                           </Text>
                         </TouchableOpacity>
                       </View>
-                      <View
-                        style={{
-                          marginTop: 10,
-                          padding: 20,
-                          elevation: 8,
-                          backgroundColor: '#FAFAFA',
-                          borderRadius: 25,
-                        }}>
-                        <Text style={{fontSize: width * 0.02}}>STATUS</Text>
-                        <Text style={{fontSize: width * 0.02, color: 'orange'}}>
-                          {orderStatus}
-                        </Text>
-                      </View>
-                      <TouchableOpacity
-                        style={[
-                          styles.add_btn,
-                          {
-                            width: width * 0.15,
-                          },
-                        ]}>
-                        <Text
+                      <View style={{flexDirection: 'column'}}>
+                        <View
                           style={{
-                            fontSize: width * 0.025,
-                            color: 'white',
-                            textAlign: 'center',
+                            padding: width * 0.02,
+                            elevation: 8,
+                            backgroundColor: '#FAFAFA',
+                            borderRadius: 25,
+                            marginVertical: width * 0.01,
                           }}>
-                          DEL
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={[styles.add_btn]}>
-                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                          REFUND
-                        </Text>
-                      </TouchableOpacity>
+                          <Text
+                            style={{
+                              fontSize: width * 0.02,
+                              textAlign: 'center',
+                            }}>
+                            STATUS{'\n'}
+                            <Text
+                              style={{
+                                fontSize: width * 0.02,
+                                color: 'orange',
+                                textAlign: 'center',
+                              }}>
+                              {orderStatus}
+                            </Text>
+                          </Text>
+                        </View>
+                        <TouchableOpacity style={styles.btn}>
+                          <Text
+                            style={{
+                              fontSize: width * 0.025,
+                              color: 'white',
+                              textAlign: 'center',
+                            }}>
+                            DEL
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={[styles.btn, {marginVertical: width * 0.01}]}>
+                          <Text
+                            style={{
+                              fontSize: width * 0.025,
+                              color: 'white',
+                              textAlign: 'center',
+                            }}>
+                            REFUND
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
                       <View
                         style={{
                           flexDirection: 'row',
@@ -386,13 +417,13 @@ export default class History extends React.Component {
                         <TouchableOpacity style={styles.print_btn}>
                           <FontAwesomeIcon
                             icon={faPrint}
-                            size={width * 0.022}
+                            size={width * 0.025}
                           />
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.print_btn}>
                           <FontAwesomeIcon
                             icon={faReceipt}
-                            size={width * 0.022}
+                            size={width * 0.025}
                           />
                         </TouchableOpacity>
                       </View>
@@ -400,7 +431,6 @@ export default class History extends React.Component {
                   </View>
                   <View
                     style={{
-                      marginTop: 20,
                       borderTopColor: 'lightgrey',
                       borderTopWidth: 1,
                       flexDirection: 'row',
@@ -409,33 +439,36 @@ export default class History extends React.Component {
                       style={{
                         fontSize: width * 0.03,
                         alignSelf: 'flex-start',
-                        flex: 0.4,
+                        flex: 0.3,
                         textAlign: 'left',
-                        marginTop: 10,
-                        paddingVertical: 10,
-                        color: '#5a5a5a',
+                        paddingVertical: width * 0.01,
+                        color: 'grey',
+                        textAlign: 'center',
                       }}>
                       Total: ${totalPrice}
                     </Text>
                     <View
                       style={{
-                        flex: 0.56,
+                        flex: 0.4,
                         flexDirection: 'row',
-                        alignItems: 'center',
-                        marginTop: 10,
+                        justifyContent: 'space-around',
                       }}>
-                      <View style={{width: width * 0.15}}>
-                        <Text
-                          style={{fontSize: width * 0.03, color: '#5a5a5a'}}>
-                          Refund:
-                        </Text>
-                      </View>
+                      <Text
+                        style={{
+                          fontSize: width * 0.03,
+                          alignSelf: 'center',
+                          color: 'grey',
+                          textAlign: 'center',
+                        }}>
+                        Refund:
+                      </Text>
+
                       <TextInput
                         style={{
                           borderColor: 'white',
-                          height: 50,
+                          height: '80%',
                           width: '50%',
-                          marginLeft: 10,
+                          alignSelf: 'center',
                           borderWidth: 1,
                           textAlign: 'center',
                           backgroundColor: 'white',
@@ -448,11 +481,18 @@ export default class History extends React.Component {
                         value={this.state.refund}
                       />
                     </View>
-                    <TouchableOpacity style={styles.add_btn}>
-                      <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                        UPDATE
-                      </Text>
-                    </TouchableOpacity>
+                    <View
+                      style={{
+                        flex: 0.3,
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                      }}>
+                      <TouchableOpacity style={styles.update_btn}>
+                        <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                          UPDATE
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </ScrollView>
               </Dialog>
@@ -462,7 +502,7 @@ export default class History extends React.Component {
                 flex: 0.12,
                 backgroundColor: '#efeff4',
                 flexDirection: 'row',
-                padding: 10,
+                padding: width * 0.01,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}>
@@ -557,8 +597,7 @@ export default class History extends React.Component {
                       style={{
                         fontSize: width * 0.03,
                         backgroundColor: '#ff9500',
-                        paddingLeft: 10,
-                        paddingRight: 10,
+                        paddingHorizontal: width * 0.01,
                         color: 'white',
                         borderRadius: 10,
                       }}>
@@ -575,8 +614,7 @@ export default class History extends React.Component {
                       style={{
                         fontSize: width * 0.03,
                         backgroundColor: '#ff9500',
-                        paddingLeft: 10,
-                        paddingRight: 10,
+                        paddingHorizontal: width * 0.01,
                         color: 'white',
                         borderRadius: 10,
                       }}>
@@ -589,7 +627,7 @@ export default class History extends React.Component {
             <View style={{flex: 0.8}}>
               <View
                 style={{
-                  padding: 15,
+                  padding: width * 0.016,
                   flex: 0.2,
                   flexDirection: 'row',
                   borderBottomColor: 'lightgrey',
@@ -599,7 +637,7 @@ export default class History extends React.Component {
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
+                    marginTop: width * 0.01,
                   }}>
                   <Text
                     style={{
@@ -607,7 +645,7 @@ export default class History extends React.Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -618,7 +656,7 @@ export default class History extends React.Component {
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
+                    marginTop: width * 0.01,
                   }}>
                   <Text
                     style={{
@@ -626,7 +664,7 @@ export default class History extends React.Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -637,7 +675,7 @@ export default class History extends React.Component {
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
+                    marginTop: width * 0.01,
                   }}>
                   <Text
                     style={{
@@ -645,7 +683,7 @@ export default class History extends React.Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -656,7 +694,7 @@ export default class History extends React.Component {
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
+                    marginTop: width * 0.01,
                   }}>
                   <Text
                     style={{
@@ -664,7 +702,7 @@ export default class History extends React.Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -675,7 +713,7 @@ export default class History extends React.Component {
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
+                    marginTop: width * 0.01,
                   }}>
                   <Text
                     style={{
@@ -683,7 +721,7 @@ export default class History extends React.Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -793,23 +831,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,
-    padding: 15,
+    padding: width * 0.016,
   },
   print_btn: {
-    margin: 10,
-    padding: 15,
+    padding: width * 0.016,
     borderRadius: 15,
     backgroundColor: '#ffffff',
   },
-  add_btn: {
-    marginTop: 10,
-    marginRight: 15,
-    paddingTop: 10,
-    paddingBottom: 10,
+  update_btn: {
+    paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
-    justifyContent: 'flex-end',
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
+    backgroundColor: '#ff9500',
+  },
+  btn: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
     backgroundColor: '#ff9500',
   },
 });

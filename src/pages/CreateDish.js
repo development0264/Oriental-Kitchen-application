@@ -34,7 +34,7 @@ import RNImagePicker from 'react-native-image-picker';
 import Colors from '../Colors';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import CheckBox from 'react-native-check-box';
-
+var {height, width} = Dimensions.get('window');
 const createFormData = (photo, body) => {
   const data = new FormData();
 
@@ -663,14 +663,14 @@ export default class CreateDish extends Component {
               style={{
                 flexDirection: 'row',
                 borderBottomColor: 'lightgrey',
-                padding: 15,
+                padding: width * 0.016,
                 borderBottomWidth: 1,
               }}>
               <View
                 style={{
                   flex: 0.4,
                   alignItems: 'center',
-                  marginTop: 10,
+                  marginTop: width * 0.01,
                   marginLeft: 10,
                 }}>
                 <Text
@@ -679,7 +679,7 @@ export default class CreateDish extends Component {
                     backgroundColor: '#ff9500',
                     color: 'white',
                     borderRadius: 80,
-                    padding: 15,
+                    padding: width * 0.016,
                     paddingBottom: 2,
                     paddingTop: 2,
                   }}>
@@ -690,7 +690,7 @@ export default class CreateDish extends Component {
                 style={{
                   flex: 0.4,
                   alignItems: 'center',
-                  marginTop: 10,
+                  marginTop: width * 0.01,
                   marginLeft: 10,
                 }}>
                 <Text
@@ -699,7 +699,7 @@ export default class CreateDish extends Component {
                     backgroundColor: '#ff9500',
                     color: 'white',
                     borderRadius: 80,
-                    padding: 15,
+                    padding: width * 0.016,
                     paddingBottom: 2,
                     paddingTop: 2,
                   }}>
@@ -710,7 +710,7 @@ export default class CreateDish extends Component {
                 style={{
                   flex: 0.4,
                   alignItems: 'center',
-                  marginTop: 10,
+                  marginTop: width * 0.01,
                   marginLeft: 10,
                 }}>
                 <Text
@@ -719,7 +719,7 @@ export default class CreateDish extends Component {
                     backgroundColor: '#ff9500',
                     color: 'white',
                     borderRadius: 80,
-                    padding: 15,
+                    padding: width * 0.016,
                     paddingBottom: 2,
                     paddingTop: 2,
                   }}>
@@ -730,7 +730,7 @@ export default class CreateDish extends Component {
                 style={{
                   flex: 0.4,
                   alignItems: 'center',
-                  marginTop: 10,
+                  marginTop: width * 0.01,
                   marginLeft: 10,
                 }}>
                 <Text
@@ -739,7 +739,7 @@ export default class CreateDish extends Component {
                     backgroundColor: '#ff9500',
                     color: 'white',
                     borderRadius: 80,
-                    padding: 15,
+                    padding: width * 0.016,
                     paddingBottom: 2,
                     paddingTop: 2,
                   }}>
@@ -754,18 +754,28 @@ export default class CreateDish extends Component {
               renderItem={({item}) => (
                 <View style={styles.dynamic_list_view}>
                   <View style={{flex: 0.5, alignItems: 'center'}}>
-                    <Text style={{fontSize: width * 0.025}}>{item.name}</Text>
+                    <Text
+                      style={{fontSize: width * 0.025, textAlign: 'center'}}>
+                      {item.name}
+                    </Text>
                   </View>
                   <View style={{flex: 0.5, alignItems: 'center'}}>
-                    <Text style={{fontSize: width * 0.025}}>
+                    <Text
+                      style={{fontSize: width * 0.025, textAlign: 'center'}}>
                       {item.description}
                     </Text>
                   </View>
                   <View style={{flex: 0.5, alignItems: 'center'}}>
                     {item.is_popular == 1 ? (
-                      <Text style={{fontSize: width * 0.025}}>Yes</Text>
+                      <Text
+                        style={{fontSize: width * 0.025, textAlign: 'center'}}>
+                        Yes
+                      </Text>
                     ) : (
-                      <Text style={{fontSize: width * 0.025}}>No</Text>
+                      <Text
+                        style={{fontSize: width * 0.025, textAlign: 'center'}}>
+                        No
+                      </Text>
                     )}
                   </View>
                   <View style={{flex: 0.5, alignItems: 'center'}}>
@@ -825,7 +835,7 @@ export default class CreateDish extends Component {
                 visible={this.state.add_dialog}
                 dialogStyle={{
                   borderRadius: 10,
-                  borderWidth: 10,
+                  borderWidth: 2,
                   borderColor: '#efeff4',
                   width: '80%',
                   justifyContent: 'center',
@@ -865,10 +875,14 @@ export default class CreateDish extends Component {
                         flex: 0.6,
                         borderRightWidth: 1,
                         borderRightColor: 'lightgrey',
-                        padding: 50,
+                        padding: 10,
                       }}>
                       <View
-                        style={{flexDirection: 'row', alignItems: 'center'}}>
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          marginTop: 15,
+                        }}>
                         <View style={{width: width * 0.15}}>
                           <Text
                             style={{fontSize: width * 0.016, color: '#76726d'}}>
@@ -878,10 +892,9 @@ export default class CreateDish extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
@@ -909,10 +922,9 @@ export default class CreateDish extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
@@ -941,10 +953,9 @@ export default class CreateDish extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
-                            marginLeft: 15,
                             borderWidth: 1,
                             textAlignVertical: 'top',
                             backgroundColor: 'white',
@@ -985,22 +996,23 @@ export default class CreateDish extends Component {
                         flex: 0.4,
                         justifyContent: 'center',
                         alignItems: 'center',
+                        marginVertical: 30,
                       }}>
                       <View style={{position: 'relative'}}>
                         {this.state.cover == null ? (
                           <Image
                             style={{
-                              width: 200,
-                              height: 200,
-                              borderRadius: 200 / 2,
+                              width: width * 0.2,
+                              height: width * 0.2,
+                              borderRadius: (width * 0.2) / 2,
                             }}
                             source={require('../images/profile-circle-picture-8.jpg')}></Image>
                         ) : (
                           <Image
                             style={{
-                              width: 200,
-                              height: 200,
-                              borderRadius: 200 / 2,
+                              width: width * 0.2,
+                              height: width * 0.2,
+                              borderRadius: (width * 0.2) / 2,
                             }}
                             source={{uri: this.state.cover}}></Image>
                         )}
@@ -1313,7 +1325,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   add_btn: {
-    marginTop: 10,
+    marginTop: width * 0.01,
     marginRight: 15,
     paddingTop: 10,
     paddingBottom: 10,
@@ -1326,7 +1338,7 @@ const styles = StyleSheet.create({
   },
   dynamic_list_view: {
     flexDirection: 'row',
-    padding: 15,
+    padding: width * 0.016,
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,
   },

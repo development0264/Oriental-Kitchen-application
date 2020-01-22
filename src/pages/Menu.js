@@ -20,7 +20,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {Dialog} from 'react-native-simple-dialogs';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import CheckBox from 'react-native-check-box';
-
+var {height, width} = Dimensions.get('window');
 export default class Employee extends Component {
   constructor(props) {
     super(props);
@@ -347,7 +347,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             marginLeft: 15,
@@ -377,7 +377,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             marginLeft: 15,
@@ -496,7 +496,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             marginLeft: 15,
@@ -526,7 +526,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             marginLeft: 15,
@@ -614,11 +614,13 @@ export default class Employee extends Component {
                   margin: 10,
                   marginLeft: 40,
                 }}>
-                <Text style={{fontSize: width * 0.03}}>Name:</Text>
+                <Text style={{fontSize: width * 0.03, alignSelf: 'center'}}>
+                  Name:
+                </Text>
                 <TextInput
                   style={{
                     borderColor: 'gray',
-                    height: '70%',
+                    height: '80%',
                     width: '50%',
                     paddingLeft: 15,
                     marginLeft: 15,
@@ -645,6 +647,7 @@ export default class Employee extends Component {
                   margin: 10,
                   justifyContent: 'center',
                   flexDirection: 'row',
+                  alignItems: 'center',
                 }}>
                 <TouchableOpacity
                   style={{marginHorizontal: 30}}
@@ -686,14 +689,14 @@ export default class Employee extends Component {
                 style={{
                   flexDirection: 'row',
                   borderBottomColor: 'lightgrey',
-                  padding: 15,
+                  padding: width * 0.016,
                   borderBottomWidth: 1,
                 }}>
                 <View
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
+                    marginTop: width * 0.01,
                     marginLeft: 10,
                   }}>
                   <Text
@@ -702,7 +705,7 @@ export default class Employee extends Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -713,7 +716,7 @@ export default class Employee extends Component {
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
+                    marginTop: width * 0.01,
                     marginLeft: 10,
                   }}>
                   <Text
@@ -722,7 +725,7 @@ export default class Employee extends Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -733,7 +736,7 @@ export default class Employee extends Component {
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
+                    marginTop: width * 0.01,
                     marginLeft: 10,
                   }}>
                   <Text
@@ -742,7 +745,7 @@ export default class Employee extends Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -753,7 +756,7 @@ export default class Employee extends Component {
                   style={{
                     flex: 0.4,
                     alignItems: 'center',
-                    marginTop: 10,
+                    marginTop: width * 0.01,
                     marginLeft: 10,
                   }}>
                   <Text
@@ -762,7 +765,7 @@ export default class Employee extends Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -778,27 +781,46 @@ export default class Employee extends Component {
                 renderItem={({item}) => (
                   <View style={styles.dynamic_list_view}>
                     <View style={{flex: 0.5, alignItems: 'center'}}>
-                      <Text style={{fontSize: width * 0.025}}>{item.name}</Text>
-                    </View>
-                    <View style={{flex: 0.5, alignItems: 'center'}}>
-                      <Text style={{fontSize: width * 0.025}}>
-                        {item.description}
+                      <Text
+                        style={{fontSize: width * 0.025, textAlign: 'center'}}>
+                        {item.name}
                       </Text>
-                    </View>
-                    <View style={{flex: 0.5, alignItems: 'center'}}>
-                      {item.status == 1 ? (
-                        <Text style={{fontSize: width * 0.025}}>Yes</Text>
-                      ) : (
-                        <Text style={{fontSize: width * 0.025}}>No</Text>
-                      )}
                     </View>
                     <View
                       style={{
                         flex: 0.5,
                         alignItems: 'center',
                       }}>
+                      <Text
+                        style={{fontSize: width * 0.025, textAlign: 'center'}}>
+                        {item.description}
+                      </Text>
+                    </View>
+                    <View style={{flex: 0.5, alignItems: 'center'}}>
+                      {item.status == 1 ? (
+                        <Text
+                          style={{
+                            fontSize: width * 0.025,
+                            textAlign: 'center',
+                          }}>
+                          Yes
+                        </Text>
+                      ) : (
+                        <Text
+                          style={{
+                            fontSize: width * 0.025,
+                            textAlign: 'center',
+                          }}>
+                          No
+                        </Text>
+                      )}
+                    </View>
+                    <View
+                      style={{
+                        flex: 0.5,
+                      }}>
                       <Row>
-                        <Col style={{width: 80}}>
+                        <Col>
                           <TouchableOpacity
                             onPress={() => this.selectmenu(item.id)}
                             style={{
@@ -806,6 +828,7 @@ export default class Employee extends Component {
                               borderRadius: 40,
                               padding: 5,
                               justifyContent: 'center',
+                              marginRight: 10,
                             }}>
                             <Text
                               style={{
@@ -818,7 +841,7 @@ export default class Employee extends Component {
                             </Text>
                           </TouchableOpacity>
                         </Col>
-                        <Col style={{marginLeft: 10, width: 110}}>
+                        <Col>
                           <TouchableOpacity
                             onPress={() => this.goto_add_dish(item.id)}
                             style={{
@@ -858,7 +881,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   add_btn: {
-    marginTop: 10,
+    marginTop: width * 0.01,
     marginRight: 10,
     paddingTop: 10,
     paddingBottom: 10,
@@ -870,7 +893,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff9500',
   },
   delete_btn: {
-    marginTop: 10,
+    marginTop: width * 0.01,
     marginRight: 15,
     paddingTop: 10,
     paddingBottom: 10,
@@ -898,7 +921,7 @@ const styles = StyleSheet.create({
   },
   dynamic_list_view: {
     flexDirection: 'row',
-    padding: 15,
+    padding: width * 0.016,
     alignItems: 'center',
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,

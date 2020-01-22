@@ -29,7 +29,7 @@ import RNImagePicker from 'react-native-image-picker';
 import SideMenu from '../components/SideMenu';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import AsyncStorage from '@react-native-community/async-storage';
-
+var {height, width} = Dimensions.get('window');
 export default class Employee extends Component {
   constructor(props) {
     super(props);
@@ -576,7 +576,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -604,7 +604,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -632,7 +632,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -661,7 +661,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -690,7 +690,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -719,7 +719,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -780,7 +780,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -939,7 +939,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -970,7 +970,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1001,7 +1001,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1033,7 +1033,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1062,7 +1062,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1091,7 +1091,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1154,7 +1154,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1350,7 +1350,7 @@ export default class Employee extends Component {
             <View style={{flex: 0.8}}>
               <View
                 style={{
-                  padding: 15,
+                  padding: width * 0.016,
                   flexDirection: 'row',
                   borderBottomColor: 'lightgrey',
                   borderBottomWidth: 1,
@@ -1366,7 +1366,7 @@ export default class Employee extends Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -1384,7 +1384,7 @@ export default class Employee extends Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -1402,7 +1402,7 @@ export default class Employee extends Component {
                       backgroundColor: '#ff9500',
                       color: 'white',
                       borderRadius: 80,
-                      padding: 15,
+                      padding: width * 0.016,
                       paddingBottom: 2,
                       paddingTop: 2,
                     }}>
@@ -1492,7 +1492,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   add_btn: {
-    marginTop: 10,
+    marginTop: width * 0.01,
     paddingVertical: 10,
     paddingHorizontal: 45,
     borderRadius: 20,
@@ -1501,7 +1501,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff9500',
   },
   delete_btn: {
-    marginTop: 10,
+    marginTop: width * 0.01,
     marginRight: 15,
     paddingVertical: 10,
     paddingHorizontal: 45,
@@ -1525,7 +1525,7 @@ const styles = StyleSheet.create({
   },
   dynamic_list_view: {
     flexDirection: 'row',
-    padding: 15,
+    padding: width * 0.016,
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,
   },

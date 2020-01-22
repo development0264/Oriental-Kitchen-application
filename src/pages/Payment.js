@@ -49,7 +49,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import SocketIOClient from 'socket.io-client';
-
+var {height, width} = Dimensions.get('window');
 export default class Employee extends Component {
   constructor(props) {
     super(props);
@@ -853,20 +853,28 @@ export default class Employee extends Component {
               <Text
                 style={{
                   fontSize: width * 0.02,
-                  marginRight: 20,
                   color: '#808080',
-                  alignSelf: 'center',
+                  textAlign: 'center',
                 }}>
                 {i + 1}.
               </Text>
             </View>
             <View style={{flex: 0.4, alignSelf: 'center'}}>
-              <Text style={{fontSize: 20, color: '#808080'}}>
+              <Text
+                style={{
+                  fontSize: width * 0.02,
+                  color: '#808080',
+                  textAlign: 'center',
+                }}>
                 Custom({obj[0].name})
               </Text>
             </View>
             <View
-              style={{flex: 0.4, alignItems: 'center', flexDirection: 'row'}}>
+              style={{
+                flex: 0.3,
+                alignItems: 'center',
+                flexDirection: 'row',
+              }}>
               <Text
                 style={{
                   fontSize: width * 0.02,
@@ -879,8 +887,17 @@ export default class Employee extends Component {
                 {item.qty}
               </Text>
             </View>
-            <View style={{flex: 0.4, alignItems: 'center'}}>
-              <Text style={{fontSize: width * 0.02, color: '#808080'}}>
+            <View
+              style={{
+                flex: 0.2,
+                justifyContent: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: width * 0.02,
+                  color: '#808080',
+                  textAlign: 'center',
+                }}>
                 ${item.rate * item.qty}
               </Text>
             </View>
@@ -1339,12 +1356,12 @@ export default class Employee extends Component {
                           uri: 'http://dev-fs.8d.ie/' + this.state.cover,
                         }}></Image>
                     </View>
-                    <View style={{marginLeft: 40, marginTop: 10}}>
+                    <View style={{marginLeft: 40, marginTop: width * 0.01}}>
                       <Text
                         style={{fontSize: width * 0.018, fontWeight: 'bold'}}>
                         {this.state.name}
                       </Text>
-                      <Text style={{fontSize: 16, width: 350, marginTop: 10}}>
+                      <Text style={{fontSize: 16, width: 350, marginTop: width * 0.01}}>
                         {this.state.description}
                       </Text>
                     </View>
@@ -1361,7 +1378,7 @@ export default class Employee extends Component {
                       block
                       icon
                       transparent
-                      style={{marginTop: 10}}
+                      style={{marginTop: width * 0.01}}
                       onPress={() =>
                         this.setState({
                           quantity:
@@ -1376,7 +1393,6 @@ export default class Employee extends Component {
                         size={20}
                       />
                     </Button>
-
                     <Text
                       style={{
                         textAlign: 'center',
@@ -1388,12 +1404,11 @@ export default class Employee extends Component {
                       }}>
                       {this.state.quantity}
                     </Text>
-
                     <Button
                       block
                       icon
                       transparent
-                      style={{marginLeft: 30, marginTop: 10}}
+                      style={{marginLeft: 30, marginTop: width * 0.01}}
                       onPress={() => this.addQuantity()}>
                       <FontAwesomeIcon
                         icon={faPlus}
@@ -1401,7 +1416,6 @@ export default class Employee extends Component {
                         size={20}
                       />
                     </Button>
-
                     <TouchableOpacity
                       style={{
                         paddingLeft: 30,
@@ -1463,8 +1477,8 @@ export default class Employee extends Component {
                   }}>
                   <Image
                     style={{
-                      width: 100,
-                      height: 100,
+                      width: width * 0.1,
+                      height: width * 0.1,
                       backgroundColor: 'white',
                     }}
                     source={{
@@ -1596,77 +1610,80 @@ export default class Employee extends Component {
               <View style={{flexDirection: 'row'}}>
                 <View
                   style={{
-                    flex: 0.78,
+                    flex: 0.74,
                     borderRightWidth: 1,
                     borderRightColor: 'lightgrey',
-                    padding: 10,
+                    padding: width * 0.01,
                   }}>
                   {this.filldata()}
                 </View>
                 <View
                   style={{
-                    flex: 0.22,
-                    justifyContent: 'center',
+                    flex: 0.26,
+                    padding: width * 0.01,
                     alignItems: 'center',
                   }}>
-                  <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginBottom: width * 0.01,
+                    }}>
                     <TouchableOpacity
-                      style={[styles.add_btn, {paddingHorizontal: 25}]}
+                      style={styles.btn}
                       onPress={() => this.change_quntity_down()}>
                       <Text style={{fontSize: width * 0.025, color: 'white'}}>
                         -
                       </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      style={[styles.add_btn, {paddingHorizontal: 20}]}
+                      style={styles.btn}
                       onPress={() => this.change_quntity_up()}>
                       <Text style={{fontSize: width * 0.025, color: 'white'}}>
                         +
                       </Text>
                     </TouchableOpacity>
                   </View>
-                  <TouchableOpacity
-                    style={[
-                      styles.add_btn,
-                      {
-                        justifyContent: 'center',
-                        alignSelf: 'center',
-                        width: 160,
-                      },
-                    ]}
-                    onPress={() => this.delete_custom_quntity()}>
-                    <Text
-                      style={{
-                        fontSize: width * 0.025,
-                        color: 'white',
-                        textAlign: 'center',
-                      }}>
-                      DEL
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[
-                      styles.add_btn,
-                      {justifyContent: 'center', alignSelf: 'center'},
-                    ]}
-                    onPress={() => this.edit_custom_dish()}>
-                    <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                      Edit
-                    </Text>
-                  </TouchableOpacity>
-                  <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                  <View style={{flexDirection: 'column'}}>
+                    <TouchableOpacity
+                      style={styles.btn}
+                      onPress={() => this.delete_custom_quntity()}>
+                      <Text
+                        style={{
+                          fontSize: width * 0.025,
+                          color: 'white',
+                          textAlign: 'center',
+                        }}>
+                        DEL
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.btn, {marginVertical: width * 0.01}]}
+                      onPress={() => this.edit_custom_dish()}>
+                      <Text
+                        style={{
+                          fontSize: width * 0.025,
+                          color: 'white',
+                          textAlign: 'center',
+                        }}>
+                        Edit
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                    }}>
                     <TouchableOpacity style={styles.print_btn}>
-                      <FontAwesomeIcon icon={faPrint} size={25} />
+                      <FontAwesomeIcon icon={faPrint} size={width * 0.025} />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.print_btn}>
-                      <FontAwesomeIcon icon={faReceipt} size={25} />
+                      <FontAwesomeIcon icon={faReceipt} size={width * 0.025} />
                     </TouchableOpacity>
                   </View>
                 </View>
               </View>
               <View
                 style={{
-                  marginTop: 20,
                   borderTopColor: 'lightgrey',
                   borderTopWidth: 1,
                   flexDirection: 'row',
@@ -1675,38 +1692,27 @@ export default class Employee extends Component {
                   style={{
                     fontSize: width * 0.03,
                     alignSelf: 'flex-start',
-                    flex: 0.4,
+                    flex: 0.5,
                     textAlign: 'left',
-                    marginTop: 10,
-                    paddingVertical: 10,
-                    color: '#5a5a5a',
+                    paddingVertical: width * 0.01,
+                    color: 'grey',
                   }}>
-                  {/* Total: ${totalPrice} */}
+                  Total: ${this.custom_dish_total()}
                 </Text>
                 <View
                   style={{
-                    left: -200,
-                    flex: 1,
+                    flex: 0.5,
                     flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: 10,
+                    justifyContent: 'flex-end',
                   }}>
-                  <View style={{width: width * 0.15}}>
-                    <Text style={{fontSize: width * 0.03, color: '#5a5a5a'}}>
-                      Total:
+                  <TouchableOpacity
+                    style={styles.update_btn}
+                    onPress={() => this.update_quntity()}>
+                    <Text style={{fontSize: width * 0.025, color: 'white'}}>
+                      UPDATE
                     </Text>
-                  </View>
-                  <Text style={{fontSize: width * 0.03, color: '#5a5a5a'}}>
-                    {this.custom_dish_total()}
-                  </Text>
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                  style={styles.add_btn}
-                  onPress={() => this.update_quntity()}>
-                  <Text style={{fontSize: width * 0.025, color: 'white'}}>
-                    UPDATE
-                  </Text>
-                </TouchableOpacity>
               </View>
             </Dialog>
             {/* open dish menu model */}
@@ -1728,7 +1734,7 @@ export default class Employee extends Component {
                   style={{
                     justifyContent: 'flex-start',
                     marginBottom: 8,
-                    marginTop: 10,
+                    marginTop: width * 0.01,
                   }}>
                   <TouchableOpacity
                     onPress={() => this.setState({card_dish_dialog: false})}>
@@ -1797,7 +1803,7 @@ export default class Employee extends Component {
                                 color: 'grey',
                                 paddingBottom: 10,
                               }}>
-                              <Text style={{marginTop: 10}}>
+                              <Text style={{marginTop: width * 0.01}}>
                                 {item.description}
                               </Text>
                             </ViewMoreText>
@@ -1871,7 +1877,7 @@ export default class Employee extends Component {
                                 height: 35,
                                 width: 60,
                                 borderRadius: 10,
-                                marginTop: 10,
+                                marginTop: width * 0.01,
                                 justifyContent: 'center',
                               }}
                               onPress={() => this.card_add_dish(item)}>
@@ -1914,14 +1920,13 @@ export default class Employee extends Component {
                         textAlign: 'center',
                         borderBottomWidth: 1,
                         borderBottomColor: 'lightgrey',
-                        paddingTop: 10,
-                        paddingBottom: 10,
-                        fontSize: 23,
+                        paddingVertical: 10,
+                        fontSize: width * 0.025,
                       }}>
                       Take Payment
                     </Text>
                   </View>
-                  <View style={{justifyContent: 'center', marginLeft: 40}}>
+                  <View style={{justifyContent: 'center'}}>
                     <TouchableOpacity
                       onPress={() => this.setState({payment_dialog: false})}>
                       <FontAwesomeIcon
@@ -1961,7 +1966,7 @@ export default class Employee extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1969,7 +1974,6 @@ export default class Employee extends Component {
                             backgroundColor: 'white',
                             borderRadius: 50,
                             flexWrap: 'wrap',
-                            alignSelf: 'flex-end',
                           }}
                           placeholder=""
                           defaultValue={this.state.cash.toString()}
@@ -1980,7 +1984,7 @@ export default class Employee extends Component {
                       </View>
                     </View>
 
-                    <View style={{height: 180}}>
+                    <View>
                       <ScrollView>
                         <View style={{flexDirection: 'row'}}>
                           <View style={{flex: 0.2, justifyContent: 'center'}}>
@@ -2031,13 +2035,14 @@ export default class Employee extends Component {
                   <View
                     style={{
                       flex: 0.5,
+                      flexDirection: 'column',
                     }}>
                     <View
                       style={{
                         borderBottomWidth: 1,
                         borderBottomColor: 'lightgrey',
                         paddingBottom: 20,
-                        flexDirection: 'column',
+
                         alignItems: 'center',
                       }}>
                       <View style={styles.touchable1}>
@@ -2438,7 +2443,6 @@ export default class Employee extends Component {
                       marginLeft: 10,
                       flex: 20,
                       textAlign: 'left',
-                      marginTop: 10,
                       paddingVertical: 10,
                       color: 'grey',
                       textAlign: 'center',
@@ -2452,7 +2456,6 @@ export default class Employee extends Component {
                       alignSelf: 'center',
                       flex: 30,
                       marginLeft: 20,
-                      marginTop: 10,
                       paddingVertical: 10,
                       color: 'grey',
                       textAlign: 'center',
@@ -2499,7 +2502,7 @@ export default class Employee extends Component {
                     }}>
                     {this.state.cash > 0 ? (
                       <TouchableOpacity
-                        style={styles.add_btn}
+                        style={styles.update_btn}
                         onPress={() => this.placeorder()}>
                         <Text
                           style={{
@@ -2718,16 +2721,6 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: '#ff9500',
   },
-  add_btn: {
-    marginTop: 10,
-    marginRight: 15,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    alignSelf: 'center',
-    backgroundColor: '#ff9500',
-  },
   touchable1: {
     paddingHorizontal: 15,
     paddingVertical: 10,
@@ -2785,7 +2778,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   create_btn: {
-    marginTop: 10,
+    marginTop: width * 0.01,
     marginRight: 10,
     paddingTop: 10,
     paddingBottom: 10,
@@ -2801,7 +2794,7 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 10,
     backgroundColor: 'white',
-    marginTop: 10,
+    marginTop: width * 0.01,
   },
   buttonText: {
     color: 'grey',
@@ -2812,7 +2805,7 @@ const styles = StyleSheet.create({
     height: 40,
     width: '100%',
     borderWidth: 1,
-    marginTop: 10,
+    marginTop: width * 0.01,
     borderColor: '#ff9500',
   },
   MainContainer: {
@@ -2835,5 +2828,18 @@ const styles = StyleSheet.create({
   custom_no_select: {
     flexDirection: 'row',
     borderRadius: 20,
+  },
+  btn: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    backgroundColor: '#ff9500',
+  },
+  update_btn: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    alignSelf: 'center',
+    backgroundColor: '#ff9500',
   },
 });

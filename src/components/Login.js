@@ -130,7 +130,7 @@ export default class Login extends Component {
           }}>
           <Image source={require('../images/logo.png')} />
         </View>
-        <View style={{flex: 0.5, marginTop: 10, alignItems: 'center'}}>
+        <View style={{flex: 0.5, marginTop: width * 0.01, alignItems: 'center'}}>
           <View style={{width: '100%', alignItems: 'center'}}>
             <TextInput
               style={{
@@ -186,7 +186,7 @@ export default class Login extends Component {
             </View>
             {this.state.hasError ? (
               <Text
-                style={{color: '#c0392b', textAlign: 'center', marginTop: 10}}>
+                style={{color: '#c0392b', textAlign: 'center', marginTop: width * 0.01}}>
                 {this.state.errorText}
               </Text>
             ) : null}

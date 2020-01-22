@@ -11,6 +11,7 @@ import {
   Linking,
   Image,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {
   View,
@@ -42,7 +43,7 @@ import {
 // Our custom files and classes import
 import Text from './Text';
 import {NavigationEvents} from 'react-navigation';
-
+var {height, width} = Dimensions.get('window');
 export default class SideMenu extends Component {
   constructor(props) {
     super(props);
@@ -330,7 +331,7 @@ const styles = {
     width: '100%',
     height: 1,
     // backgroundColor: 'rgba(189, 195, 199, 0.6)',
-    marginTop: 10,
+    marginTop: width * 0.01,
     marginBottom: 10,
   },
 };

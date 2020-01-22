@@ -26,7 +26,7 @@ import RNImagePicker from 'react-native-image-picker';
 import {ScrollView} from 'react-native-gesture-handler';
 import SideMenuDrawer from '../components/SideMenuDrawer';
 import AsyncStorage from '@react-native-community/async-storage';
-
+var {height, width} = Dimensions.get('window');
 export default class IngrediantsGroups extends Component {
   constructor(props) {
     super(props);
@@ -220,7 +220,7 @@ export default class IngrediantsGroups extends Component {
     })
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        console.log('More' + JSON.stringify(responseJson));
         if (responseJson.status == 'success') {
           this.setState({edit_dialog: false, img_uri: ''});
           this.componentDidMount();
@@ -761,7 +761,7 @@ export default class IngrediantsGroups extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -790,7 +790,7 @@ export default class IngrediantsGroups extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -823,7 +823,7 @@ export default class IngrediantsGroups extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -907,7 +907,7 @@ export default class IngrediantsGroups extends Component {
                         style={{
                           flexDirection: 'row',
                           alignItems: 'center',
-                          marginTop: 10,
+                          marginTop: width * 0.01,
                         }}>
                         <View style={{width: width * 0.15}}>
                           <Text
@@ -938,7 +938,7 @@ export default class IngrediantsGroups extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             marginRight: 10,
@@ -1074,7 +1074,7 @@ export default class IngrediantsGroups extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1103,7 +1103,7 @@ export default class IngrediantsGroups extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1140,7 +1140,7 @@ export default class IngrediantsGroups extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1180,7 +1180,7 @@ export default class IngrediantsGroups extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1257,7 +1257,7 @@ export default class IngrediantsGroups extends Component {
                         <TextInput
                           style={{
                             borderColor: 'white',
-                            height: 40,
+                            height: '80%',
                             width: '60%',
                             paddingLeft: 15,
                             borderWidth: 1,
@@ -1325,7 +1325,7 @@ export default class IngrediantsGroups extends Component {
                       flexDirection: 'row',
                       justifyContent: 'space-around',
                     }}>
-                    <View style={{flex: 0.9, marginTop: 10}}>
+                    <View style={{flex: 0.9, marginTop: width * 0.01}}>
                       <TouchableOpacity
                         style={styles.delete_btn}
                         onPress={() => this.deleteIngredientGroup()}>
@@ -1334,7 +1334,7 @@ export default class IngrediantsGroups extends Component {
                         </Text>
                       </TouchableOpacity>
                     </View>
-                    <View style={{marginTop: 10}}>
+                    <View style={{marginTop: width * 0.01}}>
                       <TouchableOpacity
                         style={styles.add_btn}
                         onPress={() =>
@@ -1399,7 +1399,7 @@ export default class IngrediantsGroups extends Component {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <View style={{flexDirection: 'row', marginTop: 10}}>
+                  <View style={{flexDirection: 'row', marginTop: width * 0.01}}>
                     <View style={{flex: 0.5}}>
                       {this.state.dialog == false ? (
                         <TouchableOpacity
@@ -1495,7 +1495,7 @@ export default class IngrediantsGroups extends Component {
                                     backgroundColor: '#ff9500',
                                     color: 'white',
                                     borderRadius: 80,
-                                    padding: 15,
+                                    padding: width * 0.016,
                                     paddingBottom: 2,
                                     paddingTop: 2,
                                   }}>
@@ -1511,7 +1511,7 @@ export default class IngrediantsGroups extends Component {
                                     backgroundColor: '#ff9500',
                                     color: 'white',
                                     borderRadius: 80,
-                                    padding: 15,
+                                    padding: width * 0.016,
                                     paddingBottom: 2,
                                     paddingTop: 2,
                                   }}>
@@ -1527,7 +1527,7 @@ export default class IngrediantsGroups extends Component {
                                     backgroundColor: '#ff9500',
                                     color: 'white',
                                     borderRadius: 80,
-                                    padding: 15,
+                                    padding: width * 0.016,
                                     paddingBottom: 2,
                                     paddingTop: 2,
                                   }}>
@@ -1543,7 +1543,7 @@ export default class IngrediantsGroups extends Component {
                                     backgroundColor: '#ff9500',
                                     color: 'white',
                                     borderRadius: 80,
-                                    padding: 15,
+                                    padding: width * 0.016,
                                     paddingBottom: 2,
                                     paddingTop: 2,
                                   }}>
@@ -1559,7 +1559,7 @@ export default class IngrediantsGroups extends Component {
                                     backgroundColor: '#ff9500',
                                     color: 'white',
                                     borderRadius: 80,
-                                    padding: 15,
+                                    padding: width * 0.016,
                                     paddingBottom: 2,
                                     paddingTop: 2,
                                   }}>
@@ -1601,7 +1601,7 @@ export default class IngrediantsGroups extends Component {
                               <TextInput
                                 style={{
                                   borderColor: 'white',
-                                  height: 40,
+                                  height: '80%',
                                   width: '60%',
                                   paddingLeft: 15,
                                   borderWidth: 1,
@@ -1634,7 +1634,7 @@ export default class IngrediantsGroups extends Component {
                               <TextInput
                                 style={{
                                   borderColor: 'white',
-                                  height: 40,
+                                  height: '80%',
                                   width: '60%',
                                   paddingLeft: 15,
                                   borderWidth: 1,
@@ -1667,7 +1667,7 @@ export default class IngrediantsGroups extends Component {
                               <TextInput
                                 style={{
                                   borderColor: 'white',
-                                  height: 40,
+                                  height: '80%',
                                   width: '60%',
                                   paddingLeft: 15,
                                   borderWidth: 1,
@@ -1700,7 +1700,7 @@ export default class IngrediantsGroups extends Component {
                               <TextInput
                                 style={{
                                   borderColor: 'white',
-                                  height: 40,
+                                  height: '80%',
                                   width: '60%',
                                   paddingLeft: 15,
                                   borderWidth: 1,
@@ -1766,7 +1766,7 @@ export default class IngrediantsGroups extends Component {
                               <TextInput
                                 style={{
                                   borderColor: 'white',
-                                  height: 40,
+                                  height: '80%',
                                   width: '60%',
                                   paddingLeft: 15,
                                   borderWidth: 1,
@@ -1799,7 +1799,7 @@ export default class IngrediantsGroups extends Component {
                               <TextInput
                                 style={{
                                   borderColor: 'white',
-                                  height: 40,
+                                  height: '80%',
                                   width: '60%',
                                   paddingLeft: 15,
                                   borderWidth: 1,
@@ -1971,7 +1971,7 @@ export default class IngrediantsGroups extends Component {
                           <TextInput
                             style={{
                               borderColor: 'white',
-                              height: 40,
+                              height: '80%',
                               width: '60%',
                               paddingLeft: 15,
                               marginLeft: 15,
@@ -2006,7 +2006,7 @@ export default class IngrediantsGroups extends Component {
                           <TextInput
                             style={{
                               borderColor: 'white',
-                              height: 40,
+                              height: '80%',
                               width: '60%',
                               paddingLeft: 15,
                               marginLeft: 15,
@@ -2041,7 +2041,7 @@ export default class IngrediantsGroups extends Component {
                           <TextInput
                             style={{
                               borderColor: 'white',
-                              height: 40,
+                              height: '80%',
                               width: '60%',
                               paddingLeft: 15,
                               marginLeft: 15,
@@ -2076,7 +2076,7 @@ export default class IngrediantsGroups extends Component {
                           <TextInput
                             style={{
                               borderColor: 'white',
-                              height: 40,
+                              height: '80%',
                               width: '60%',
                               paddingLeft: 15,
                               marginLeft: 15,
@@ -2148,7 +2148,7 @@ export default class IngrediantsGroups extends Component {
                           <TextInput
                             style={{
                               borderColor: 'white',
-                              height: 40,
+                              height: '80%',
                               width: '60%',
                               paddingLeft: 15,
                               marginLeft: 15,
@@ -2183,7 +2183,7 @@ export default class IngrediantsGroups extends Component {
                           <TextInput
                             style={{
                               borderColor: 'white',
-                              height: 40,
+                              height: '80%',
                               width: '60%',
                               paddingLeft: 15,
                               marginLeft: 15,
@@ -2315,7 +2315,7 @@ export default class IngrediantsGroups extends Component {
                         borderBottomWidth: 1,
                         alignItems: 'center',
                         justifyContent: 'space-around',
-                        padding: 15,
+                        padding: width * 0.016,
                       }}>
                       <Col style={{alignItems: 'center', width: '15%'}}>
                         <View>
@@ -2325,7 +2325,7 @@ export default class IngrediantsGroups extends Component {
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
-                              padding: 15,
+                              padding: width * 0.016,
                               paddingBottom: 2,
                               paddingTop: 2,
                             }}>
@@ -2341,7 +2341,7 @@ export default class IngrediantsGroups extends Component {
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
-                              padding: 15,
+                              padding: width * 0.016,
                               paddingBottom: 2,
                               paddingTop: 2,
                             }}>
@@ -2357,7 +2357,7 @@ export default class IngrediantsGroups extends Component {
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
-                              padding: 15,
+                              padding: width * 0.016,
                               paddingBottom: 2,
                               paddingTop: 2,
                             }}>
@@ -2373,7 +2373,7 @@ export default class IngrediantsGroups extends Component {
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
-                              padding: 15,
+                              padding: width * 0.016,
                               paddingBottom: 2,
                               paddingTop: 2,
                             }}>
@@ -2389,7 +2389,7 @@ export default class IngrediantsGroups extends Component {
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
-                              padding: 15,
+                              padding: width * 0.016,
                               paddingBottom: 2,
                               paddingTop: 2,
                             }}>
@@ -2405,7 +2405,7 @@ export default class IngrediantsGroups extends Component {
                               backgroundColor: '#ff9500',
                               color: 'white',
                               borderRadius: 80,
-                              padding: 15,
+                              padding: width * 0.016,
                               paddingBottom: 2,
                               paddingTop: 2,
                             }}>
@@ -2501,7 +2501,7 @@ export default class IngrediantsGroups extends Component {
                   borderBottomWidth: 1,
                   alignItems: 'center',
                   justifyContent: 'space-around',
-                  padding: 15,
+                  padding: width * 0.016,
                 }}>
                 <Col style={{alignItems: 'center', width: '15%'}}>
                   <Text style={{fontSize: width * 0.025, textAlign: 'center'}}>
@@ -2561,7 +2561,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   add_btn: {
-    marginTop: 10,
+    marginTop: width * 0.01,
     paddingVertical: 10,
     paddingHorizontal: 45,
     borderRadius: 20,
@@ -2601,7 +2601,7 @@ const styles = StyleSheet.create({
   },
   dynamic_list_view: {
     flexDirection: 'row',
-    padding: 15,
+    padding: width * 0.016,
     borderBottomColor: 'lightgrey',
     borderBottomWidth: 1,
   },
@@ -2612,7 +2612,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   delete_btn: {
-    marginTop: 10,
+    marginTop: width * 0.01,
     marginRight: 15,
     paddingVertical: 10,
     paddingHorizontal: 45,
