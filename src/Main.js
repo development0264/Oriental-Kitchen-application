@@ -1,9 +1,9 @@
 // React native and others libraries imports
-import React, { Component } from 'react';
-import { Root } from 'native-base';
-import { Scene, Router, Actions } from 'react-native-router-flux';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import React, {Component} from 'react';
+import {Root} from 'native-base';
+import {Scene, Router, Actions} from 'react-native-router-flux';
+import {createAppContainer} from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 
 import Home_kitchen from './pages/Home_kitchen';
 import Login from './components/Login';
@@ -20,84 +20,91 @@ import Order_success from './pages/Order_success';
 
 var x = new Date();
 var offset = -x.getTimezoneOffset();
-global.CurrentOffset = (offset >= 0 ? "+" : "-") + ('00' + parseInt(Math.abs(offset) / 60).toString()).slice(-2) + ":" + ('00' + (Math.abs(offset) % 60).toString()).slice(-2);
+global.CurrentOffset =
+  (offset >= 0 ? '+' : '-') +
+  ('00' + parseInt(Math.abs(offset) / 60).toString()).slice(-2) +
+  ':' +
+  ('00' + (Math.abs(offset) % 60).toString()).slice(-2);
 
-const AppNavigator = createStackNavigator({
+const AppNavigator = createStackNavigator(
+  {
     Splashscreen: {
-        screen: Splashscreen,
-        navigationOptions: {
-            header: null,
-        }
+      screen: Splashscreen,
+      navigationOptions: {
+        header: null,
+      },
     },
     Login: {
-        screen: Login,
-        navigationOptions: {
-            header: null,
-        }
+      screen: Login,
+      navigationOptions: {
+        header: null,
+      },
     },
     Logout: {
-        screen: Logout,
-        navigationOptions: {
-            header: null,
-        }
+      screen: Logout,
+      navigationOptions: {
+        header: null,
+      },
     },
     Home_kitchen: {
-        screen: Home_kitchen,
-        navigationOptions: {
-            header: null,
-        }
+      screen: Home_kitchen,
+      navigationOptions: {
+        header: null,
+      },
     },
     Employee: {
-        screen: Employee,
-        navigationOptions: {
-            header: null,
-        }
+      screen: Employee,
+      navigationOptions: {
+        header: null,
+      },
     },
     Ingrediant: {
-        screen: Ingrediant,
-        navigationOptions: {
-            header: null,
-        }
+      screen: Ingrediant,
+      navigationOptions: {
+        header: null,
+      },
     },
     History: {
-        screen: History,
-        navigationOptions: {
-            header: null,
-        }
+      screen: History,
+      navigationOptions: {
+        header: null,
+      },
     },
     Payment: {
-        screen: Payment,
-        navigationOptions: {
-            header: null,
-        }
+      screen: Payment,
+      navigationOptions: {
+        header: null,
+      },
     },
     IngrediantsGroups: {
-        screen: IngrediantsGroups,
-        navigationOptions: {
-            header: null,
-        }
+      screen: IngrediantsGroups,
+      navigationOptions: {
+        header: null,
+      },
     },
     CreateDish: {
-        screen: CreateDish,
-        navigationOptions: {
-            header: null,
-        }
+      screen: CreateDish,
+      navigationOptions: {
+        header: null,
+      },
     },
     Menu: {
-        screen: Menu,
-        navigationOptions: {
-            header: null,
-        }
+      screen: Menu,
+      navigationOptions: {
+        header: null,
+      },
     },
     Order_success: {
-        screen: Order_success,
-        navigationOptions: {
-            header: null,
-        }
-    }
-}, {
-    initialRouteName: 'Splashscreen'
-});
+      screen: Order_success,
+      navigationOptions: {
+        header: null,
+      },
+    },
+  },
+  {
+    initialRouteName: 'Splashscreen',
+  },
+);
 
 const ReApp = createAppContainer(AppNavigator);
 export default ReApp;

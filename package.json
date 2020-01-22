@@ -16,6 +16,8 @@
     "@react-native-community/async-storage": "^1.7.1",
     "@react-native-community/checkbox": "^0.2.2",
     "@react-native-community/datetimepicker": "^2.1.0",
+    "@react-native-community/netinfo": "^5.3.3",
+    "jetifier": "^1.6.5",
     "moment": "^2.24.0",
     "native-base": "^2.13.8",
     "react": "16.9.0",
