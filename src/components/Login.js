@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -8,10 +8,10 @@ import {
   TextInput,
   TouchableOpacity,
   Platform,
-  Alert
+  Alert,
 } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCoffee, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faCoffee, faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
 import NetInfo from '@react-native-community/netinfo';
@@ -43,18 +43,40 @@ export default class Login extends Component {
           [
             {
               text: 'ok',
-              onPress: () => { },
+              onPress: () => {},
             },
           ],
-          { cancelable: false },
+          {cancelable: false},
         );
       } else {
         this.storeData = this.storeData.bind(this);
+        this._retrieveData();
       }
     });
-
-
   }
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('visited_onces');
+      console.log('userId::' + value);
+      let valueRecieve = JSON.parse(value);
+
+      if (value !== null) {
+        this.setState({userId: JSON.parse(value)});
+        if (valueRecieve.roleName == 'vender') {
+          this.props.navigation.navigate('Employee');
+        } else if (valueRecieve.roleName == 'cashier') {
+          this.props.navigation.navigate('Payment');
+        } else if (valueRecieve.roleName == 'kitchenstaff') {
+          this.props.navigation.navigate('Home_kitchen');
+        }
+      } else {
+        this.props.navigation.navigate('Login');
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   storeData = async () => {
     let obj = {
@@ -131,13 +153,13 @@ export default class Login extends Component {
           }
         })
         .catch(error => {
-          this.setState({ hasError: true, errorText: error });
+          this.setState({hasError: true, errorText: error});
         });
     }
   };
 
   render() {
-    var { height, width } = Dimensions.get('window');
+    var {height, width} = Dimensions.get('window');
     // const { navigation } = this.props;
     return (
       <View style={styles.container}>
@@ -152,8 +174,8 @@ export default class Login extends Component {
           <Image source={require('../images/logo.png')} />
         </View>
         <View
-          style={{ flex: 0.5, marginTop: width * 0.01, alignItems: 'center' }}>
-          <View style={{ width: '100%', alignItems: 'center' }}>
+          style={{flex: 0.5, marginTop: width * 0.01, alignItems: 'center'}}>
+          <View style={{width: '100%', alignItems: 'center'}}>
             <TextInput
               style={{
                 borderBottomColor: 'white',
@@ -167,11 +189,11 @@ export default class Login extends Component {
               placeholder="Username -or- Email"
               placeholderTextColor="white"
               numberOfLines={1}
-              onChangeText={email => this.setState({ email })}
+              onChangeText={email => this.setState({email})}
             />
           </View>
           <View
-            style={{ position: 'relative', width: '100%', alignItems: 'center' }}>
+            style={{position: 'relative', width: '100%', alignItems: 'center'}}>
             <TextInput
               style={{
                 borderBottomColor: 'white',
@@ -186,25 +208,25 @@ export default class Login extends Component {
               placeholder="Password"
               placeholderTextColor="white"
               numberOfLines={1}
-              onChangeText={password => this.setState({ password })}
+              onChangeText={password => this.setState({password})}
               secureTextEntry={this.state.showPassword}
             />
-            <View style={{ position: 'absolute', right: width * 0.18, top: 40 }}>
+            <View style={{position: 'absolute', right: width * 0.18, top: 40}}>
               {this.state.showPassword == true ? (
                 <TouchableOpacity
                   onPress={() => {
-                    this.setState({ showPassword: false });
+                    this.setState({showPassword: false});
                   }}>
                   <FontAwesomeIcon icon={faEyeSlash} color={'white'} />
                 </TouchableOpacity>
               ) : (
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.setState({ showPassword: true });
-                    }}>
-                    <FontAwesomeIcon icon={faEye} color={'white'} />
-                  </TouchableOpacity>
-                )}
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({showPassword: true});
+                  }}>
+                  <FontAwesomeIcon icon={faEye} color={'white'} />
+                </TouchableOpacity>
+              )}
             </View>
             {this.state.hasError ? (
               <Text
@@ -218,7 +240,7 @@ export default class Login extends Component {
             ) : null}
           </View>
           <TouchableOpacity
-            style={{ backgroundColor: 'white', borderRadius: 9, marginTop: 20 }}
+            style={{backgroundColor: 'white', borderRadius: 9, marginTop: 20}}
             onPress={() => this.login()}>
             <Text
               style={{
