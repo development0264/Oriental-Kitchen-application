@@ -3,7 +3,7 @@
  **/
 
 // React native and others libraries imports
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   ScrollView,
   LayoutAnimation,
@@ -11,7 +11,7 @@ import {
   Linking,
   Image,
   TouchableOpacity,
-  Dimensions,
+  Text
 } from 'react-native';
 import {
   View,
@@ -28,7 +28,7 @@ import {
   Col,
 } from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faHistory,
   faStar,
@@ -38,12 +38,11 @@ import {
   faSignOutAlt,
   faMoneyBill,
   faConciergeBell,
-  faUtensils,
 } from '@fortawesome/free-solid-svg-icons';
 // Our custom files and classes import
-import Text from './Text';
-import {NavigationEvents} from 'react-navigation';
-var {height, width} = Dimensions.get('window');
+//import Text from './Text';
+import { NavigationEvents } from 'react-navigation';
+
 export default class SideMenu extends Component {
   constructor(props) {
     super(props);
@@ -76,6 +75,7 @@ export default class SideMenu extends Component {
       alert(error);
     }
   };
+
   page_reloaded = () => {
     this.componentDidMount();
   };
@@ -94,7 +94,7 @@ export default class SideMenu extends Component {
   }
 
   renderMenu() {
-    const {navigation} = this.props;
+    const { navigation } = this.props;
     return (
       <View
         style={{
@@ -102,8 +102,7 @@ export default class SideMenu extends Component {
           height: '100%',
           width: '100%',
           opacity: 0.9,
-          zIndex: 9999,
-          position: 'relative',
+          zIndex: 1,
         }}>
         <NavigationEvents
           onDidFocus={() => {
@@ -114,49 +113,49 @@ export default class SideMenu extends Component {
           <View style={styles.MainContainer}>
             <Image
               source={require('../images/profile-circle-picture-8.jpg')}
-              style={{width: 120, height: 120, borderRadius: 120 / 2}}
+              style={{ width: 120, height: 120, borderRadius: 120 / 2 }}
             />
-            <Text style={{color: 'white', fontSize: 20, marginTop: 20}}>
+            <Text style={{ color: 'white', fontSize: 20, marginTop: 20 }}>
               {this.state.userDetail.name}
             </Text>
           </View>
           <Item
-            style={{marginLeft: 60, marginRight: 60, marginBottom: 30}}></Item>
+            style={{ marginLeft: 60, marginRight: 60, marginBottom: 30 }}></Item>
         </View>
-        <View style={{paddingRight: 40, paddingBottom: 15}}>
+        <View style={{ paddingRight: 40, paddingBottom: 15 }}>
           <List>
             {this.state.userDetail.roleName == 'cashier'
               ? this.renderCashierMenuItems()
               : this.state.userDetail.roleName == 'admin'
-              ? this.renderAdminMenuItems()
-              : this.state.userDetail.roleName == 'kitchenstaff'
-              ? this.renderKitchenMenuItems()
-              : this.state.userDetail.roleName == 'vender'
-              ? this.renderVenderMenuItems()
-              : null}
+                ? this.renderAdminMenuItems()
+                : this.state.userDetail.roleName == 'kitchenstaff'
+                  ? this.renderKitchenMenuItems()
+                  : this.state.userDetail.roleName == 'vender'
+                    ? this.renderVenderMenuItems()
+                    : null}
           </List>
         </View>
-        <Item style={{marginLeft: 60, marginRight: 60, marginBottom: 5}}></Item>
-        <View style={{paddingRight: 40}}>
+        <Item style={{ marginLeft: 60, marginRight: 60, marginBottom: 5 }}></Item>
+        <View style={{ paddingRight: 40 }}>
           <List>
             <ListItem
               noBorder
               button={true}
-              onPress={() => this.propsnavi.navigation.navigate('Login')}>
+              onPress={() => this.props.navigation.navigate('Login')}>
               <View
                 style={{
                   backgroundColor: '#ff9500',
                   borderRadius: 50,
                   padding: 5,
                 }}>
-                <FontAwesomeIcon icon={faSignOutAlt} style={{color: 'black'}} />
+                <FontAwesomeIcon icon={faSignOutAlt} style={{ color: 'black' }} />
               </View>
               <Body>
                 <TouchableOpacity
                   onPress={() => {
                     this.propsnavi.navigation.navigate('Logout');
                   }}>
-                  <Text style={{color: 'white', paddingLeft: 10}}>LogOut</Text>
+                  <Text style={{ color: 'white', paddingLeft: 10 }}>LogOut</Text>
                 </TouchableOpacity>
               </Body>
             </ListItem>
@@ -176,15 +175,15 @@ export default class SideMenu extends Component {
           key={item.id}
           button={true}>
           <View
-            style={{backgroundColor: '#ff9500', borderRadius: 50, padding: 5}}>
-            <FontAwesomeIcon icon={item.icon} style={{color: 'black'}} />
+            style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }}>
+            <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
           </View>
           <Body>
             <TouchableOpacity
               onPress={() => {
                 this.propsnavi.navigation.navigate(item.page);
               }}>
-              <Text style={{color: 'white', paddingLeft: 10}}>
+              <Text style={{ color: 'white', paddingLeft: 10 }}>
                 {item.title}
               </Text>
             </TouchableOpacity>
@@ -205,15 +204,15 @@ export default class SideMenu extends Component {
           key={item.id}
           button={true}>
           <View
-            style={{backgroundColor: '#ff9500', borderRadius: 50, padding: 5}}>
-            <FontAwesomeIcon icon={item.icon} style={{color: 'black'}} />
+            style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }}>
+            <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
           </View>
           <Body>
             <TouchableOpacity
               onPress={() => {
                 this.propsnavi.navigation.navigate(item.page);
               }}>
-              <Text style={{color: 'white', paddingLeft: 10}}>
+              <Text style={{ color: 'white', paddingLeft: 10 }}>
                 {item.title}
               </Text>
             </TouchableOpacity>
@@ -234,15 +233,15 @@ export default class SideMenu extends Component {
           key={item.id}
           button={true}>
           <View
-            style={{backgroundColor: '#ff9500', borderRadius: 50, padding: 5}}>
-            <FontAwesomeIcon icon={item.icon} style={{color: 'black'}} />
+            style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }}>
+            <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
           </View>
           <Body>
             <TouchableOpacity
               onPress={() => {
                 this.propsnavi.navigation.navigate(item.page);
               }}>
-              <Text style={{color: 'white', paddingLeft: 10}}>
+              <Text style={{ color: 'white', paddingLeft: 10 }}>
                 {item.title}
               </Text>
             </TouchableOpacity>
@@ -263,15 +262,15 @@ export default class SideMenu extends Component {
           key={item.id}
           button={true}>
           <View
-            style={{backgroundColor: '#ff9500', borderRadius: 50, padding: 5}}>
-            <FontAwesomeIcon icon={item.icon} style={{color: 'black'}} />
+            style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }}>
+            <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
           </View>
           <Body>
             <TouchableOpacity
               onPress={() => {
                 this.propsnavi.navigation.navigate(item.page);
               }}>
-              <Text style={{color: 'white', paddingLeft: 10}}>
+              <Text style={{ color: 'white', paddingLeft: 10 }}>
                 {item.title}
               </Text>
             </TouchableOpacity>
@@ -292,15 +291,15 @@ export default class SideMenu extends Component {
           key={item.id}
           button={true}>
           <View
-            style={{backgroundColor: '#ff9500', borderRadius: 50, padding: 5}}>
-            <FontAwesomeIcon icon={item.icon} style={{color: 'black'}} />
+            style={{ backgroundColor: '#ff9500', borderRadius: 50, padding: 5 }}>
+            <FontAwesomeIcon icon={item.icon} style={{ color: 'black' }} />
           </View>
           <Body>
             <TouchableOpacity
               onPress={() => {
                 this.propsnavi.navigation.navigate(item.page);
               }}>
-              <Text style={{color: 'white', paddingLeft: 10}}>
+              <Text style={{ color: 'white', paddingLeft: 10 }}>
                 {item.title}
               </Text>
             </TouchableOpacity>
@@ -331,7 +330,7 @@ const styles = {
     width: '100%',
     height: 1,
     // backgroundColor: 'rgba(189, 195, 199, 0.6)',
-    marginTop: width * 0.01,
+    marginTop: 10,
     marginBottom: 10,
   },
 };
@@ -372,8 +371,13 @@ var CashiermenuItems = [
     icon: faMoneyBill,
     page: 'Payment',
   },
+  // {
+  //   id: 2,
+  //   title: 'Sales',
+  //   icon: faHistory,
+  // },
   {
-    id: 2,
+    id: 3,
     title: 'History',
     icon: faHistory,
     page: 'History',
@@ -413,7 +417,7 @@ var KitchenmenuItems = [
   {
     id: 1,
     title: 'Kitchen',
-    icon: faUtensils,
+    icon: faStar,
     page: 'Home_kitchen',
   },
   // {

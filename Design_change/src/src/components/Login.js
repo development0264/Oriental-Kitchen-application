@@ -8,13 +8,12 @@ import {
   TextInput,
   TouchableOpacity,
   Platform,
-  Alert
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCoffee, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import DeviceInfo from 'react-native-device-info';
 import AsyncStorage from '@react-native-community/async-storage';
-import NetInfo from '@react-native-community/netinfo';
+//import SplashScreen from 'react-native-splash-screen';
 
 export default class Login extends Component {
   constructor(props) {
@@ -32,28 +31,9 @@ export default class Login extends Component {
       roleName: '',
       name: '',
       wok: '',
-      vender_id: null,
     };
-
-    NetInfo.addEventListener(state => {
-      if (state.isConnected.toString() == 'false') {
-        Alert.alert(
-          'No network connection',
-          'No internet connection. connect to the internet and try again.',
-          [
-            {
-              text: 'ok',
-              onPress: () => { },
-            },
-          ],
-          { cancelable: false },
-        );
-      } else {
-        this.storeData = this.storeData.bind(this);
-      }
-    });
-
-
+    this.storeData = this.storeData.bind(this);
+    //SplashScreen.hide();
   }
 
   storeData = async () => {
@@ -63,7 +43,6 @@ export default class Login extends Component {
       roleName: this.state.roleName,
       name: this.state.name,
       wok: this.state.wok,
-      vender_id: this.state.vender_id,
     };
     console.log(obj);
     try {
@@ -103,7 +82,7 @@ export default class Login extends Component {
       })
         .then(response => response.json())
         .then(responseJson => {
-          console.log('safhjv', responseJson);
+          console.log(responseJson);
           if (responseJson.status == 'success') {
             if (responseJson.role == 'vender') {
               this.setState({
@@ -112,7 +91,6 @@ export default class Login extends Component {
                 userToken: responseJson.access_token,
                 name: responseJson.vender.name,
                 wok: responseJson.vender.logo,
-                vender_id: responseJson.vender.vender_id,
               });
             } else {
               this.setState({
@@ -120,7 +98,6 @@ export default class Login extends Component {
                 roleName: responseJson.employee.role_name,
                 userToken: responseJson.access_token,
                 name: responseJson.employee.name,
-                vender_id: responseJson.employee.vender_id,
               });
             }
             this.storeData();
@@ -138,7 +115,7 @@ export default class Login extends Component {
 
   render() {
     var { height, width } = Dimensions.get('window');
-    // const { navigation } = this.props;
+    const { navigation } = this.props;
     return (
       <View style={styles.container}>
         <View
@@ -151,8 +128,7 @@ export default class Login extends Component {
           }}>
           <Image source={require('../images/logo.png')} />
         </View>
-        <View
-          style={{ flex: 0.5, marginTop: width * 0.01, alignItems: 'center' }}>
+        <View style={{ flex: 0.5, marginTop: 10, alignItems: 'center' }}>
           <View style={{ width: '100%', alignItems: 'center' }}>
             <TextInput
               style={{
@@ -166,6 +142,7 @@ export default class Login extends Component {
               }}
               placeholder="Username -or- Email"
               placeholderTextColor="white"
+              fontSize={22}
               numberOfLines={1}
               onChangeText={email => this.setState({ email })}
             />
@@ -176,7 +153,7 @@ export default class Login extends Component {
               style={{
                 borderBottomColor: 'white',
                 paddingLeft: 15,
-                marginTop: 20,
+                marginTop: 50,
                 borderBottomWidth: 1,
                 textAlignVertical: 'top',
                 width: '70%',
@@ -185,6 +162,7 @@ export default class Login extends Component {
               }}
               placeholder="Password"
               placeholderTextColor="white"
+              fontSize={22}
               numberOfLines={1}
               onChangeText={password => this.setState({ password })}
               secureTextEntry={this.state.showPassword}
@@ -195,30 +173,26 @@ export default class Login extends Component {
                   onPress={() => {
                     this.setState({ showPassword: false });
                   }}>
-                  <FontAwesomeIcon icon={faEyeSlash} color={'white'} />
+                  <FontAwesomeIcon icon={faEyeSlash} color={'white'} size={25} />
                 </TouchableOpacity>
               ) : (
                   <TouchableOpacity
                     onPress={() => {
                       this.setState({ showPassword: true });
                     }}>
-                    <FontAwesomeIcon icon={faEye} color={'white'} />
+                    <FontAwesomeIcon icon={faEye} color={'white'} size={25} />
                   </TouchableOpacity>
                 )}
             </View>
             {this.state.hasError ? (
               <Text
-                style={{
-                  color: '#c0392b',
-                  textAlign: 'center',
-                  marginTop: width * 0.01,
-                }}>
+                style={{ color: '#c0392b', textAlign: 'center', marginTop: 10 }}>
                 {this.state.errorText}
               </Text>
             ) : null}
           </View>
           <TouchableOpacity
-            style={{ backgroundColor: 'white', borderRadius: 9, marginTop: 20 }}
+            style={{ backgroundColor: 'white', borderRadius: 9, marginTop: 40 }}
             onPress={() => this.login()}>
             <Text
               style={{

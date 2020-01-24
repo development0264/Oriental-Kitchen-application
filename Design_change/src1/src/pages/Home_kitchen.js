@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {
   Dimensions,
+  Platform,
   StyleSheet,
   Text,
   View,
   Image,
   ScrollView,
   TouchableOpacity,
+  TouchableHighlight,
   ToastAndroid,
 } from 'react-native';
 import {Button, Left, Right, Icon, Grid, Col} from 'native-base';
@@ -256,7 +258,7 @@ export default class Home extends Component {
           //     obj[i].is_pause = true;
           //   }
           // }
-          console.log('dataIni =' + JSON.stringify(this.state.dataIni));
+
           var obj = this.state.dataIni.filter(o => o.name == 'current');
           if (obj.length) {
             obj[0].is_selected = true;
@@ -268,10 +270,25 @@ export default class Home extends Component {
           } else {
             this.makecurrentorder(this.state.dataIni);
           }
+          // else {
+          //   var obj = this.state.dataIni.filter(o => o.name == 'pause');
+          //   if (obj.length) {
+          //     for (var i = 0; i < obj.length; i++) {
+          //       obj[i].is_pause = true;
+          //     }
+          //     // this.select_order(obj[0].order_id)
+          //     // this.setState({
+          //     //   current_order: obj[0].reference,
+          //     // });
+          //   } else {
+          //     //this.makecurrentorder(this.state.dataIni)
+          //   }
+          // }
         } else {
           alert('Something wrong happened');
         }
       })
+
       .catch(error => {
         console.error(error);
       });
@@ -279,6 +296,7 @@ export default class Home extends Component {
 
   select_order(id, Is_cuurent) {
     var data = new FormData();
+    //call current order on page load
     data.append('order_id', id);
     data.append('UserOffset', global.CurrentOffset);
 
@@ -388,6 +406,14 @@ export default class Home extends Component {
               {'\n'}
               {item.delivery_name}
             </Text>
+            {/* <Text>
+              {
+                (item.is_pause == null || item.is_pause == undefined || item.is_pause == false) ?
+                  null
+                  :
+                  this.calltimer()
+              }
+            </Text> */}
           </View>
         </TouchableOpacity>,
       );
@@ -407,7 +433,7 @@ export default class Home extends Component {
         items.push(
           <ScrollView>
             <View>
-              <Card containerStyle={{backgroundColor: '#efeff4'}}>
+              <Card>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -417,19 +443,14 @@ export default class Home extends Component {
                     borderBottomWidth: 1,
                     paddingBottom: 10,
                   }}>
-                  <View
-                    style={{
-                      flex: 0.8,
-                      borderRightColor: 'grey',
-                      borderRightWidth: 1,
-                    }}>
-                    <Text style={{fontSize: width * 0.025}}>
+                  <View style={{flex: 0.9}}>
+                    <Text style={{fontSize: 25}}>
                       {i + 1}
                       {'. '}
                       <Text
                         style={{
                           fontWeight: 'bold',
-                          fontSize: width * 0.035,
+                          fontSize: 35,
                           textTransform: 'uppercase',
                         }}>
                         {item.order_dish_name}
@@ -438,17 +459,18 @@ export default class Home extends Component {
                   </View>
                   <View
                     style={{
-                      flex: 0.2,
-                      alignItems: 'center',
+                      flex: 0.1,
+                      borderLeftColor: 'grey',
+                      borderLeftWidth: 1,
                     }}>
                     <Text
                       style={{
-                        fontSize: width * 0.035,
+                        fontSize: 40,
+                        marginLeft: 15,
                         fontWeight: 'bold',
                       }}>
                       X{' '}
-                      <Text
-                        style={{fontWeight: 'bold', fontSize: width * 0.035}}>
+                      <Text style={{fontWeight: 'bold', fontSize: 40}}>
                         {item.qty}
                       </Text>
                     </Text>
@@ -457,6 +479,7 @@ export default class Home extends Component {
                 <View
                   style={{
                     flexDirection: 'row',
+
                     flexWrap: 'wrap',
                   }}>
                   {this.loadImage(item)}
@@ -495,7 +518,7 @@ export default class Home extends Component {
   };
 
   loadImage = item => {
-    var {height, width} = Dimensions.get('window');
+    // var {height, width} = Dimensions.get('window');
     // alert(JSON.stringify(item));
     var items = [];
     var ingredient = [];
@@ -526,18 +549,19 @@ export default class Home extends Component {
                   flex: 1,
                   flexDirection: 'row',
                   backgroundColor: '#ff9500',
-                  height: width * 0.1,
-                  width: width * 0.1,
+                  height: 90,
+                  width: 90,
                   alignItems: 'center',
                   justifyContent: 'center',
                   textAlign: 'center',
-                  marginLeft: width * 0.0075,
-                  marginTop: width * 0.0075,
+                  marginLeft: 8,
+                  marginTop: 8,
                 }}>
                 <Image
                   style={{
-                    height: width * 0.09,
-                    width: width * 0.09,
+                    height: 80,
+                    width: 80,
+                    margin: 8,
                     backgroundColor: '#ff9500',
                   }}
                   resizeMode="contain"
@@ -546,12 +570,9 @@ export default class Home extends Component {
                 <Text
                   style={{
                     position: 'absolute',
-                    fontSize: width * 0.025,
+                    fontSize: 30,
                     color: 'white',
-                    top: width * 0.02,
-                    width: width * 0.08,
-                    textAlign: 'center',
-                    lineHeight: width * 0.025,
+                    top: 18,
                     textDecorationLine: 'line-through',
                     textDecorationStyle: 'solid',
                   }}>
@@ -559,27 +580,19 @@ export default class Home extends Component {
                 </Text>
               </View>
             ) : (
-              <View
+              <Image
+                source={{
+                  uri: 'http://dev-fs.8d.ie/' + ingredient[i].cover,
+                }}
                 style={{
-                  flex: 1,
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  marginLeft: width * 0.0075,
-                  marginTop: width * 0.0075,
-                }}>
-                <Image
-                  source={{
-                    uri: 'http://dev-fs.8d.ie/' + ingredient[i].cover,
-                  }}
-                  style={{
-                    height: width * 0.1,
-                    width: width * 0.1,
-                    backgroundColor: 'white',
-                  }}
-                  resizeMode="contain"
-                />
-              </View>
+                  height: 90,
+                  width: 90,
+                  margin: 8,
+                }}
+                resizeMode="contain"
+              />
             )}
+            {/* <Text>{ingredient[i].name}</Text> */}
           </View>
         </View>,
       );
@@ -651,10 +664,10 @@ export default class Home extends Component {
                   flexDirection: 'row',
                   justifyContent: 'flex-start',
                 }}>
-                {/* <TouchableOpacity style={{marginLeft: 30, marginTop: width * 0.01}}>
+                {/* <TouchableOpacity style={{marginLeft: 30, marginTop: 10}}>
                     <Image source={require('../images/arrow.png')} />
                   </TouchableOpacity>
-                  <TouchableOpacity style={{marginLeft: 30, marginTop: width * 0.01}}>
+                  <TouchableOpacity style={{marginLeft: 30, marginTop: 10}}>
                     <Image source={require('../images/arrow-down.png')} />
                   </TouchableOpacity> */}
               </View>
@@ -699,7 +712,7 @@ export default class Home extends Component {
           paddingRight: 10,
           color: 'white',
           borderRadius: 10,
-          marginTop: width * 0.01,
+          marginTop: 10,
         }}>
         PAUSE
     </Text>
@@ -715,7 +728,7 @@ export default class Home extends Component {
                       paddingHorizontal: 10,
                       color: 'white',
                       borderRadius: 10,
-                      marginTop: width * 0.01,
+                      marginTop: 10,
                     }}>
                     CANCEL
                   </Text>
@@ -741,9 +754,9 @@ export default class Home extends Component {
     );
     var right = (
       <Right style={{flex: 1}}>
-        {/* <Text style={{color: 'white', fontFamily: 'Roboto', fontWeight: '100'}}>
+        <Text style={{color: 'white', fontFamily: 'Roboto', fontWeight: '100'}}>
           Station 1
-        </Text> */}
+        </Text>
       </Right>
     );
     return (
@@ -833,7 +846,7 @@ export default class Home extends Component {
               style={{
                 fontSize: width * 0.016,
                 textAlign: 'center',
-                marginTop: width * 0.01,
+                marginTop: 10,
               }}>
               Order will pause for 5 minutes?
             </Text>
@@ -845,7 +858,7 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-around',
               }}>
-              <View style={{flex: 0.9, marginTop: width * 0.01}}>
+              <View style={{flex: 0.9, marginTop: 10}}>
                 <TouchableOpacity
                   style={styles.yes}
                   onPress={() => {
@@ -856,7 +869,7 @@ export default class Home extends Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{marginTop: width * 0.01}}>
+              <View style={{marginTop: 10}}>
                 <TouchableOpacity
                   style={styles.no}
                   onPress={() => this.setState({pause_dialog: false})}>
@@ -909,7 +922,7 @@ export default class Home extends Component {
               style={{
                 fontSize: width * 0.016,
                 textAlign: 'center',
-                marginTop: width * 0.01,
+                marginTop: 10,
               }}>
               Are you sure to cancel the order?
             </Text>
@@ -921,7 +934,7 @@ export default class Home extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-around',
               }}>
-              <View style={{flex: 0.9, marginTop: width * 0.01}}>
+              <View style={{flex: 0.9, marginTop: 10}}>
                 <TouchableOpacity
                   style={styles.yes}
                   onPress={() => {
@@ -932,7 +945,7 @@ export default class Home extends Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View style={{marginTop: width * 0.01}}>
+              <View style={{marginTop: 10}}>
                 <TouchableOpacity
                   style={styles.no}
                   onPress={() => this.setState({cancel_dialog: false})}>
@@ -973,6 +986,7 @@ export default class Home extends Component {
                     fontWeight: 'bold',
                     width: '50%',
                     textAlign: 'left',
+                    // backgroundColor: 'red',
                   }}>
                   Collection Time : {this.state.order_date}
                 </Text>
@@ -1008,7 +1022,7 @@ export default class Home extends Component {
               }}>
               <Text
                 style={{
-                  fontSize: width * 0.03,
+                  fontSize: width * 0.035,
                   color: 'white',
                   fontWeight: 'bold',
                 }}>

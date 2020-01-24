@@ -1,9 +1,9 @@
 // React native and others libraries imports
-import React, {Component} from 'react';
-import {Root} from 'native-base';
-import {Scene, Router, Actions} from 'react-native-router-flux';
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import React, { Component } from 'react';
+import { Root, Alert } from 'native-base';
+import { Scene, Router, Actions } from 'react-native-router-flux';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import Home_kitchen from './pages/Home_kitchen';
 import Login from './components/Login';
@@ -17,6 +17,8 @@ import CreateDish from './pages/CreateDish';
 import Menu from './pages/Menu';
 import Splashscreen from './components/Splashscreen';
 import Order_success from './pages/Order_success';
+
+
 
 var x = new Date();
 var offset = -x.getTimezoneOffset();
@@ -102,7 +104,7 @@ const AppNavigator = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'Splashscreen',
+    initialRouteName: 'Login',
   },
 );
 
