@@ -49,8 +49,8 @@ export default class Login extends Component {
           {cancelable: false},
         );
       } else {
-        this.storeData = this.storeData.bind(this);
         this._retrieveData();
+        this.storeData = this.storeData.bind(this);
       }
     });
   }
