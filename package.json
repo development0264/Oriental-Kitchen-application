@@ -18,7 +18,7 @@
     "@react-native-community/datetimepicker": "^2.1.0",
     "@react-native-community/netinfo": "^5.3.3",
     "jetifier": "^1.6.5",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "native-base": "^2.13.8",
     "react": "16.9.0",
     "react-intl": "^3.11.0",
